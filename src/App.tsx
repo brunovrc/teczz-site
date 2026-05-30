@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { ArrowRight, ArrowUpRight, ChevronDown, Menu, X } from 'lucide-react';
 import NeuralCanvas from './components/NeuralCanvas';
+import Preloader from './components/Preloader';
 
 function useInView(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null);
@@ -57,8 +58,13 @@ const faqs = [
 ];
 
 export default function App() {
+  const [showPreloader, setShowPreloader] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+
+  const handlePreloaderComplete = useCallback(() => {
+    setShowPreloader(false);
+  }, []);
 
   const servicesSection = useInView();
   const casesSection = useInView();
@@ -67,9 +73,12 @@ export default function App() {
   const ctaSection = useInView();
 
   return (
-    <div className="grain-overlay bg-black text-white font-grotesk">
+    <>
+      {showPreloader && <Preloader onComplete={handlePreloaderComplete} duration={3300} />}
 
-      {/* NAV */}
+      <div className="grain-overlay bg-black text-white font-grotesk">
+
+        {/* NAV */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-10 py-5"
         style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, transparent 100%)' }}>
         <div className="flex items-center gap-8">
@@ -358,6 +367,7 @@ export default function App() {
         </div>
       </footer>
 
-    </div>
+      </div>
+    </>
   );
 }
