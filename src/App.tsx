@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, ArrowUpRight, ChevronDown, Menu, X } from 'lucide-react';
+import NeuralCanvas from './components/NeuralCanvas';
 
 function useInView(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null);
@@ -20,10 +21,11 @@ function useInView(threshold = 0.15) {
 }
 
 const services = [
-  { id: '01', name: 'Chatbots', desc: 'Agentes conversacionais treinados no contexto da sua empresa, integrados a qualquer canal.' },
-  { id: '02', name: 'Automação', desc: 'Fluxos automatizados que eliminam tarefas repetitivas e aceleram operações inteiras.' },
-  { id: '03', name: 'Agentes IA', desc: 'Sistemas autônomos que tomam decisões, executam tarefas e se adaptam em tempo real.' },
-  { id: '04', name: 'Integrações', desc: 'Conectamos modelos de linguagem a qualquer stack — CRMs, ERPs, APIs e legado.' },
+  { id: '01', name: 'Sites com IA', desc: 'Desenvolvemos sites e plataformas digitais com IA integrada desde o primeiro pixel.' },
+  { id: '02', name: 'Chatbots', desc: 'Agentes conversacionais treinados no contexto da sua empresa, integrados a qualquer canal.' },
+  { id: '03', name: 'Automação', desc: 'Fluxos automatizados que eliminam tarefas repetitivas e aceleram operações inteiras.' },
+  { id: '04', name: 'Agentes IA', desc: 'Sistemas autônomos que tomam decisões, executam tarefas e se adaptam em tempo real.' },
+  { id: '05', name: 'Implementação IA', desc: 'Integramos modelos de linguagem em qualquer processo do negócio — vendas, operações, financeiro, RH.' },
 ];
 
 const cases = [
@@ -104,29 +106,35 @@ export default function App() {
 
       {/* ─── HERO ─── */}
       <section className="relative min-h-screen flex flex-col overflow-hidden" style={{ background: '#000' }}>
-        {/* Spotlight */}
-        <div className="spotlight" />
-        <div className="spotlight-cone" />
+        {/* Neural Network Canvas */}
+        <NeuralCanvas />
 
-        {/* Extra ambient glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[500px] pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 50% 50% at 50% 0%, rgba(59,130,246,0.07) 0%, transparent 70%)' }} />
+        {/* Spotlight effects */}
+        <div className="absolute inset-0 pointer-events-none z-0">
+          <div className="spotlight" />
+          <div className="spotlight-cone" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[500px]"
+            style={{ background: 'radial-gradient(ellipse 50% 50% at 50% 0%, rgba(59,130,246,0.07) 0%, transparent 70%)' }} />
+        </div>
 
         {/* Top label */}
         <div className="relative z-10 pt-32 px-6 md:px-10 animate-on-load animate-on-load-d1">
           <span className="text-[10px] tracking-[0.3em] text-white/35 uppercase font-medium">IA ST '25</span>
         </div>
 
-        {/* Main headline area */}
+        {/* Main content */}
         <div className="relative z-10 flex-1 flex flex-col justify-center px-6 md:px-10 pt-8 pb-0">
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-10 md:gap-0">
 
-            {/* Left: massive headline */}
-            <div className="flex-1">
-              <h1 className="hero-headline text-white animate-on-load animate-on-load-d2 leading-none">
-                TECZZ
+            {/* Left: new headline */}
+            <div className="flex-1 max-w-3xl">
+              <span className="text-[11px] md:text-xs tracking-[0.25em] text-blue-500 uppercase font-semibold mb-4 block animate-on-load animate-on-load-d1">
+                Implementação de IA para negócios reais
+              </span>
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black uppercase leading-[0.95] tracking-tight mb-6 animate-on-load animate-on-load-d2">
+                IA que transforma negócios.
               </h1>
-              <p className="mt-6 text-white/45 text-sm md:text-base max-w-sm leading-relaxed animate-on-load animate-on-load-d3 font-light">
+              <p className="text-white/45 text-sm md:text-base max-w-md leading-relaxed animate-on-load animate-on-load-d3 font-light">
                 Implementamos inteligência artificial que gera resultado real — não demos, não experimentos.
               </p>
               <div className="mt-8 flex items-center gap-4 animate-on-load animate-on-load-d4">
@@ -140,10 +148,10 @@ export default function App() {
             </div>
 
             {/* Right: services list */}
-            <div className="md:pt-4 md:pl-8 animate-on-load animate-on-load-d3">
+            <div className="md:pt-8 md:pl-8 animate-on-load animate-on-load-d3">
               <p className="text-[10px] tracking-[0.3em] text-white/30 uppercase mb-4 font-medium">/we do</p>
               <div className="flex flex-col gap-3">
-                {['CHATBOTS', 'AUTOMAÇÃO', 'AGENTES IA', 'INTEGRAÇÕES'].map((s, i) => (
+                {['SITES', 'CHATBOTS', 'AUTOMAÇÃO', 'AGENTES IA', 'INTEGRAÇÕES'].map((s, i) => (
                   <span key={s} className="text-xl md:text-2xl font-bold tracking-tight"
                     style={{ color: i === 0 ? '#3b82f6' : 'rgba(255,255,255,0.75)', animationDelay: `${0.6 + i * 0.1}s` }}>
                     {s}
@@ -164,11 +172,6 @@ export default function App() {
               <ChevronDown size={18} />
             </a>
           </div>
-        </div>
-
-        {/* Ghost 2025 */}
-        <div className="absolute bottom-0 right-0 overflow-hidden pointer-events-none select-none z-0">
-          <span className="number-ghost">2025</span>
         </div>
       </section>
 
@@ -196,14 +199,14 @@ export default function App() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/[0.06]">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/[0.06]">
             {services.map((s) => (
               <div key={s.id} className="card-dark p-8 md:p-10 group cursor-default">
                 <div className="flex items-start justify-between mb-8">
                   <span className="text-[10px] tracking-[0.3em] text-white/25 uppercase">{s.id}</span>
                   <ArrowUpRight size={14} className="text-white/20 group-hover:text-blue-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300" />
                 </div>
-                <h3 className="text-3xl md:text-4xl font-black uppercase tracking-tight mb-4 group-hover:text-blue-500 transition-colors duration-300">
+                <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight mb-4 group-hover:text-blue-500 transition-colors duration-300">
                   {s.name}
                 </h3>
                 <p className="text-white/45 text-sm leading-relaxed">{s.desc}</p>
