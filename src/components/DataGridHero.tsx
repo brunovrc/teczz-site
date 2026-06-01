@@ -29,17 +29,17 @@ export default function DataGridHero({
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Mobile: reduce grid density and throttle to 30fps
+    // On mobile, cells are physically larger (smaller screen) so we can
+    // use the same visual density with fewer absolute cells
     const isMobile = window.innerWidth < 768;
-    const effectiveRows = isMobile ? Math.ceil(rows * 0.45) : rows;
-    const effectiveCols = isMobile ? Math.ceil(cols * 0.45) : cols;
+    const effectiveRows = isMobile ? Math.ceil(rows * 0.7) : rows;
+    const effectiveCols = isMobile ? Math.ceil(cols * 0.7) : cols;
 
     let width = 0;
     let height = 0;
     let mouseX = -1;
     let mouseY = -1;
     let rafId = 0;
-    let frameCount = 0;
     const startTime = performance.now();
     const GAP = 3;
     const DURATION = 5000;
@@ -75,8 +75,6 @@ export default function DataGridHero({
 
     const draw = () => {
       rafId = requestAnimationFrame(draw);
-      // Throttle to ~30fps on mobile
-      if (isMobile && ++frameCount % 2 !== 0) return;
       if (!width || !height) return;
 
       const t = performance.now() - startTime;
@@ -97,6 +95,7 @@ export default function DataGridHero({
           const phase = (t / DURATION - delay * 0.1) * Math.PI * 2;
           let opacity = opacityMin + (opacityMax - opacityMin) * ((Math.sin(phase) + 1) * 0.5);
 
+          // Mouse glow — desktop only
           if (!isMobile && mouseX >= 0) {
             const dx = (c + 0.5) * cellW - mouseX;
             const dy = cy - mouseY;
