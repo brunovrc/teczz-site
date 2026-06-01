@@ -120,6 +120,11 @@ export default function App() {
     setShowPreloader(false);
   }, []);
 
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [mobileOpen]);
+
   return (
     <>
       {/* Scroll progress bar — scaleX updated via ref */}
@@ -166,12 +171,18 @@ export default function App() {
         <AnimatePresence>
           {mobileOpen && (
             <motion.div
-              className="fixed inset-0 z-40 bg-black/98 flex flex-col items-center justify-center gap-8"
+              className="fixed inset-0 z-[60] bg-black flex flex-col items-center justify-center gap-8"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
             >
+              <button
+                className="absolute top-5 right-6 text-white/50 hover:text-white transition-colors"
+                onClick={() => setMobileOpen(false)}
+              >
+                <X size={26} />
+              </button>
               {['Soluções', 'Cases', 'Sobre', 'Contato'].map((link, i) => (
                 <motion.a
                   key={link}
@@ -254,7 +265,7 @@ export default function App() {
                 <div className="animate-on-load animate-on-load-d3"
                   style={{ marginBottom: '2.5rem', height: '2rem', position: 'relative', overflow: 'visible' }}>
                   <GooeyText
-                    texts={['Sites personalizados', 'Chatbots treinados', 'Automação de processos', 'Agentes autônomos', 'Voz com IA']}
+                    texts={['Sites personalizados', 'Chatbots', 'Automações', 'Agentes de IA']}
                     morphTime={1.2}
                     cooldownTime={2.2}
                     textStyle={{
