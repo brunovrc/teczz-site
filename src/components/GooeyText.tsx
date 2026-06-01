@@ -21,13 +21,14 @@ export function GooeyText({
   useEffect(() => {
     if (!texts.length) return;
 
+    const isMobile = window.innerWidth < 768;
+
     let textIndex = 0;
     let morph = 0;
     let cooldown = cooldownTime;
     let lastTime = performance.now();
     let raf: number;
 
-    // Show first two texts from the start — no blank state
     if (text1Ref.current) {
       text1Ref.current.textContent = texts[0];
       text1Ref.current.style.opacity = '1';
@@ -36,7 +37,7 @@ export function GooeyText({
     if (text2Ref.current) {
       text2Ref.current.textContent = texts[1 % texts.length];
       text2Ref.current.style.opacity = '0';
-      text2Ref.current.style.filter = 'blur(8px)';
+      text2Ref.current.style.filter = isMobile ? '' : 'blur(8px)';
     }
 
     const applyMorph = (fraction: number) => {
@@ -44,19 +45,17 @@ export function GooeyText({
       const t2 = text2Ref.current;
       if (!t1 || !t2) return;
 
-      // text1 fades out: full → invisible
       const opacity1 = Math.pow(Math.max(0, 1 - fraction), 0.5);
-      const blur1 = fraction * 8;
-
-      // text2 fades in: invisible → full
       const opacity2 = Math.pow(Math.max(0, fraction), 0.5);
-      const blur2 = (1 - fraction) * 8;
 
       t1.style.opacity = opacity1.toFixed(3);
-      t1.style.filter = blur1 > 0.05 ? `blur(${blur1.toFixed(2)}px)` : '';
-
       t2.style.opacity = opacity2.toFixed(3);
-      t2.style.filter = blur2 > 0.05 ? `blur(${blur2.toFixed(2)}px)` : '';
+
+      // Blur só no desktop — muito pesado na GPU mobile
+      if (!isMobile) {
+        t1.style.filter = fraction > 0.05 ? `blur(${(fraction * 8).toFixed(2)}px)` : '';
+        t2.style.filter = fraction < 0.95 ? `blur(${((1 - fraction) * 8).toFixed(2)}px)` : '';
+      }
     };
 
     const animate = (now: number) => {
@@ -107,7 +106,7 @@ export function GooeyText({
           style={{
             left: '50%',
             transform: 'translateX(-50%)',
-            willChange: 'filter, opacity',
+            willChange: 'opacity',
             ...textStyle,
           }}
         />
@@ -117,7 +116,7 @@ export function GooeyText({
           style={{
             left: '50%',
             transform: 'translateX(-50%)',
-            willChange: 'filter, opacity',
+            willChange: 'opacity',
             ...textStyle,
           }}
         />

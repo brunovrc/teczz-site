@@ -29,25 +29,30 @@ export default function DataGridHero({
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    // Mobile: reduce grid density and throttle to 30fps
+    const isMobile = window.innerWidth < 768;
+    const effectiveRows = isMobile ? Math.ceil(rows * 0.45) : rows;
+    const effectiveCols = isMobile ? Math.ceil(cols * 0.45) : cols;
+
     let width = 0;
     let height = 0;
     let mouseX = -1;
     let mouseY = -1;
     let rafId = 0;
+    let frameCount = 0;
     const startTime = performance.now();
     const GAP = 3;
-    const DURATION = 5000; // ms
-    const GLOW_R2 = 260 * 260; // squared radius — avoids sqrt
+    const DURATION = 5000;
+    const GLOW_R2 = 260 * 260;
 
-    // Pre-compute pulse delay per cell (distance from center)
-    const delays = new Float32Array(rows * cols);
-    const centerRow = rows / 2;
-    const centerCol = cols / 2;
-    for (let r = 0; r < rows; r++) {
-      for (let c = 0; c < cols; c++) {
+    const delays = new Float32Array(effectiveRows * effectiveCols);
+    const centerRow = effectiveRows / 2;
+    const centerCol = effectiveCols / 2;
+    for (let r = 0; r < effectiveRows; r++) {
+      for (let c = 0; c < effectiveCols; c++) {
         const dr = r - centerRow;
         const dc = c - centerCol;
-        delays[r * cols + c] = Math.sqrt(dr * dr + dc * dc) * 0.18;
+        delays[r * effectiveCols + c] = Math.sqrt(dr * dr + dc * dc) * 0.18;
       }
     }
 
@@ -70,28 +75,29 @@ export default function DataGridHero({
 
     const draw = () => {
       rafId = requestAnimationFrame(draw);
+      // Throttle to ~30fps on mobile
+      if (isMobile && ++frameCount % 2 !== 0) return;
       if (!width || !height) return;
 
       const t = performance.now() - startTime;
-      const cellW = width / cols;
-      const cellH = height / rows;
+      const cellW = width / effectiveCols;
+      const cellH = height / effectiveRows;
       const cw = cellW - GAP;
       const ch = cellH - GAP;
 
       ctx.clearRect(0, 0, width, height);
       ctx.fillStyle = color;
 
-      for (let r = 0; r < rows; r++) {
+      for (let r = 0; r < effectiveRows; r++) {
         const y = r * cellH + GAP / 2;
         const cy = (r + 0.5) * cellH;
 
-        for (let c = 0; c < cols; c++) {
-          const delay = delays[r * cols + c];
+        for (let c = 0; c < effectiveCols; c++) {
+          const delay = delays[r * effectiveCols + c];
           const phase = (t / DURATION - delay * 0.1) * Math.PI * 2;
           let opacity = opacityMin + (opacityMax - opacityMin) * ((Math.sin(phase) + 1) * 0.5);
 
-          // Mouse glow — squared distance, no sqrt needed
-          if (mouseX >= 0) {
+          if (!isMobile && mouseX >= 0) {
             const dx = (c + 0.5) * cellW - mouseX;
             const dy = cy - mouseY;
             const d2 = dx * dx + dy * dy;
