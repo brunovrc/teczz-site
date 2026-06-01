@@ -246,15 +246,13 @@ export default function App() {
                 <h1 className="animate-on-load animate-on-load-d2"
                   style={{
                     fontFamily: '"Bebas Neue", sans-serif',
-                    fontSize: 'clamp(2.8rem, 5.2vw, 5.2rem)',
+                    fontSize: 'clamp(1.6rem, 7vw, 5.2rem)',
                     fontWeight: 400,
-                    lineHeight: 1.2,
+                    lineHeight: 1.15,
                     paddingTop: '0.1em',
                     letterSpacing: '0.04em',
                     textTransform: 'uppercase',
                     marginBottom: '2rem',
-                    overflow: 'visible',
-                    whiteSpace: 'nowrap',
                   }}>
                   <span style={{
                     background: 'linear-gradient(180deg, #ffffff 0%, rgba(255,255,255,0.6) 100%)',
