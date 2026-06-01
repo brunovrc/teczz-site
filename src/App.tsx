@@ -73,6 +73,8 @@ const cases = [
   },
 ];
 
+const gooeyTexts = ['Sites personalizados', 'Chatbots', 'Automações', 'Agentes de IA'];
+
 const faqs = [
   { q: 'Quanto tempo leva uma implementação?', a: 'Projetos de chatbot e automação simples ficam prontos em 2–4 semanas. Agentes IA mais complexos, de 4 a 8 semanas.' },
   { q: 'Trabalham com quais modelos de IA?', a: 'GPT-4o, Claude 3.5, Gemini 1.5 e modelos open-source. Escolhemos o melhor custo-benefício para cada caso.' },
@@ -265,7 +267,7 @@ export default function App() {
                 <div className="animate-on-load animate-on-load-d3"
                   style={{ marginBottom: '2.5rem', height: '2rem', position: 'relative', overflow: 'visible' }}>
                   <GooeyText
-                    texts={['Sites personalizados', 'Chatbots', 'Automações', 'Agentes de IA']}
+                    texts={gooeyTexts}
                     morphTime={1.2}
                     cooldownTime={2.2}
                     textStyle={{

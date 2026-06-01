@@ -18,8 +18,11 @@ export function GooeyText({
   const text1Ref = useRef<HTMLSpanElement>(null);
   const text2Ref = useRef<HTMLSpanElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const textsRef = useRef(texts);
+  textsRef.current = texts;
 
   useEffect(() => {
+    const texts = textsRef.current;
     if (!texts.length) return;
 
     let textIndex = 0;
@@ -99,7 +102,8 @@ export function GooeyText({
 
     raf = requestAnimationFrame(animate);
     return () => { cancelAnimationFrame(raf); io.disconnect(); };
-  }, [texts, morphTime, cooldownTime]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [morphTime, cooldownTime]);
 
   return (
     <div ref={containerRef} className={`relative ${className}`}>
