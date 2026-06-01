@@ -17,6 +17,7 @@ export function GooeyText({
 }: GooeyTextProps) {
   const text1Ref = useRef<HTMLSpanElement>(null);
   const text2Ref = useRef<HTMLSpanElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!texts.length) return;
@@ -26,6 +27,7 @@ export function GooeyText({
     let cooldown = cooldownTime;
     let lastTime = performance.now();
     let raf: number;
+    let isVisible = true;
 
     if (text1Ref.current) {
       text1Ref.current.textContent = texts[0];
@@ -56,8 +58,15 @@ export function GooeyText({
       t2.style.filter = blur2 > 0.05 ? `blur(${blur2.toFixed(2)}px)` : '';
     };
 
+    const io = new IntersectionObserver(
+      ([entry]) => { isVisible = entry.isIntersecting; },
+      { threshold: 0 }
+    );
+    if (containerRef.current) io.observe(containerRef.current);
+
     const animate = (now: number) => {
       raf = requestAnimationFrame(animate);
+      if (!isVisible) { lastTime = now; return; }
       const dt = Math.min((now - lastTime) / 1000, 0.05);
       lastTime = now;
 
@@ -89,11 +98,11 @@ export function GooeyText({
     };
 
     raf = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(raf);
+    return () => { cancelAnimationFrame(raf); io.disconnect(); };
   }, [texts, morphTime, cooldownTime]);
 
   return (
-    <div className={`relative ${className}`}>
+    <div ref={containerRef} className={`relative ${className}`}>
       <div className="flex items-center justify-center w-full">
         <span
           ref={text1Ref}
