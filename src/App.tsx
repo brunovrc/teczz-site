@@ -756,7 +756,7 @@ export default function App() {
               <span className="text-[10px] tracking-[0.2em] text-white/25 uppercase">IA Implementation Studio</span>
             </div>
             <div className="flex items-center gap-5">
-              <a href="https://instagram.com/teczz" target="_blank" rel="noopener noreferrer" className="social-instagram">
+              <a href="https://www.instagram.com/teczz.ai/" target="_blank" rel="noopener noreferrer" className="social-instagram">
                 <Instagram size={17} />
               </a>
               <a href="https://linkedin.com/company/teczz" target="_blank" rel="noopener noreferrer" className="social-linkedin">
