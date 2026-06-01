@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <rect width="1200" height="630" fill="#000"/>
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#2563eb" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <!-- Grid dots -->
+  <pattern id="dots" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+    <circle cx="20" cy="20" r="1" fill="rgba(59,130,246,0.15)"/>
+  </pattern>
+  <rect width="1200" height="630" fill="url(#dots)"/>
+  <!-- Logo -->
+  <text x="100" y="290" font-family="Inter, Arial, sans-serif" font-weight="700" font-size="112" fill="#ffffff" letter-spacing="-3">Teczz</text>
+  <text x="668" y="290" font-family="Inter, Arial, sans-serif" font-weight="700" font-size="112" fill="#3b82f6">.</text>
+  <!-- Tagline -->
+  <text x="100" y="370" font-family="Inter, Arial, sans-serif" font-weight="400" font-size="34" fill="rgba(255,255,255,0.55)">Implementação de IA para empresas</text>
+  <!-- Divider -->
+  <rect x="100" y="430" width="80" height="2" fill="#3b82f6" opacity="0.6"/>
+  <!-- Bottom label -->
+  <text x="100" y="540" font-family="Inter, Arial, sans-serif" font-weight="500" font-size="16" fill="rgba(255,255,255,0.2)" letter-spacing="5">IA IMPLEMENTATION STUDIO · teczz.com.br</text>
+</svg>
