@@ -40,6 +40,7 @@ export default function DataGridHero({
     let mouseX = -1;
     let mouseY = -1;
     let rafId = 0;
+    let isVisible = true;
     const startTime = performance.now();
     const GAP = 3;
     const DURATION = 5000;
@@ -66,6 +67,13 @@ export default function DataGridHero({
     const ro = new ResizeObserver(resize);
     ro.observe(canvas);
 
+    // Pause animation when hero is off-screen — frees main thread for smooth scroll
+    const io = new IntersectionObserver(
+      ([entry]) => { isVisible = entry.isIntersecting; },
+      { threshold: 0 }
+    );
+    io.observe(canvas);
+
     const onMouseMove = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
       mouseX = e.clientX - rect.left;
@@ -75,7 +83,7 @@ export default function DataGridHero({
 
     const draw = () => {
       rafId = requestAnimationFrame(draw);
-      if (!width || !height) return;
+      if (!isVisible || !width || !height) return;
 
       const t = performance.now() - startTime;
       const cellW = width / effectiveCols;
@@ -117,6 +125,7 @@ export default function DataGridHero({
       cancelAnimationFrame(rafId);
       window.removeEventListener('mousemove', onMouseMove);
       ro.disconnect();
+      io.disconnect();
     };
   }, [rows, cols, color, opacityMin, opacityMax]);
 
