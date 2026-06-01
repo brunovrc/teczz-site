@@ -19,6 +19,7 @@ export default {
         'fade-up-delay': 'fadeUp 1s ease 0.3s forwards',
         'fade-up-delay2': 'fadeUp 1s ease 0.6s forwards',
         'fade-up-delay3': 'fadeUp 1s ease 0.9s forwards',
+        spotlight: 'spotlight 2s ease 0.75s 1 forwards',
       },
       keyframes: {
         fadeIn: {
@@ -28,6 +29,10 @@ export default {
         fadeUp: {
           from: { opacity: '0', transform: 'translateY(40px)' },
           to: { opacity: '1', transform: 'translateY(0)' },
+        },
+        spotlight: {
+          '0%': { opacity: '0', transform: 'translate(-72%, -62%) scale(0.5)' },
+          '100%': { opacity: '1', transform: 'translate(-50%, -40%) scale(1)' },
         },
       },
     },

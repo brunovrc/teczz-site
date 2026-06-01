@@ -8,6 +8,7 @@ import ServiceCard from './components/ServiceCard';
 import BentoGrid, { type BentoItem } from './components/BentoGrid';
 import { GlowMenu } from './components/GlowMenu';
 import type { MenuItem } from './components/GlowMenu';
+import { Spotlight } from './components/Spotlight';
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -226,6 +227,9 @@ export default function App() {
         <section className="relative min-h-screen flex flex-col overflow-hidden" style={{ background: '#000' }}>
 
           <DataGridHero rows={28} cols={50} spacing={3} duration={5} color="#3b82f6" animationType="pulse" pulseEffect mouseGlow opacityMin={0.03} opacityMax={0.28} />
+
+          <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="#3b82f6" />
+          <Spotlight className="top-10 left-full" fill="white" />
 
           {/* Dark scrim behind text for contrast */}
           <div className="absolute inset-0 pointer-events-none z-[5]"
