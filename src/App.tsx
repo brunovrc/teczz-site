@@ -122,6 +122,12 @@ export default function App() {
     setShowPreloader(false);
   }, []);
 
+  // Sempre inicia no topo — entrada e refresh
+  useEffect(() => {
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
+  }, []);
+
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
@@ -156,7 +162,9 @@ export default function App() {
             borderBottom: navScrolled ? '1px solid rgba(255,255,255,0.06)' : '1px solid transparent',
           }}>
           <div className="flex items-center gap-8">
-            <span className="text-2xl font-bold tracking-tight">Teczz<span style={{ color: '#3b82f6' }}>.</span></span>
+            <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="text-2xl font-bold tracking-tight cursor-pointer">
+              Teczz<span style={{ color: '#3b82f6' }}>.</span>
+            </button>
           </div>
           <div className="hidden md:flex items-center">
             <GlowMenu items={navItems} activeItem={activeNav} onItemClick={setActiveNav} />
