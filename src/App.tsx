@@ -4,8 +4,8 @@ import { ArrowRight, ArrowUpRight, ChevronDown, Menu, X, Layers, TrendingUp, Use
 import DataGridHero from './components/DataGridHero';
 import Preloader from './components/Preloader';
 import { GooeyText } from './components/GooeyText';
-import ServiceCard from './components/ServiceCard';
 import BentoGrid, { type BentoItem } from './components/BentoGrid';
+import { GlowingEffect } from './components/ui/GlowingEffect';
 import { GlowMenu } from './components/GlowMenu';
 import type { MenuItem } from './components/GlowMenu';
 import { Spotlight } from './components/Spotlight';
@@ -337,169 +337,113 @@ export default function App() {
               </h2>
             </LampHeading>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <ul className="grid grid-cols-1 gap-4 md:grid-cols-12 md:grid-rows-3 xl:grid-rows-2 xl:max-h-[42rem]">
 
-              <motion.div variants={itemVariants}>
-                <ServiceCard
-                  title="Sites Personalizados"
-                  tagline="Presença digital que converte"
-                  body="Cada detalhe construído para o seu negócio: visual único, performance real e experiência que faz o visitante ficar. Sem template, sem genérico."
-                  accent="#3b82f6"
-                  icon={
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round">
-                      <rect x="2" y="3" width="20" height="14" rx="2"/>
-                      <line x1="2" y1="7" x2="22" y2="7"/>
-                      <circle cx="5.5" cy="5" r="0.8" fill="currentColor" stroke="none"/>
-                      <circle cx="8.5" cy="5" r="0.8" fill="currentColor" stroke="none"/>
-                      <circle cx="12" cy="14" r="2"/>
-                      <line x1="12" y1="17" x2="12" y2="20"/>
-                      <line x1="9" y1="20" x2="15" y2="20"/>
-                    </svg>
-                  }
-                  background={
-                    <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, #0a0f2e 0%, #0d1b4b 40%, #071022 100%)' }}>
-                      <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(rgba(59,130,246,0.12) 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
-                      <div style={{ position: 'absolute', top: '35%', left: '50%', transform: 'translate(-50%,-50%)', width: 180, height: 180, borderRadius: '50%', background: 'radial-gradient(circle, rgba(59,130,246,0.18) 0%, transparent 70%)' }} />
-                    </div>
-                  }
-                />
-              </motion.div>
-
-              <motion.div variants={itemVariants}>
-                <ServiceCard
-                  title="Chatbots"
-                  tagline="Atendimento sem limite"
-                  body="Seu melhor colaborador nunca dorme, nunca esquece e aprende com cada conversa. Treinado no DNA da sua empresa."
-                  accent="#06b6d4"
-                  icon={
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="2" y="4" width="13" height="9" rx="2"/>
-                      <rect x="9" y="11" width="13" height="9" rx="2"/>
-                    </svg>
-                  }
-                  background={
-                    <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(160deg, #040d1a 0%, #071828 50%, #050e1c 100%)' }}>
-                      {[0.15, 0.35, 0.55, 0.75, 0.92].map((y, i) => (
-                        <div key={i} style={{ position: 'absolute', left: 0, right: 0, top: `${y * 100}%`, height: 1, background: `linear-gradient(90deg, transparent, rgba(6,182,212,${0.06 + i * 0.02}), transparent)` }} />
-                      ))}
-                      <div style={{ position: 'absolute', top: '30%', right: '15%', width: 120, height: 120, borderRadius: '50%', background: 'radial-gradient(circle, rgba(6,182,212,0.15) 0%, transparent 70%)' }} />
-                    </div>
-                  }
-                />
-              </motion.div>
-
-              <motion.div variants={itemVariants}>
-                <ServiceCard
-                  title="Automação"
-                  tagline="Processos sem esforço"
-                  body="Tarefas repetitivas eliminadas. Fluxos que correm sozinhos. Sua equipe focada no que só humano faz: pensar e criar."
-                  accent="#a855f7"
-                  icon={
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M12 4a8 8 0 1 0 7.5 5.5"/>
-                      <polyline points="16 4 20 4 20 8"/>
-                    </svg>
-                  }
-                  background={
-                    <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(140deg, #0d0618 0%, #150a28 50%, #090414 100%)' }}>
-                      <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', opacity: 0.12 }} viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice">
-                        <defs><marker id="arr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="rgba(168,85,247,0.8)" /></marker></defs>
-                        {[60,120,180,240].map((x,i) => (
-                          <line key={i} x1={x} y1="20" x2={x} y2="380" stroke="rgba(168,85,247,0.6)" strokeWidth="1" strokeDasharray="6 10" markerEnd="url(#arr)" />
-                        ))}
+              <motion.li variants={itemVariants} className="min-h-[14rem] list-none md:[grid-area:1/1/2/7] xl:[grid-area:1/1/2/5]">
+                <div className="relative h-full rounded-2xl border border-white/[0.08] p-2">
+                  <GlowingEffect blur={0} borderWidth={3} spread={80} glow={true} proximity={64} inactiveZone={0.01} />
+                  <div className="relative flex h-full flex-col justify-between gap-6 overflow-hidden rounded-xl bg-[#0a0a0f] p-6 shadow-[0px_0px_27px_0px_#2D2D2D]">
+                    <div className="w-fit rounded-lg border border-white/10 bg-white/5 p-2">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.4" strokeLinecap="round">
+                        <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="2" y1="7" x2="22" y2="7"/>
+                        <circle cx="5.5" cy="5" r="0.8" fill="rgba(255,255,255,0.7)" stroke="none"/>
+                        <circle cx="8.5" cy="5" r="0.8" fill="rgba(255,255,255,0.7)" stroke="none"/>
                       </svg>
-                      <div style={{ position: 'absolute', top: '40%', left: '50%', transform: 'translate(-50%,-50%)', width: 140, height: 140, borderRadius: '50%', background: 'radial-gradient(circle, rgba(168,85,247,0.18) 0%, transparent 70%)' }} />
                     </div>
-                  }
-                />
-              </motion.div>
-
-              <motion.div variants={itemVariants}>
-                <ServiceCard
-                  title="Agentes IA"
-                  tagline="Inteligência que age"
-                  body="Sistemas autônomos que tomam decisões, executam e se adaptam sem precisar ser chamados. IA que trabalha enquanto você lidera."
-                  accent="#f59e0b"
-                  icon={
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round">
-                      <line x1="12" y1="2" x2="12" y2="10"/>
-                      <line x1="12" y1="10" x2="5" y2="21"/>
-                      <line x1="12" y1="10" x2="19" y2="21"/>
-                      <circle cx="12" cy="10" r="2.2" fill="currentColor" stroke="none"/>
-                    </svg>
-                  }
-                  background={
-                    <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(150deg, #0f0a00 0%, #1a1000 50%, #0a0800 100%)' }}>
-                      <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 200, height: 200, borderRadius: '50%', background: 'radial-gradient(circle, rgba(245,158,11,0.20) 0%, rgba(245,158,11,0.06) 50%, transparent 70%)' }} />
-                      <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 100, height: 100, borderRadius: '50%', border: '1px solid rgba(245,158,11,0.2)', boxShadow: '0 0 30px rgba(245,158,11,0.1)' }} />
-                      <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 160, height: 160, borderRadius: '50%', border: '1px solid rgba(245,158,11,0.08)' }} />
+                    <div className="space-y-2">
+                      <h3 className="text-xl font-semibold text-white tracking-tight">Sites Personalizados</h3>
+                      <p className="text-sm text-white/50 leading-relaxed">Cada detalhe construído para o seu negócio: visual único, performance real e experiência que faz o visitante ficar. Sem template, sem genérico.</p>
                     </div>
-                  }
-                />
-              </motion.div>
+                  </div>
+                </div>
+              </motion.li>
 
-              <motion.div variants={itemVariants}>
-                <ServiceCard
-                  title="Implementação IA"
-                  tagline="IA no núcleo do negócio"
-                  body="Integramos modelos de linguagem onde a dor é maior: vendas, operações, financeiro, RH. IA no coração, não nas bordas."
-                  accent="#10b981"
-                  icon={
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round">
-                      <line x1="3" y1="6" x2="21" y2="6"/>
-                      <line x1="6" y1="12" x2="18" y2="12"/>
-                      <line x1="10" y1="18" x2="14" y2="18"/>
-                    </svg>
-                  }
-                  background={
-                    <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(140deg, #020f0a 0%, #051a10 50%, #020c08 100%)' }}>
-                      <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', opacity: 0.15 }} viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice">
-                        {[[80,100],[220,80],[150,200],[60,300],[240,280],[150,360]].map(([cx,cy],i) => (
-                          <g key={i}>
-                            <circle cx={cx} cy={cy} r="5" fill="rgba(16,185,129,0.7)" />
-                            {i < 5 && <line x1={cx} y1={cy} x2={[[220,80],[150,200],[60,300],[240,280],[150,360]][i][0]} y2={[[220,80],[150,200],[60,300],[240,280],[150,360]][i][1]} stroke="rgba(16,185,129,0.3)" strokeWidth="1" />}
-                          </g>
-                        ))}
+              <motion.li variants={itemVariants} className="min-h-[14rem] list-none md:[grid-area:2/1/3/7] xl:[grid-area:2/1/3/5]">
+                <div className="relative h-full rounded-2xl border border-white/[0.08] p-2">
+                  <GlowingEffect blur={0} borderWidth={3} spread={80} glow={true} proximity={64} inactiveZone={0.01} />
+                  <div className="relative flex h-full flex-col justify-between gap-6 overflow-hidden rounded-xl bg-[#0a0a0f] p-6 shadow-[0px_0px_27px_0px_#2D2D2D]">
+                    <div className="w-fit rounded-lg border border-white/10 bg-white/5 p-2">
+                      <Zap className="w-4 h-4 text-white/70" />
+                    </div>
+                    <div className="space-y-2">
+                      <h3 className="text-xl font-semibold text-white tracking-tight">Automação</h3>
+                      <p className="text-sm text-white/50 leading-relaxed">Tarefas repetitivas eliminadas. Fluxos que correm sozinhos. Sua equipe focada no que só humano faz: pensar e criar.</p>
+                    </div>
+                  </div>
+                </div>
+              </motion.li>
+
+              <motion.li variants={itemVariants} className="min-h-[14rem] list-none md:[grid-area:1/7/3/13] xl:[grid-area:1/5/3/8]">
+                <div className="relative h-full rounded-2xl border border-white/[0.08] p-2">
+                  <GlowingEffect blur={0} borderWidth={3} spread={80} glow={true} proximity={64} inactiveZone={0.01} />
+                  <div className="relative flex h-full flex-col justify-between gap-6 overflow-hidden rounded-xl bg-[#0a0a0f] p-6 shadow-[0px_0px_27px_0px_#2D2D2D]">
+                    <div className="w-fit rounded-lg border border-white/10 bg-white/5 p-2">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="2" y="4" width="13" height="9" rx="2"/><rect x="9" y="11" width="13" height="9" rx="2"/>
                       </svg>
-                      <div style={{ position: 'absolute', top: '40%', left: '50%', transform: 'translate(-50%,-50%)', width: 130, height: 130, borderRadius: '50%', background: 'radial-gradient(circle, rgba(16,185,129,0.15) 0%, transparent 70%)' }} />
                     </div>
-                  }
-                />
-              </motion.div>
-
-              <motion.div variants={itemVariants}>
-                <ServiceCard
-                  title="Voz com IA"
-                  tagline="Agentes que ligam e atendem"
-                  body="Agentes de voz que ligam, qualificam leads, atendem clientes e agendam reuniões. Sem script travado, sem operador, com naturalidade real."
-                  accent="#a78bfa"
-                  icon={
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>
-                      <path d="M15 7c.5 0 2 .5 2 2"/>
-                      <path d="M15 3c1.5 0 4 1.5 4 5"/>
-                    </svg>
-                  }
-                  background={
-                    <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(145deg, #07051a 0%, #100c2e 50%, #060414 100%)' }}>
-                      {[0,1,2,3,4].map(i => (
-                        <div key={i} style={{
-                          position: 'absolute',
-                          top: '50%', left: '50%',
-                          transform: 'translate(-50%, -50%)',
-                          width: 40 + i * 40,
-                          height: 40 + i * 40,
-                          borderRadius: '50%',
-                          border: `1px solid rgba(167,139,250,${0.16 - i * 0.025})`,
-                        }} />
-                      ))}
-                      <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 120, height: 120, borderRadius: '50%', background: 'radial-gradient(circle, rgba(167,139,250,0.18) 0%, transparent 70%)' }} />
+                    <div className="space-y-2">
+                      <h3 className="text-2xl font-semibold text-white tracking-tight">Chatbots</h3>
+                      <p className="text-sm text-white/50 leading-relaxed">Seu melhor colaborador nunca dorme, nunca esquece e aprende com cada conversa. Treinado no DNA da sua empresa.</p>
                     </div>
-                  }
-                />
-              </motion.div>
+                  </div>
+                </div>
+              </motion.li>
 
-            </div>
+              <motion.li variants={itemVariants} className="min-h-[14rem] list-none md:[grid-area:3/1/4/7] xl:[grid-area:1/8/2/13]">
+                <div className="relative h-full rounded-2xl border border-white/[0.08] p-2">
+                  <GlowingEffect blur={0} borderWidth={3} spread={80} glow={true} proximity={64} inactiveZone={0.01} />
+                  <div className="relative flex h-full flex-col justify-between gap-6 overflow-hidden rounded-xl bg-[#0a0a0f] p-6 shadow-[0px_0px_27px_0px_#2D2D2D]">
+                    <div className="w-fit rounded-lg border border-white/10 bg-white/5 p-2">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.4" strokeLinecap="round">
+                        <line x1="12" y1="2" x2="12" y2="10"/><line x1="12" y1="10" x2="5" y2="21"/>
+                        <line x1="12" y1="10" x2="19" y2="21"/>
+                        <circle cx="12" cy="10" r="2.2" fill="rgba(255,255,255,0.7)" stroke="none"/>
+                      </svg>
+                    </div>
+                    <div className="space-y-2">
+                      <h3 className="text-xl font-semibold text-white tracking-tight">Agentes IA</h3>
+                      <p className="text-sm text-white/50 leading-relaxed">Sistemas autônomos que tomam decisões, executam e se adaptam. IA que trabalha enquanto você lidera.</p>
+                    </div>
+                  </div>
+                </div>
+              </motion.li>
+
+              <motion.li variants={itemVariants} className="min-h-[14rem] list-none md:[grid-area:3/7/4/13] xl:[grid-area:2/8/3/11]">
+                <div className="relative h-full rounded-2xl border border-white/[0.08] p-2">
+                  <GlowingEffect blur={0} borderWidth={3} spread={80} glow={true} proximity={64} inactiveZone={0.01} />
+                  <div className="relative flex h-full flex-col justify-between gap-6 overflow-hidden rounded-xl bg-[#0a0a0f] p-6 shadow-[0px_0px_27px_0px_#2D2D2D]">
+                    <div className="w-fit rounded-lg border border-white/10 bg-white/5 p-2">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.4" strokeLinecap="round">
+                        <line x1="3" y1="6" x2="21" y2="6"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="10" y1="18" x2="14" y2="18"/>
+                      </svg>
+                    </div>
+                    <div className="space-y-2">
+                      <h3 className="text-xl font-semibold text-white tracking-tight">Implementação IA</h3>
+                      <p className="text-sm text-white/50 leading-relaxed">Integramos IA onde a dor é maior: vendas, operações, financeiro, RH. No coração, não nas bordas.</p>
+                    </div>
+                  </div>
+                </div>
+              </motion.li>
+
+              <motion.li variants={itemVariants} className="min-h-[14rem] list-none md:[grid-area:4/1/5/13] xl:[grid-area:2/11/3/13]">
+                <div className="relative h-full rounded-2xl border border-white/[0.08] p-2">
+                  <GlowingEffect blur={0} borderWidth={3} spread={80} glow={true} proximity={64} inactiveZone={0.01} />
+                  <div className="relative flex h-full flex-col justify-between gap-6 overflow-hidden rounded-xl bg-[#0a0a0f] p-6 shadow-[0px_0px_27px_0px_#2D2D2D]">
+                    <div className="w-fit rounded-lg border border-white/10 bg-white/5 p-2">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>
+                      </svg>
+                    </div>
+                    <div className="space-y-2">
+                      <h3 className="text-xl font-semibold text-white tracking-tight">Voz com IA</h3>
+                      <p className="text-sm text-white/50 leading-relaxed">Agentes que ligam, qualificam leads e agendam. Sem script travado, com naturalidade real.</p>
+                    </div>
+                  </div>
+                </div>
+              </motion.li>
+
+            </ul>
           </motion.div>
         </section>
 
