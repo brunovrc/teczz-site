@@ -9,6 +9,7 @@ import BentoGrid, { type BentoItem } from './components/BentoGrid';
 import { GlowMenu } from './components/GlowMenu';
 import type { MenuItem } from './components/GlowMenu';
 import { Spotlight } from './components/Spotlight';
+import { LampHeading } from './components/LampHeading';
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -326,18 +327,15 @@ export default function App() {
         <section id="soluções" className="px-6 md:px-10 py-24 md:py-36">
           <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={vp}>
 
-            <motion.div variants={itemVariants} className="flex flex-col md:flex-row md:items-end md:justify-between mb-16 gap-4">
-              <div>
-                <span className="text-[13px] tracking-[0.2em] text-blue-500 uppercase font-semibold mb-3 block">Soluções</span>
-                <h2 className="text-5xl md:text-7xl font-black uppercase leading-none tracking-tight"
-                  style={{
-                    background: 'linear-gradient(180deg, #ffffff 0%, rgba(255,255,255,0.55) 100%)',
-                    WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-                  }}>
-                  O que<br />construímos
-                </h2>
-              </div>
-            </motion.div>
+            <LampHeading label="Soluções" className="mb-16">
+              <h2 className="text-5xl md:text-7xl font-black uppercase leading-none tracking-tight"
+                style={{
+                  background: 'linear-gradient(180deg, #ffffff 0%, rgba(255,255,255,0.55) 100%)',
+                  WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+                }}>
+                O que<br />construímos
+              </h2>
+            </LampHeading>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
@@ -510,12 +508,11 @@ export default function App() {
         <section id="cases" className="px-6 md:px-10 py-24 md:py-36">
           <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={vp}>
 
-            <motion.div variants={itemVariants} className="mb-16">
-              <span className="text-[13px] tracking-[0.2em] text-blue-500 uppercase font-semibold mb-3 block">Cases</span>
+            <LampHeading label="Cases" className="mb-16">
               <h2 className="text-5xl md:text-7xl font-black uppercase leading-none tracking-tight">
                 Projetos<br />reais
               </h2>
-            </motion.div>
+            </LampHeading>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {cases.map((c, i) => (
@@ -571,17 +568,14 @@ export default function App() {
 
           <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={vp} className="relative z-10">
 
-            <motion.div variants={itemVariants} className="flex flex-col md:flex-row md:items-end md:justify-between mb-16 gap-4">
-              <div>
-                <span className="text-[13px] tracking-[0.2em] text-blue-500 uppercase font-semibold mb-3 block">Processo</span>
-                <h2 className="text-5xl md:text-7xl font-black uppercase leading-none tracking-tight">
-                  Como<br />trabalhamos
-                </h2>
-              </div>
-              <p className="text-white/70 text-sm leading-relaxed max-w-xs">
+            <LampHeading label="Processo" className="mb-16">
+              <h2 className="text-5xl md:text-7xl font-black uppercase leading-none tracking-tight">
+                Como<br />trabalhamos
+              </h2>
+              <p className="text-white/70 text-sm leading-relaxed max-w-xs mx-auto mt-4">
                 Do primeiro diagnóstico ao go-live — um processo testado que entrega resultado real.
               </p>
-            </motion.div>
+            </LampHeading>
 
             <motion.div variants={itemVariants}>
               <BentoGrid items={[
@@ -633,12 +627,11 @@ export default function App() {
         <section id="faq" className="px-6 md:px-10 py-24 md:py-36">
           <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={vp}>
 
-            <motion.div variants={itemVariants} className="mb-14">
-              <span className="text-[13px] tracking-[0.2em] text-blue-500 uppercase font-semibold mb-3 block">FAQ</span>
+            <LampHeading label="FAQ" className="mb-14">
               <h2 className="text-5xl md:text-6xl font-black uppercase leading-none tracking-tight">
                 Dúvidas<br />frequentes
               </h2>
-            </motion.div>
+            </LampHeading>
 
             <div className="flex flex-col">
               {faqs.map((faq, i) => {
