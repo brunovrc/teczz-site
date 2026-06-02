@@ -10,7 +10,6 @@ import { GlowMenu } from './components/GlowMenu';
 import type { MenuItem } from './components/GlowMenu';
 import { Spotlight } from './components/Spotlight';
 import { LampHeading } from './components/LampHeading';
-import { TracingBeam } from './components/TracingBeam';
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -324,7 +323,6 @@ export default function App() {
           </div>
         </section>
 
-        <TracingBeam>
         {/* ─── SERVICES ─── */}
         <section id="soluções" className="px-6 md:px-10 py-24 md:py-36">
           <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={vp}>
@@ -751,8 +749,6 @@ export default function App() {
             </motion.div>
           </motion.div>
         </section>
-
-        </TracingBeam>
 
         {/* ─── FOOTER ─── */}
         <div aria-hidden="true" className="section-sep" />
