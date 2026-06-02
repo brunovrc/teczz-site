@@ -5,7 +5,7 @@ import DataGridHero from './components/DataGridHero';
 import Preloader from './components/Preloader';
 import { GooeyText } from './components/GooeyText';
 import BentoGrid, { type BentoItem } from './components/BentoGrid';
-import { GlowingEffect } from './components/ui/GlowingEffect';
+import { BentoCard } from './components/BentoCard';
 import { GlowMenu } from './components/GlowMenu';
 import type { MenuItem } from './components/GlowMenu';
 import { Spotlight } from './components/Spotlight';
@@ -339,109 +339,72 @@ export default function App() {
 
             <ul className="grid grid-cols-1 gap-4 md:grid-cols-12 md:grid-rows-3 xl:grid-rows-2 xl:max-h-[42rem]">
 
-              <motion.li variants={itemVariants} className="min-h-[14rem] list-none md:[grid-area:1/1/2/7] xl:[grid-area:1/1/2/5]">
-                <div className="relative h-full rounded-2xl border border-white/[0.08] p-2">
-                  <GlowingEffect blur={0} borderWidth={3} spread={80} glow={true} proximity={64} inactiveZone={0.01} />
-                  <div className="relative flex h-full flex-col justify-between gap-6 overflow-hidden rounded-xl bg-[#0a0a0f] p-6 shadow-[0px_0px_27px_0px_#2D2D2D]">
-                    <div className="w-fit rounded-lg border border-white/10 bg-white/5 p-2">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.4" strokeLinecap="round">
-                        <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="2" y1="7" x2="22" y2="7"/>
-                        <circle cx="5.5" cy="5" r="0.8" fill="rgba(255,255,255,0.7)" stroke="none"/>
-                        <circle cx="8.5" cy="5" r="0.8" fill="rgba(255,255,255,0.7)" stroke="none"/>
-                      </svg>
-                    </div>
-                    <div className="space-y-2">
-                      <h3 className="text-xl font-semibold text-white tracking-tight">Sites Personalizados</h3>
-                      <p className="text-sm text-white/50 leading-relaxed">Cada detalhe construído para o seu negócio: visual único, performance real e experiência que faz o visitante ficar. Sem template, sem genérico.</p>
-                    </div>
-                  </div>
-                </div>
-              </motion.li>
+              <BentoCard
+                area="md:[grid-area:1/1/2/7] xl:[grid-area:1/1/2/5]"
+                title="Sites Personalizados"
+                description="Cada detalhe construído para o seu negócio: visual único, performance real e experiência que faz o visitante ficar. Sem template, sem genérico."
+                icon={
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.4" strokeLinecap="round">
+                    <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="2" y1="7" x2="22" y2="7"/>
+                    <circle cx="5.5" cy="5" r="0.8" fill="rgba(255,255,255,0.7)" stroke="none"/>
+                    <circle cx="8.5" cy="5" r="0.8" fill="rgba(255,255,255,0.7)" stroke="none"/>
+                  </svg>
+                }
+              />
 
-              <motion.li variants={itemVariants} className="min-h-[14rem] list-none md:[grid-area:2/1/3/7] xl:[grid-area:2/1/3/5]">
-                <div className="relative h-full rounded-2xl border border-white/[0.08] p-2">
-                  <GlowingEffect blur={0} borderWidth={3} spread={80} glow={true} proximity={64} inactiveZone={0.01} />
-                  <div className="relative flex h-full flex-col justify-between gap-6 overflow-hidden rounded-xl bg-[#0a0a0f] p-6 shadow-[0px_0px_27px_0px_#2D2D2D]">
-                    <div className="w-fit rounded-lg border border-white/10 bg-white/5 p-2">
-                      <Zap className="w-4 h-4 text-white/70" />
-                    </div>
-                    <div className="space-y-2">
-                      <h3 className="text-xl font-semibold text-white tracking-tight">Automação</h3>
-                      <p className="text-sm text-white/50 leading-relaxed">Tarefas repetitivas eliminadas. Fluxos que correm sozinhos. Sua equipe focada no que só humano faz: pensar e criar.</p>
-                    </div>
-                  </div>
-                </div>
-              </motion.li>
+              <BentoCard
+                area="md:[grid-area:2/1/3/7] xl:[grid-area:2/1/3/5]"
+                title="Automação"
+                description="Tarefas repetitivas eliminadas. Fluxos que correm sozinhos. Sua equipe focada no que só humano faz: pensar e criar."
+                icon={<Zap width="16" height="16" stroke="rgba(255,255,255,0.7)" strokeWidth={1.4} />}
+              />
 
-              <motion.li variants={itemVariants} className="min-h-[14rem] list-none md:[grid-area:1/7/3/13] xl:[grid-area:1/5/3/8]">
-                <div className="relative h-full rounded-2xl border border-white/[0.08] p-2">
-                  <GlowingEffect blur={0} borderWidth={3} spread={80} glow={true} proximity={64} inactiveZone={0.01} />
-                  <div className="relative flex h-full flex-col justify-between gap-6 overflow-hidden rounded-xl bg-[#0a0a0f] p-6 shadow-[0px_0px_27px_0px_#2D2D2D]">
-                    <div className="w-fit rounded-lg border border-white/10 bg-white/5 p-2">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
-                        <rect x="2" y="4" width="13" height="9" rx="2"/><rect x="9" y="11" width="13" height="9" rx="2"/>
-                      </svg>
-                    </div>
-                    <div className="space-y-2">
-                      <h3 className="text-2xl font-semibold text-white tracking-tight">Chatbots</h3>
-                      <p className="text-sm text-white/50 leading-relaxed">Seu melhor colaborador nunca dorme, nunca esquece e aprende com cada conversa. Treinado no DNA da sua empresa.</p>
-                    </div>
-                  </div>
-                </div>
-              </motion.li>
+              <BentoCard
+                area="md:[grid-area:1/7/3/13] xl:[grid-area:1/5/3/8]"
+                title="Chatbots"
+                titleSize="text-2xl"
+                description="Seu melhor colaborador nunca dorme, nunca esquece e aprende com cada conversa. Treinado no DNA da sua empresa."
+                icon={
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="2" y="4" width="13" height="9" rx="2"/><rect x="9" y="11" width="13" height="9" rx="2"/>
+                  </svg>
+                }
+              />
 
-              <motion.li variants={itemVariants} className="min-h-[14rem] list-none md:[grid-area:3/1/4/7] xl:[grid-area:1/8/2/13]">
-                <div className="relative h-full rounded-2xl border border-white/[0.08] p-2">
-                  <GlowingEffect blur={0} borderWidth={3} spread={80} glow={true} proximity={64} inactiveZone={0.01} />
-                  <div className="relative flex h-full flex-col justify-between gap-6 overflow-hidden rounded-xl bg-[#0a0a0f] p-6 shadow-[0px_0px_27px_0px_#2D2D2D]">
-                    <div className="w-fit rounded-lg border border-white/10 bg-white/5 p-2">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.4" strokeLinecap="round">
-                        <line x1="12" y1="2" x2="12" y2="10"/><line x1="12" y1="10" x2="5" y2="21"/>
-                        <line x1="12" y1="10" x2="19" y2="21"/>
-                        <circle cx="12" cy="10" r="2.2" fill="rgba(255,255,255,0.7)" stroke="none"/>
-                      </svg>
-                    </div>
-                    <div className="space-y-2">
-                      <h3 className="text-xl font-semibold text-white tracking-tight">Agentes IA</h3>
-                      <p className="text-sm text-white/50 leading-relaxed">Sistemas autônomos que tomam decisões, executam e se adaptam. IA que trabalha enquanto você lidera.</p>
-                    </div>
-                  </div>
-                </div>
-              </motion.li>
+              <BentoCard
+                area="md:[grid-area:3/1/4/7] xl:[grid-area:1/8/2/13]"
+                title="Agentes IA"
+                description="Sistemas autônomos que tomam decisões, executam e se adaptam. IA que trabalha enquanto você lidera."
+                icon={
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.4" strokeLinecap="round">
+                    <line x1="12" y1="2" x2="12" y2="10"/><line x1="12" y1="10" x2="5" y2="21"/>
+                    <line x1="12" y1="10" x2="19" y2="21"/>
+                    <circle cx="12" cy="10" r="2.2" stroke="rgba(255,255,255,0.7)" fill="none"/>
+                  </svg>
+                }
+              />
 
-              <motion.li variants={itemVariants} className="min-h-[14rem] list-none md:[grid-area:3/7/4/13] xl:[grid-area:2/8/3/11]">
-                <div className="relative h-full rounded-2xl border border-white/[0.08] p-2">
-                  <GlowingEffect blur={0} borderWidth={3} spread={80} glow={true} proximity={64} inactiveZone={0.01} />
-                  <div className="relative flex h-full flex-col justify-between gap-6 overflow-hidden rounded-xl bg-[#0a0a0f] p-6 shadow-[0px_0px_27px_0px_#2D2D2D]">
-                    <div className="w-fit rounded-lg border border-white/10 bg-white/5 p-2">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.4" strokeLinecap="round">
-                        <line x1="3" y1="6" x2="21" y2="6"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="10" y1="18" x2="14" y2="18"/>
-                      </svg>
-                    </div>
-                    <div className="space-y-2">
-                      <h3 className="text-xl font-semibold text-white tracking-tight">Implementação IA</h3>
-                      <p className="text-sm text-white/50 leading-relaxed">Integramos IA onde a dor é maior: vendas, operações, financeiro, RH. No coração, não nas bordas.</p>
-                    </div>
-                  </div>
-                </div>
-              </motion.li>
+              <BentoCard
+                area="md:[grid-area:3/7/4/13] xl:[grid-area:2/8/3/11]"
+                title="Implementação IA"
+                description="Integramos IA onde a dor é maior: vendas, operações, financeiro, RH. No coração, não nas bordas."
+                icon={
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.4" strokeLinecap="round">
+                    <line x1="3" y1="6" x2="21" y2="6"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="10" y1="18" x2="14" y2="18"/>
+                  </svg>
+                }
+              />
 
-              <motion.li variants={itemVariants} className="min-h-[14rem] list-none md:[grid-area:4/1/5/13] xl:[grid-area:2/11/3/13]">
-                <div className="relative h-full rounded-2xl border border-white/[0.08] p-2">
-                  <GlowingEffect blur={0} borderWidth={3} spread={80} glow={true} proximity={64} inactiveZone={0.01} />
-                  <div className="relative flex h-full flex-col justify-between gap-6 overflow-hidden rounded-xl bg-[#0a0a0f] p-6 shadow-[0px_0px_27px_0px_#2D2D2D]">
-                    <div className="w-fit rounded-lg border border-white/10 bg-white/5 p-2">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>
-                      </svg>
-                    </div>
-                    <div className="space-y-2">
-                      <h3 className="text-xl font-semibold text-white tracking-tight">Voz com IA</h3>
-                      <p className="text-sm text-white/50 leading-relaxed">Agentes que ligam, qualificam leads e agendam. Sem script travado, com naturalidade real.</p>
-                    </div>
-                  </div>
-                </div>
-              </motion.li>
+              <BentoCard
+                area="md:[grid-area:4/1/5/13] xl:[grid-area:2/11/3/13]"
+                title="Voz com IA"
+                description="Agentes que ligam, qualificam leads e agendam. Sem script travado, com naturalidade real."
+                icon={
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>
+                  </svg>
+                }
+              />
 
             </ul>
           </motion.div>
