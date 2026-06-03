@@ -1,4 +1,4 @@
-import { type RefObject, useRef, useEffect, useMemo } from 'react';
+import { type RefObject, useRef, useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, ChevronDown } from 'lucide-react';
 import DataGridHero from './DataGridHero';
@@ -21,10 +21,23 @@ interface HeroRobotProps {
 export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
   const heroRef = useRef<HTMLElement>(null);
   const splineRef = useRef<HTMLDivElement>(null);
-  // Calculado uma vez no mount — evita renderizar DUAS instâncias do Spline
   const isDesktop = useMemo(() => window.innerWidth >= 768, []);
 
-  // Repassa mousemove de toda a hero para o canvas do Spline (desktop only)
+  // Spline só monta depois do browser ficar idle — página abre fluida,
+  // robô carrega em background e faz fade-in quando pronto
+  const [splineReady, setSplineReady] = useState(false);
+  useEffect(() => {
+    const mount = () => setSplineReady(true);
+    if ('requestIdleCallback' in window) {
+      const id = (window as Window & { requestIdleCallback: (cb: () => void, opts?: { timeout: number }) => number })
+        .requestIdleCallback(mount, { timeout: 3000 });
+      return () => (window as Window & { cancelIdleCallback: (id: number) => void }).cancelIdleCallback(id);
+    }
+    const id = setTimeout(mount, 1400);
+    return () => clearTimeout(id);
+  }, []);
+
+  // Repassa mousemove para o canvas do Spline (desktop only)
   useEffect(() => {
     if (!isDesktop) return;
     const hero = heroRef.current;
@@ -53,28 +66,36 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
         opacityMin={0.03} opacityMax={0.28}
       />
 
-      {/* 2. Robô — UMA instância: desktop (direita) ou mobile (tela inteira) */}
+      {/* 2. Robô — monta só quando browser está idle (não bloqueia primeiro render) */}
       {isDesktop ? (
         <div
           ref={splineRef}
           id="spline-robot"
           className="absolute overflow-hidden"
-          style={{ top: 0, right: 0, bottom: 0, left: '50%', zIndex: 3 }}
+          style={{
+            top: 0, right: 0, bottom: 0, left: '50%', zIndex: 3,
+            opacity: splineReady ? 1 : 0,
+            transition: splineReady ? 'opacity 0.8s ease' : 'none',
+          }}
         >
-          <SplineScene scene={SPLINE_SCENE} className="w-full h-full" />
+          {splineReady && <SplineScene scene={SPLINE_SCENE} className="w-full h-full" />}
           <style>{`#spline-robot canvas ~ div { display: none !important; }`}</style>
         </div>
       ) : (
         <div
           id="spline-mobile"
           className="absolute inset-0 pointer-events-none z-[4]"
+          style={{
+            opacity: splineReady ? 1 : 0,
+            transition: splineReady ? 'opacity 1s ease' : 'none',
+          }}
         >
-          <SplineScene scene={SPLINE_SCENE} className="w-full h-full" />
+          {splineReady && <SplineScene scene={SPLINE_SCENE} className="w-full h-full" />}
           <style>{`#spline-mobile canvas ~ div { display: none !important; }`}</style>
         </div>
       )}
 
-      {/* 4. Scrim desktop — esquerda → direita */}
+      {/* 3. Scrim desktop */}
       <div
         aria-hidden="true"
         className="hidden md:block absolute inset-0 pointer-events-none z-[5]"
@@ -83,7 +104,7 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
         }}
       />
 
-      {/* 5. Scrim mobile — baixo → cima para legibilidade do texto */}
+      {/* 4. Scrim mobile */}
       <div
         aria-hidden="true"
         className="md:hidden absolute inset-0 pointer-events-none z-[6]"
@@ -92,11 +113,7 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
         }}
       />
 
-      {/*
-        6. Conteúdo — pointer-events-none no container, só o CTA é clicável
-           Mobile: centralizado na base da hero
-           Desktop: coluna esquerda, centralizado verticalmente
-      */}
+      {/* 5. Conteúdo */}
       <div className="relative z-10 flex flex-1 pointer-events-none">
 
         <div
@@ -148,7 +165,7 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
 
       </div>
 
-      {/* 7. Marquee — z-[15] cobre as pernas do robô mobile */}
+      {/* 6. Marquee */}
       <div className="relative z-[15] pointer-events-auto">
         <div className="px-6 md:px-10 pt-5 pb-3 flex items-center justify-between">
           <p className="lets-build text-[9px] md:text-[10px] tracking-[0.5em] md:tracking-[0.8em] uppercase font-medium">
