@@ -112,12 +112,19 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
         {/* ── Robô 3D Spline — direita ── */}
         <div id="spline-robot" className="hidden md:flex flex-1 relative overflow-hidden" style={{ minHeight: 'calc(100svh - 60px)' }}>
 
-          <div className="absolute inset-0" style={{
-            filter: 'sepia(0.25) hue-rotate(185deg) saturate(2.6) brightness(1.08)',
-            transform: 'scale(1.18) translateY(6%)',
-            transformOrigin: 'center top',
-          }}>
-            <SplineScene scene={SPLINE_SCENE} className="w-full h-full" transparentBackground />
+          {/*
+            mix-blend-mode: screen FORA do filter → composta contra o fundo real da página
+            (fundo escuro do Spline vira transparente; robô fica visível)
+            filter DENTRO → apenas tinta a cor, sem afetar o blend
+          */}
+          <div className="absolute inset-0" style={{ mixBlendMode: 'screen' }}>
+            <div className="absolute inset-0" style={{
+              filter: 'sepia(0.2) hue-rotate(185deg) saturate(2.4) brightness(1.1)',
+              transform: 'scale(1.18) translateY(6%)',
+              transformOrigin: 'center top',
+            }}>
+              <SplineScene scene={SPLINE_SCENE} className="w-full h-full" transparentBackground />
+            </div>
           </div>
 
           {/* Vignette esquerda */}
