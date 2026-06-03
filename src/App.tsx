@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
+import { createTimeline, scrambleText } from 'animejs';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, ArrowUpRight, ChevronDown, Menu, X, Layers, TrendingUp, Users, Mail, Instagram, Linkedin, Facebook, Search, Zap, Rocket } from 'lucide-react';
 import DataGridHero from './components/DataGridHero';
@@ -95,6 +96,9 @@ export default function App() {
   const lastScrollY = useRef(0);
   const rafRef = useRef(0);
   const progressBarRef = useRef<HTMLDivElement>(null);
+  const heroLine1Ref = useRef<HTMLSpanElement>(null);
+  const heroLine2Ref = useRef<HTMLSpanElement>(null);
+  const heroScrambled = useRef(false);
 
   useEffect(() => {
     const onScroll = () => {
@@ -134,6 +138,37 @@ export default function App() {
     document.body.style.overflow = mobileOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [mobileOpen]);
+
+  // Scramble da headline — dispara quando o preloader sai
+  useEffect(() => {
+    if (showPreloader || heroScrambled.current) return;
+    if (!heroLine1Ref.current || !heroLine2Ref.current) return;
+    heroScrambled.current = true;
+
+    createTimeline({ delay: 150 })
+      .add(heroLine1Ref.current, {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        innerHTML: (scrambleText as any)({
+          duration: 1100,
+          settleDuration: 450,
+          perturbation: 0.22,
+          chars: 'uppercase',
+          cursor: '░▒▓█',
+          from: 'left',
+        }),
+      })
+      .add(heroLine2Ref.current, {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        innerHTML: (scrambleText as any)({
+          duration: 1100,
+          settleDuration: 450,
+          perturbation: 0.22,
+          chars: 'uppercase',
+          cursor: '░▒▓█',
+          from: 'left',
+        }),
+      }, '-=750');
+  }, [showPreloader]);
 
   return (
     <>
@@ -256,14 +291,14 @@ export default function App() {
                     textTransform: 'uppercase',
                     marginBottom: '2rem',
                   }}>
-                  <span style={{
+                  <span ref={heroLine1Ref} style={{
                     background: 'linear-gradient(180deg, #ffffff 0%, rgba(255,255,255,0.6) 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     backgroundClip: 'text',
                     display: 'block',
                   }}>IA não é mais tendência.</span>
-                  <span style={{
+                  <span ref={heroLine2Ref} style={{
                     background: 'linear-gradient(180deg, #60a5fa 0%, #3b82f6 60%, #2563eb 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
