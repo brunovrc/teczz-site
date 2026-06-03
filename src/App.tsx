@@ -149,9 +149,9 @@ export default function App() {
       .add(heroLine1Ref.current, {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         innerHTML: (scrambleText as any)({
-          duration: 1100,
-          settleDuration: 450,
-          perturbation: 0.22,
+          duration: 2200,
+          settleDuration: 800,
+          perturbation: 0.12,
           chars: 'uppercase',
           cursor: '░▒▓█',
           from: 'left',
@@ -160,14 +160,14 @@ export default function App() {
       .add(heroLine2Ref.current, {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         innerHTML: (scrambleText as any)({
-          duration: 1100,
-          settleDuration: 450,
-          perturbation: 0.22,
+          duration: 2200,
+          settleDuration: 800,
+          perturbation: 0.12,
           chars: 'uppercase',
           cursor: '░▒▓█',
           from: 'left',
         }),
-      }, '-=750');
+      }, '-=1500');
   }, [showPreloader]);
 
   return (
