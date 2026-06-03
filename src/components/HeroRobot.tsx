@@ -82,7 +82,7 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
       <div className="relative z-10 flex flex-1 pointer-events-none">
 
         <div className="relative z-20 flex flex-col justify-center gap-6 px-6 md:px-10 lg:px-16
-                        w-full md:w-[55%] lg:w-[52%] pointer-events-auto"
+                        w-full md:w-[65%] lg:w-[63%] pointer-events-auto"
           style={{ paddingTop: 'calc(72px + 1rem)', paddingBottom: '2rem' }}
         >
           <motion.h1
@@ -91,26 +91,24 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
             transition={{ delay: 0.15, duration: 0.8, ease }}
             style={{
               fontFamily: '"Bebas Neue", sans-serif',
-              fontSize: 'clamp(2.2rem, 3.8vw, 3.8rem)',
+              fontSize: 'clamp(2.8rem, 5vw, 5rem)',
               fontWeight: 400,
-              lineHeight: 1.05,
+              lineHeight: 1.0,
               letterSpacing: '0.04em',
               textTransform: 'uppercase',
             }}
           >
-            <span ref={line1Ref} style={{
+            <span ref={line1Ref} className="md:whitespace-nowrap" style={{
               background: 'linear-gradient(180deg, #fff 0%, rgba(255,255,255,0.62) 100%)',
               WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
               display: 'block',
-              whiteSpace: 'nowrap',
             }}>
               IA não é mais tendência.
             </span>
-            <span ref={line2Ref} style={{
+            <span ref={line2Ref} className="md:whitespace-nowrap" style={{
               background: 'linear-gradient(180deg, #60a5fa 0%, #3b82f6 60%, #2563eb 100%)',
               WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
               display: 'block',
-              whiteSpace: 'nowrap',
             }}>
               É vantagem competitiva.
             </span>
@@ -131,18 +129,18 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.62, duration: 0.7 }}
-            style={{ height: '1.6rem', position: 'relative', overflow: 'visible' }}
+            style={{ height: '2.2rem', position: 'relative', overflow: 'visible' }}
           >
             <GooeyText
               texts={gooeyTexts}
               morphTime={1.2}
               cooldownTime={2.2}
               textStyle={{
-                fontSize: 'clamp(0.8rem, 1.3vw, 1rem)',
+                fontSize: 'clamp(1rem, 1.6vw, 1.35rem)',
                 fontWeight: 700,
-                letterSpacing: '-0.025em',
+                letterSpacing: '0.05em',
                 textTransform: 'uppercase' as const,
-                color: 'rgba(255,255,255,0.55)',
+                color: 'rgba(255,255,255,0.75)',
                 whiteSpace: 'nowrap',
                 left: 0,
                 transform: 'none',
