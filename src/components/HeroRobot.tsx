@@ -91,7 +91,7 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
             transition={{ delay: 0.15, duration: 0.8, ease }}
             style={{
               fontFamily: '"Bebas Neue", sans-serif',
-              fontSize: 'clamp(2.2rem, 5vw, 5.2rem)',
+              fontSize: 'clamp(2rem, 3.5vw, 4rem)',
               fontWeight: 400,
               lineHeight: 1.1,
               letterSpacing: '0.04em',
@@ -102,6 +102,7 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
               background: 'linear-gradient(180deg, #fff 0%, rgba(255,255,255,0.62) 100%)',
               WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
               display: 'block',
+              whiteSpace: 'nowrap',
             }}>
               IA não é mais tendência.
             </span>
@@ -109,42 +110,44 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
               background: 'linear-gradient(180deg, #60a5fa 0%, #3b82f6 60%, #2563eb 100%)',
               WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
               display: 'block',
+              whiteSpace: 'nowrap',
             }}>
               É vantagem competitiva.
             </span>
           </motion.h1>
 
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.45, duration: 0.7 }}
-            style={{ height: '2rem', position: 'relative', overflow: 'visible', width: '100%' }}
-          >
-            <GooeyText
-              texts={gooeyTexts}
-              morphTime={1.2}
-              cooldownTime={2.2}
-              textStyle={{
-                fontSize: 'clamp(0.85rem, 1.6vw, 1.2rem)',
-                fontWeight: 700,
-                letterSpacing: '-0.025em',
-                textTransform: 'uppercase' as const,
-                color: 'rgba(255,255,255,0.7)',
-                whiteSpace: 'nowrap',
-              }}
-            />
-          </motion.div>
-
-          <motion.a
-            href="https://wa.me/5511940411688?text=Ol%C3%A1%2C%20quero%20implementar%20IA%20na%20minha%20empresa!"
-            target="_blank" rel="noopener noreferrer"
-            className="pill-btn-lg w-fit"
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.62, duration: 0.7, ease }}
+            transition={{ delay: 0.45, duration: 0.7, ease }}
+            className="flex flex-wrap items-center gap-x-5 gap-y-3"
           >
-            Quero implementar IA na minha empresa <ArrowRight size={14} />
-          </motion.a>
+            <div style={{ height: '1.6rem', position: 'relative', overflow: 'visible', minWidth: '15rem' }}>
+              <GooeyText
+                texts={gooeyTexts}
+                morphTime={1.2}
+                cooldownTime={2.2}
+                textStyle={{
+                  fontSize: 'clamp(0.8rem, 1.4vw, 1.05rem)',
+                  fontWeight: 700,
+                  letterSpacing: '-0.025em',
+                  textTransform: 'uppercase' as const,
+                  color: 'rgba(255,255,255,0.7)',
+                  whiteSpace: 'nowrap',
+                  left: 0,
+                  transform: 'none',
+                }}
+              />
+            </div>
+
+            <a
+              href="https://wa.me/5511940411688?text=Ol%C3%A1%2C%20quero%20implementar%20IA%20na%20minha%20empresa!"
+              target="_blank" rel="noopener noreferrer"
+              className="pill-btn-lg w-fit"
+            >
+              Quero implementar IA na minha empresa <ArrowRight size={14} />
+            </a>
+          </motion.div>
         </div>
 
         <div className="hidden md:flex flex-1" />
