@@ -123,7 +123,6 @@
     animation: marquee 22s linear infinite;
     white-space: nowrap;
     will-change: transform;
-    contain: paint layout;
   }
 
   .marquee-word {
