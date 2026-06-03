@@ -139,9 +139,14 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
 
         <div className="hidden md:flex flex-1" />
 
-        {/* Mobile */}
-        <div className="md:hidden absolute inset-0 pointer-events-none opacity-20 z-[4]">
+        {/* Mobile — robô do topo até onde começa o GooeyText (~50vh) */}
+        <div
+          id="spline-mobile"
+          className="md:hidden absolute left-0 right-0 top-0 pointer-events-none opacity-30 z-[4]"
+          style={{ height: '50vh' }}
+        >
           <SplineScene scene={SPLINE_SCENE} className="w-full h-full" />
+          <style>{`#spline-mobile canvas ~ div { display: none !important; }`}</style>
         </div>
 
       </div>
