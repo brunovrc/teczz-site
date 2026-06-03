@@ -110,14 +110,8 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
         </div>
 
         {/* ── Robô 3D Spline — direita ── */}
-        <div className="hidden md:flex flex-1 relative overflow-hidden" style={{ minHeight: 'calc(100svh - 60px)' }}>
+        <div id="spline-robot" className="hidden md:flex flex-1 relative overflow-hidden" style={{ minHeight: 'calc(100svh - 60px)' }}>
 
-          {/*
-            transparentBackground → setBackgroundColor('rgba(0,0,0,0)') no onLoad → fundo some
-            filter: paleta branco-azul da Teczz
-            scale(1.18) + translateY(6%) → pernas chegam até o marquee
-            pointer-events ativo (filter CSS não bloqueia mouse)
-          */}
           <div className="absolute inset-0" style={{
             filter: 'sepia(0.25) hue-rotate(185deg) saturate(2.6) brightness(1.08)',
             transform: 'scale(1.18) translateY(6%)',
@@ -135,7 +129,8 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
             style={{ background: 'linear-gradient(to bottom, #000 0%, transparent 14%, transparent 84%, #000 100%)' }}
           />
 
-          <style>{`canvas ~ div { display: none !important; }`}</style>
+          {/* Escopo restrito ao container do Spline — não afeta canvas do DataGridHero */}
+          <style>{`#spline-robot canvas ~ div { display: none !important; }`}</style>
         </div>
 
         {/* Mobile — robô fantasma atrás do texto */}

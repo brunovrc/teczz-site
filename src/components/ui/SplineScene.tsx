@@ -12,7 +12,7 @@ interface SplineSceneProps {
 export function SplineScene({ scene, className, transparentBackground }: SplineSceneProps) {
   const handleLoad = useCallback((app: Application) => {
     if (transparentBackground) {
-      app.setBackgroundColor('rgba(0,0,0,0)');
+      app.setBackgroundColor('transparent');
     }
   }, [transparentBackground]);
 
