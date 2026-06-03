@@ -84,11 +84,19 @@ export default function DataGridHero({
     };
     window.addEventListener('mousemove', onMouseMove, { passive: true });
 
-    const draw = () => {
+    let lastTs = 0;
+    const FRAME_MS = 1000 / 30; // cap 30fps — imperceptível para pulse lento
+
+    const draw = (ts: number) => {
       if (!isVisible || !width || !height) {
-        rafId = 0; // RAF stops — IO reinicia quando voltar à tela
+        rafId = 0;
         return;
       }
+      if (ts - lastTs < FRAME_MS) {
+        rafId = requestAnimationFrame(draw);
+        return;
+      }
+      lastTs = ts;
 
       const t = performance.now() - startTime;
       const cellW = width / effectiveCols;
@@ -125,7 +133,7 @@ export default function DataGridHero({
       rafId = requestAnimationFrame(draw);
     };
 
-    draw();
+    rafId = requestAnimationFrame(draw);
 
     return () => {
       cancelAnimationFrame(rafId);

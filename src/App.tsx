@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback, memo } from 'react';
 import { createTimeline, scrambleText } from 'animejs';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, ArrowUpRight, ChevronDown, Menu, X, Layers, TrendingUp, Users, Mail, Instagram, Linkedin, Facebook, Search, Zap, Rocket } from 'lucide-react';
@@ -81,6 +81,27 @@ const faqs = [
   { q: 'Como funciona a precificação?', a: 'Projetos de escopo fechado com valor fixo. Retainers mensais para manutenção e evolução contínua.' },
 ];
 
+// Renderiza o iframe só quando a seção entra no viewport (+200px de antecedência)
+const LazyFrame = memo(function LazyFrame({ src, title }: { src: string; title: string }) {
+  const [show, setShow] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { setShow(true); io.disconnect(); } },
+      { rootMargin: '200px', threshold: 0 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return (
+    <div ref={ref} className="browser-iframe" style={{ width: '100%', height: '100%' }}>
+      {show && <iframe src={src} title={title} className="browser-iframe" loading="lazy" sandbox="allow-scripts allow-same-origin" />}
+    </div>
+  );
+});
+
 export default function App() {
   // Remove o preloader HTML assim que o React montar
   useEffect(() => {
@@ -98,29 +119,51 @@ export default function App() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [showAllCases, setShowAllCases] = useState(false);
   const [activeNav, setActiveNav] = useState<string>('Soluções');
-  const [navHidden, setNavHidden] = useState(false);
-  const [navScrolled, setNavScrolled] = useState(false);
 
   const lastScrollY = useRef(0);
   const rafRef = useRef(0);
   const progressBarRef = useRef<HTMLDivElement>(null);
+  const navRef = useRef<HTMLElement>(null);
+  const maxScrollRef = useRef(0);
+  const isTouchRef = useRef(false);
   const heroLine1Ref = useRef<HTMLSpanElement>(null);
   const heroLine2Ref = useRef<HTMLSpanElement>(null);
   const heroScrambled = useRef(false);
 
   useEffect(() => {
+    // Cache maxScroll e detecta touch — atualiza só no resize, não a cada scroll
+    const updateLayout = () => {
+      maxScrollRef.current = document.documentElement.scrollHeight - window.innerHeight;
+      isTouchRef.current = !window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    };
+    updateLayout();
+    window.addEventListener('resize', updateLayout, { passive: true });
+
     const onScroll = () => {
       cancelAnimationFrame(rafRef.current);
       rafRef.current = requestAnimationFrame(() => {
         const y = window.scrollY;
 
-        if (progressBarRef.current) {
-          const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-          progressBarRef.current.style.transform = `scaleX(${maxScroll > 0 ? y / maxScroll : 0})`;
+        // Barra de progresso — DOM direto, zero re-render
+        if (progressBarRef.current && maxScrollRef.current > 0) {
+          progressBarRef.current.style.transform = `scaleX(${y / maxScrollRef.current})`;
         }
 
-        setNavScrolled(y > 40);
-        setNavHidden(y > lastScrollY.current && y > 80);
+        // Nav — DOM direto, elimina re-renders do React durante scroll
+        const nav = navRef.current;
+        if (nav) {
+          const scrolled = y > 40;
+          const hidden = y > lastScrollY.current && y > 80;
+          const blur = (scrolled && !isTouchRef.current) ? 'blur(18px)' : 'none';
+          nav.style.transform = hidden ? 'translateY(-100%)' : 'translateY(0)';
+          nav.style.background = scrolled
+            ? 'rgba(5,5,8,0.82)'
+            : 'linear-gradient(to bottom, rgba(0,0,0,0.75) 0%, transparent 100%)';
+          nav.style.backdropFilter = blur;
+          nav.style.setProperty('-webkit-backdrop-filter', blur);
+          nav.style.borderBottomColor = scrolled ? 'rgba(255,255,255,0.06)' : 'transparent';
+        }
+
         lastScrollY.current = y;
       });
     };
@@ -128,6 +171,7 @@ export default function App() {
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => {
       window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', updateLayout);
       cancelAnimationFrame(rafRef.current);
     };
   }, []);
@@ -187,17 +231,14 @@ export default function App() {
 
       <div className="grain-overlay bg-black text-white font-grotesk">
 
-        {/* NAV */}
-        <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-10 py-5"
+        {/* NAV — estilos dinâmicos via ref (zero re-renders no scroll) */}
+        <nav ref={navRef} className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-10 py-5"
           style={{
-            transform: navHidden ? 'translateY(-100%)' : 'translateY(0)',
+            transform: 'translateY(0)',
             transition: 'transform 0.35s cubic-bezier(0.22,1,0.36,1), background 0.4s ease, border-color 0.4s ease, backdrop-filter 0.4s ease',
-            background: navScrolled
-              ? 'rgba(5,5,8,0.82)'
-              : 'linear-gradient(to bottom, rgba(0,0,0,0.75) 0%, transparent 100%)',
-            backdropFilter: navScrolled ? 'blur(18px)' : 'none',
-            WebkitBackdropFilter: navScrolled ? 'blur(18px)' : 'none',
-            borderBottom: navScrolled ? '1px solid rgba(255,255,255,0.06)' : '1px solid transparent',
+            background: 'linear-gradient(to bottom, rgba(0,0,0,0.75) 0%, transparent 100%)',
+            backdropFilter: 'none',
+            borderBottom: '1px solid transparent',
           }}>
           <div className="flex items-center gap-8">
             <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="text-2xl font-bold tracking-tight cursor-pointer">
@@ -410,9 +451,7 @@ export default function App() {
                           </a>
                         </div>
                         <div className="browser-viewport">
-                          <iframe src={c.url} title={c.title}
-                            className="browser-iframe" loading="lazy"
-                            sandbox="allow-scripts allow-same-origin" />
+                          <LazyFrame src={c.url} title={c.title} />
                         </div>
                       </div>
                     </div>
