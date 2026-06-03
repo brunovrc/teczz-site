@@ -96,7 +96,7 @@ const LazyFrame = memo(function LazyFrame({ src, title }: { src: string; title: 
     return () => io.disconnect();
   }, []);
   return (
-    <div ref={ref} className="browser-iframe" style={{ width: '100%', height: '100%' }}>
+    <div ref={ref} style={{ position: 'absolute', inset: 0 }}>
       {show && <iframe src={src} title={title} className="browser-iframe" loading="lazy" sandbox="allow-scripts allow-same-origin" />}
     </div>
   );
