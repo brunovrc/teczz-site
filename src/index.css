@@ -459,6 +459,49 @@
     transform: scaleX(0);
   }
 
+  /* ── Process cards — gradient border + glow ── */
+  .process-card {
+    padding: 2px;
+    border-radius: 1rem;
+    background: var(--card-gradient);
+    position: relative;
+    z-index: 1;
+    transition: transform 0.35s ease;
+    will-change: transform;
+  }
+
+  .process-card::after {
+    content: "";
+    position: absolute;
+    top: 24px;
+    left: 0;
+    right: 0;
+    z-index: -1;
+    height: 100%;
+    width: 100%;
+    transform: scale(0.85);
+    filter: blur(24px);
+    background: var(--card-gradient);
+    transition: opacity 0.5s ease;
+    border-radius: inherit;
+  }
+
+  .process-card:hover {
+    transform: translateY(-6px);
+  }
+
+  .process-card:hover::after {
+    opacity: 0;
+  }
+
+  .process-card-inner {
+    background: #04091a;
+    border-radius: calc(1rem - 2px);
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     [data-framer-appear-id] {
       opacity: 1 !important;
