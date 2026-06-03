@@ -51,10 +51,7 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
         opacityMin={0.03} opacityMax={0.28}
       />
 
-      {/*
-        2. Robô — container na direita
-           Mouse events de qualquer posição são repassados via useEffect acima
-      */}
+      {/* 2. Robô desktop — metade direita */}
       <div
         ref={splineRef}
         id="spline-robot"
@@ -65,22 +62,47 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
         <style>{`#spline-robot canvas ~ div { display: none !important; }`}</style>
       </div>
 
-      {/* 3. Scrim esquerda — legibilidade do texto */}
-      <div aria-hidden="true" className="absolute inset-0 pointer-events-none z-[5]"
+      {/* 3. Robô mobile — altura total (cabeça no topo, pernas encerram no marquee) */}
+      <div
+        id="spline-mobile"
+        className="md:hidden absolute inset-0 pointer-events-none z-[4]"
+      >
+        <SplineScene scene={SPLINE_SCENE} className="w-full h-full" />
+        <style>{`#spline-mobile canvas ~ div { display: none !important; }`}</style>
+      </div>
+
+      {/* 4. Scrim desktop — esquerda → direita */}
+      <div
+        aria-hidden="true"
+        className="hidden md:block absolute inset-0 pointer-events-none z-[5]"
         style={{
           background: 'linear-gradient(to right, rgba(0,0,0,0.97) 0%, rgba(0,0,0,0.88) 35%, rgba(0,0,0,0.45) 55%, rgba(0,0,0,0.1) 68%, transparent 80%)',
         }}
       />
 
+      {/* 5. Scrim mobile — baixo → cima para legibilidade do texto */}
+      <div
+        aria-hidden="true"
+        className="md:hidden absolute inset-0 pointer-events-none z-[6]"
+        style={{
+          background: 'linear-gradient(to top, rgba(0,0,0,0.96) 0%, rgba(0,0,0,0.82) 30%, rgba(0,0,0,0.35) 60%, rgba(0,0,0,0.08) 85%, transparent 100%)',
+        }}
+      />
+
       {/*
-        4. Texto — pointer-events-none no container para não bloquear mouse do Spline
-           Apenas o CTA (motion.a) precisa de pointer-events-auto
+        6. Conteúdo — pointer-events-none no container, só o CTA é clicável
+           Mobile: centralizado na base da hero
+           Desktop: coluna esquerda, centralizado verticalmente
       */}
       <div className="relative z-10 flex flex-1 pointer-events-none">
 
-        <div className="relative z-20 flex flex-col justify-center gap-8 px-6 md:px-10 lg:px-16
-                        w-full md:w-[65%] lg:w-[63%] pointer-events-none"
-          style={{ paddingTop: 'calc(72px + 1rem)', paddingBottom: '2rem' }}
+        <div
+          className="relative z-20 flex flex-col pointer-events-none gap-5
+                     items-center text-center justify-end pb-24
+                     md:items-start md:text-left md:justify-center md:pb-8
+                     px-5 md:px-10 lg:px-16
+                     w-full md:w-[65%] lg:w-[63%]"
+          style={{ paddingTop: 'calc(72px + 1rem)' }}
         >
           <motion.h1
             initial={{ opacity: 0, y: 24 }}
@@ -88,21 +110,21 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
             transition={{ delay: 0.15, duration: 0.8, ease }}
             style={{
               fontFamily: '"Bebas Neue", sans-serif',
-              fontSize: 'clamp(2.8rem, 5vw, 5rem)',
+              fontSize: 'clamp(1.9rem, 5vw, 5rem)',
               fontWeight: 400,
               lineHeight: 1.15,
               letterSpacing: '0.04em',
               textTransform: 'uppercase',
             }}
           >
-            <span ref={line1Ref} className="md:whitespace-nowrap" style={{
+            <span ref={line1Ref} className="whitespace-nowrap" style={{
               background: 'linear-gradient(180deg, #fff 0%, rgba(255,255,255,0.62) 100%)',
               WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
               display: 'block',
             }}>
               IA não é mais tendência.
             </span>
-            <span ref={line2Ref} className="md:whitespace-nowrap" style={{
+            <span ref={line2Ref} className="whitespace-nowrap" style={{
               background: 'linear-gradient(180deg, #60a5fa 0%, #3b82f6 60%, #2563eb 100%)',
               WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
               display: 'block',
@@ -125,19 +147,9 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
 
         <div className="hidden md:flex flex-1" />
 
-        {/* Mobile — robô do topo (~50vh) */}
-        <div
-          id="spline-mobile"
-          className="md:hidden absolute left-0 right-0 top-0 pointer-events-none opacity-30 z-[4]"
-          style={{ height: '50vh' }}
-        >
-          <SplineScene scene={SPLINE_SCENE} className="w-full h-full" />
-          <style>{`#spline-mobile canvas ~ div { display: none !important; }`}</style>
-        </div>
-
       </div>
 
-      {/* 5. Marquee */}
+      {/* 7. Marquee — z-[15] cobre as pernas do robô mobile */}
       <div className="relative z-[15] pointer-events-auto">
         <div className="px-6 md:px-10 pt-5 pb-3 flex items-center justify-between">
           <p className="lets-build text-[9px] md:text-[10px] tracking-[0.5em] md:tracking-[0.8em] uppercase font-medium">
