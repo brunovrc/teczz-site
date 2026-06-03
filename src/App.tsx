@@ -7,6 +7,7 @@ import Preloader from './components/Preloader';
 import { GooeyText } from './components/GooeyText';
 import BentoGrid, { type BentoItem } from './components/BentoGrid';
 import { BentoCard } from './components/BentoCard';
+import { AnimatedHeading } from './components/AnimatedHeading';
 import { ContainerScroll } from './components/ui/ContainerScroll';
 import { GlowMenu } from './components/GlowMenu';
 import type { MenuItem } from './components/GlowMenu';
@@ -356,13 +357,14 @@ export default function App() {
           <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={vp}>
 
             <LampHeading label="Soluções" className="mb-16">
-              <h2 className="text-5xl md:text-7xl font-black uppercase leading-none tracking-tight"
+              <AnimatedHeading
+                html="O que<br />construímos"
+                className="text-5xl md:text-7xl font-black uppercase leading-none tracking-tight"
                 style={{
                   background: 'linear-gradient(180deg, #ffffff 0%, rgba(255,255,255,0.55) 100%)',
                   WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-                }}>
-                O que<br />construímos
-              </h2>
+                }}
+              />
             </LampHeading>
 
             <ul className="grid grid-cols-1 gap-4 md:grid-cols-12 md:grid-rows-3 xl:grid-rows-2 xl:max-h-[42rem]">
@@ -444,9 +446,10 @@ export default function App() {
           <ContainerScroll
             titleComponent={
               <LampHeading label="Cases" className="mb-0">
-                <h2 className="text-5xl md:text-7xl font-black uppercase leading-none tracking-tight">
-                  Projetos<br />reais
-                </h2>
+                <AnimatedHeading
+                  html="Projetos<br />reais"
+                  className="text-5xl md:text-7xl font-black uppercase leading-none tracking-tight"
+                />
               </LampHeading>
             }
           >
@@ -503,9 +506,10 @@ export default function App() {
           <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={vp} className="relative z-10">
 
             <LampHeading label="Processo" className="mb-16">
-              <h2 className="text-5xl md:text-7xl font-black uppercase leading-none tracking-tight">
-                Como<br />trabalhamos
-              </h2>
+              <AnimatedHeading
+                html="Como<br />trabalhamos"
+                className="text-5xl md:text-7xl font-black uppercase leading-none tracking-tight"
+              />
               <p className="text-white/70 text-sm leading-relaxed max-w-xs mx-auto mt-4">
                 Do primeiro diagnóstico ao go-live — um processo testado que entrega resultado real.
               </p>
@@ -556,9 +560,10 @@ export default function App() {
           <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={vp}>
 
             <LampHeading label="FAQ" className="mb-14">
-              <h2 className="text-5xl md:text-6xl font-black uppercase leading-none tracking-tight">
-                Dúvidas<br />frequentes
-              </h2>
+              <AnimatedHeading
+                html="Dúvidas<br />frequentes"
+                className="text-5xl md:text-6xl font-black uppercase leading-none tracking-tight"
+              />
             </LampHeading>
 
             <div className="flex flex-col">
