@@ -8,7 +8,6 @@ import { GooeyText } from './components/GooeyText';
 import BentoGrid, { type BentoItem } from './components/BentoGrid';
 import { BentoCard } from './components/BentoCard';
 import { AnimatedHeading } from './components/AnimatedHeading';
-import { ContainerScroll } from './components/ui/ContainerScroll';
 import { GlowMenu } from './components/GlowMenu';
 import type { MenuItem } from './components/GlowMenu';
 import { LampHeading } from './components/LampHeading';
@@ -442,59 +441,128 @@ export default function App() {
 
         {/* ─── CASES ─── */}
         <div aria-hidden="true" className="section-sep" />
-        <section id="cases" className="px-6 md:px-10">
-          <ContainerScroll
-            titleComponent={
-              <LampHeading label="Cases" className="mb-0">
-                <AnimatedHeading
-                  html="Projetos<br />reais"
-                  className="text-5xl md:text-7xl font-black uppercase leading-none tracking-tight"
-                />
-              </LampHeading>
-            }
-          >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {cases.map((c, i) => (
-                <div key={i}>
+        <section id="cases" className="px-6 md:px-10 py-24 md:py-36">
+          <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={vp}>
 
-                  {/* Browser mockup */}
-                  <div className="browser-frame mb-4">
+            <LampHeading label="Cases" className="mb-16">
+              <AnimatedHeading
+                html="Projetos<br />reais"
+                className="text-5xl md:text-7xl font-black uppercase leading-none tracking-tight"
+              />
+            </LampHeading>
+
+            {/* ── Featured case ── */}
+            <motion.div variants={itemVariants}
+              className="relative rounded-2xl border border-white/[0.08] overflow-hidden mb-6"
+              style={{ background: 'rgba(6,13,31,0.9)' }}
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-0 min-h-[440px]">
+
+                {/* Info */}
+                <div className="flex flex-col justify-center p-10 md:p-14 gap-6">
+                  <div className="flex items-center gap-3">
+                    <span className="text-[11px] tracking-[0.22em] text-blue-500 uppercase font-semibold px-3 py-1 rounded-full border border-blue-500/25 bg-blue-500/8">
+                      {cases[0].tag}
+                    </span>
+                    <span className="text-[11px] tracking-[0.15em] text-white/25 uppercase font-medium">
+                      {cases[0].status}
+                    </span>
+                  </div>
+
+                  <h3 className="font-black uppercase tracking-tight leading-none"
+                    style={{ fontSize: 'clamp(2.2rem, 4vw, 3.4rem)' }}>
+                    {cases[0].title}
+                  </h3>
+
+                  <p className="text-white/55 text-sm leading-relaxed max-w-sm">
+                    {cases[0].desc}
+                  </p>
+
+                  <a href={cases[0].url} target="_blank" rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-[13px] tracking-[0.1em] uppercase text-blue-400 hover:text-blue-300 transition-colors font-semibold w-fit group">
+                    Ver projeto
+                    <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                  </a>
+                </div>
+
+                {/* Browser mockup */}
+                <div className="relative flex items-center justify-center p-6 md:p-8 border-t md:border-t-0 md:border-l border-white/[0.06]">
+                  <div className="browser-frame w-full" style={{ boxShadow: '0 24px 60px rgba(0,0,0,0.5)' }}>
                     <div className="browser-bar">
                       <div className="flex gap-1.5 shrink-0">
                         <span className="w-3 h-3 rounded-full" style={{ background: '#ff5f57' }} />
                         <span className="w-3 h-3 rounded-full" style={{ background: '#febc2e' }} />
                         <span className="w-3 h-3 rounded-full" style={{ background: '#28c840' }} />
                       </div>
-                      <div className="browser-url">{c.urlLabel}</div>
-                      <a href={c.url} target="_blank" rel="noopener noreferrer"
+                      <div className="browser-url">{cases[0].urlLabel}</div>
+                      <a href={cases[0].url} target="_blank" rel="noopener noreferrer"
                         className="text-white/20 hover:text-white/60 transition-colors shrink-0">
                         <ArrowUpRight size={13} />
                       </a>
                     </div>
                     <div className="browser-viewport">
-                      <iframe
-                        src={c.url}
-                        title={c.title}
-                        className="browser-iframe"
-                        loading="lazy"
-                        sandbox="allow-scripts allow-same-origin"
-                      />
+                      <iframe src={cases[0].url} title={cases[0].title}
+                        className="browser-iframe" loading="lazy"
+                        sandbox="allow-scripts allow-same-origin" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* ── Secondary cases ── */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {cases.slice(1).map((c, i) => (
+                <motion.div key={i} variants={itemVariants}
+                  className="relative rounded-2xl border border-white/[0.08] overflow-hidden"
+                  style={{ background: 'rgba(6,13,31,0.9)' }}
+                >
+                  {/* Browser mockup */}
+                  <div className="border-b border-white/[0.06]">
+                    <div className="browser-frame" style={{ borderRadius: 0, border: 'none' }}>
+                      <div className="browser-bar">
+                        <div className="flex gap-1.5 shrink-0">
+                          <span className="w-3 h-3 rounded-full" style={{ background: '#ff5f57' }} />
+                          <span className="w-3 h-3 rounded-full" style={{ background: '#febc2e' }} />
+                          <span className="w-3 h-3 rounded-full" style={{ background: '#28c840' }} />
+                        </div>
+                        <div className="browser-url">{c.urlLabel}</div>
+                        <a href={c.url} target="_blank" rel="noopener noreferrer"
+                          className="text-white/20 hover:text-white/60 transition-colors shrink-0">
+                          <ArrowUpRight size={13} />
+                        </a>
+                      </div>
+                      <div className="browser-viewport">
+                        <iframe src={c.url} title={c.title}
+                          className="browser-iframe" loading="lazy"
+                          sandbox="allow-scripts allow-same-origin" />
+                      </div>
                     </div>
                   </div>
 
                   {/* Info */}
-                  <span className="text-[13px] tracking-[0.2em] text-blue-500 uppercase font-semibold block mb-2">{c.tag}</span>
-                  <h3 className="text-lg font-bold tracking-tight mb-1">{c.title}</h3>
-                  <p className="text-white/60 text-sm leading-relaxed mb-3">{c.desc}</p>
-                  <a href={c.url} target="_blank" rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-[13px] tracking-[0.08em] uppercase text-blue-400 hover:text-blue-300 transition-colors font-semibold">
-                    Ver projeto <ArrowUpRight size={14} />
-                  </a>
-
-                </div>
+                  <div className="p-7 flex flex-col gap-3">
+                    <div className="flex items-center gap-3">
+                      <span className="text-[11px] tracking-[0.22em] text-blue-500 uppercase font-semibold px-3 py-1 rounded-full border border-blue-500/25 bg-blue-500/8">
+                        {c.tag}
+                      </span>
+                      <span className="text-[11px] tracking-[0.15em] text-white/25 uppercase font-medium">
+                        {c.status}
+                      </span>
+                    </div>
+                    <h3 className="text-xl font-black uppercase tracking-tight">{c.title}</h3>
+                    <p className="text-white/50 text-sm leading-relaxed">{c.desc}</p>
+                    <a href={c.url} target="_blank" rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-[13px] tracking-[0.1em] uppercase text-blue-400 hover:text-blue-300 transition-colors font-semibold w-fit group">
+                      Ver projeto
+                      <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                    </a>
+                  </div>
+                </motion.div>
               ))}
             </div>
-          </ContainerScroll>
+
+          </motion.div>
         </section>
 
         {/* ─── PROCESS ─── */}
