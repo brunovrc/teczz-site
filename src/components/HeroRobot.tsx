@@ -121,16 +121,12 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
               background: 'linear-gradient(180deg, #fff 0%, rgba(255,255,255,0.62) 100%)',
               WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
               display: 'block',
-            }}>
-              IA não é mais tendência.
-            </span>
+            }} />
             <span ref={line2Ref} className="whitespace-nowrap" style={{
               background: 'linear-gradient(180deg, #60a5fa 0%, #3b82f6 60%, #2563eb 100%)',
               WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
               display: 'block',
-            }}>
-              É vantagem competitiva.
-            </span>
+            }} />
           </motion.h1>
 
           <motion.a

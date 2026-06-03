@@ -137,6 +137,10 @@ export default function App() {
       if (!heroLine1Ref.current || !heroLine2Ref.current) return;
       heroScrambled.current = true;
 
+      // Texto só entra aqui — DOM nunca teve texto legível antes disso
+      heroLine1Ref.current.textContent = 'IA não é mais tendência.';
+      heroLine2Ref.current.textContent = 'É vantagem competitiva.';
+
       const params = {
         duration: 2200,
         settleDuration: 800,
