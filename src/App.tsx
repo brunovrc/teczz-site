@@ -140,7 +140,7 @@ export default function App() {
       const params = {
         duration: 2200,
         settleDuration: 800,
-        perturbation: 0.12,
+        perturbation: 0.45,
         chars: 'uppercase',
         cursor: '░▒▓█',
         from: 'left',
@@ -151,7 +151,7 @@ export default function App() {
         .add(heroLine1Ref.current, { innerHTML: (scrambleText as any)(params) }, 0)
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .add(heroLine2Ref.current, { innerHTML: (scrambleText as any)(params) }, 200);
-    }, 500);
+    }, 50);
 
     return () => clearTimeout(timer);
   }, []);
