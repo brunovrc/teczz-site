@@ -18,11 +18,30 @@ export function AnimatedHeading({ html, className, style }: AnimatedHeadingProps
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const split = (splitText as any)(el, { words: true });
 
+    // Se o h2 tem gradient text, propaga pra cada word span —
+    // background-clip: text só funciona no elemento com texto direto
+    const hasGradientText =
+      el.style.webkitTextFillColor === 'transparent' ||
+      el.style.backgroundClip === 'text';
+
     split.words.forEach((w: HTMLElement) => {
       w.style.opacity = '0';
       w.style.transform = 'translateY(10px)';
       w.style.display = 'inline-block';
+
+      if (hasGradientText) {
+        w.style.background = el.style.background;
+        w.style.webkitBackgroundClip = 'text';
+        w.style.backgroundClip = 'text';
+        w.style.webkitTextFillColor = 'transparent';
+      }
     });
+
+    // Remove o gradient do h2 pai pra não duplicar
+    if (hasGradientText) {
+      el.style.background = 'none';
+      el.style.webkitTextFillColor = 'inherit';
+    }
 
     const observer = new IntersectionObserver(([entry]) => {
       if (!entry.isIntersecting || animated.current) return;
