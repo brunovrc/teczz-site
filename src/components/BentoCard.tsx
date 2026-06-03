@@ -1,6 +1,5 @@
-import { useEffect, useRef, type ReactNode } from 'react';
+import { useRef, type ReactNode } from 'react';
 import { motion } from 'framer-motion';
-import { animate, svg } from 'animejs';
 import { GlowingEffect } from './ui/GlowingEffect';
 
 const itemVariants = {
@@ -21,31 +20,7 @@ interface BentoCardProps {
 }
 
 export function BentoCard({ area, icon, title, description, titleSize = 'text-xl' }: BentoCardProps) {
-  const iconRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const container = iconRef.current;
-    if (!container) return;
-
-    const els = Array.from(
-      container.querySelectorAll<SVGGeometryElement>('path, circle, line, polyline, rect, ellipse')
-    ).filter(el => el.getAttribute('stroke') !== 'none');
-
-    if (!els.length) return;
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const drawables = svg.createDrawable(els as any);
-    const anim = animate(drawables, {
-      draw: ['0 0.05', '0.05 1'],
-      ease: 'inOutQuad',
-      duration: 1200,
-      loop: true,
-      alternate: true,
-    });
-
-    return () => { anim.pause(); };
-  }, []);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const el = cardRef.current;
@@ -75,7 +50,7 @@ export function BentoCard({ area, icon, title, description, titleSize = 'text-xl
       >
         <GlowingEffect blur={0} borderWidth={3} spread={80} glow={true} proximity={64} inactiveZone={0.01} />
         <div className="relative flex h-full flex-col justify-between gap-6 overflow-hidden rounded-xl bg-[#0a0a0f] p-6 shadow-[0px_0px_27px_0px_#2D2D2D]">
-          <div ref={iconRef} className="w-fit rounded-lg border border-white/10 bg-white/5 p-2">
+          <div className="w-fit rounded-lg border border-white/10 bg-white/5 p-2">
             {icon}
           </div>
           <div className="space-y-2">
