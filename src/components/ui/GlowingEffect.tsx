@@ -60,6 +60,8 @@ export function GlowingEffect({
 
   useEffect(() => {
     if (disabled) return;
+    // Touch-only devices have no hover — skip all listeners to save scroll perf
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
     const onMove = (e: PointerEvent) => update(e);
     const onScroll = () => update();
     window.addEventListener('pointermove', onMove);

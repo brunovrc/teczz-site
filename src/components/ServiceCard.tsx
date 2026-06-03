@@ -1,4 +1,4 @@
-import { useRef, useState, type ReactNode, type CSSProperties } from 'react';
+import { useRef, type ReactNode } from 'react';
 
 interface ServiceCardProps {
   title: string;
@@ -11,24 +11,29 @@ interface ServiceCardProps {
 
 export default function ServiceCard({ title, tagline, body, background, accent, icon }: ServiceCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
-  const [style, setStyle] = useState<CSSProperties>({});
+  const rafRef = useRef(0);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
-    const { left, top, width, height } = cardRef.current.getBoundingClientRect();
-    const rotX = (((e.clientY - top) - height / 2) / (height / 2)) * -6;
-    const rotY = (((e.clientX - left) - width / 2) / (width / 2)) * 6;
-    setStyle({
-      transform: `perspective(900px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.02,1.02,1.02)`,
-      transition: 'transform 0.1s ease-out',
+    const clientX = e.clientX;
+    const clientY = e.clientY;
+    cancelAnimationFrame(rafRef.current);
+    rafRef.current = requestAnimationFrame(() => {
+      const el = cardRef.current;
+      if (!el) return;
+      const { left, top, width, height } = el.getBoundingClientRect();
+      const rotX = (((clientY - top) - height / 2) / (height / 2)) * -6;
+      const rotY = (((clientX - left) - width / 2) / (width / 2)) * 6;
+      el.style.transform = `perspective(900px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.02,1.02,1.02)`;
+      el.style.transition = 'transform 0.1s ease-out';
     });
   };
 
   const handleMouseLeave = () => {
-    setStyle({
-      transform: 'perspective(900px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)',
-      transition: 'transform 0.5s ease-in-out',
-    });
+    cancelAnimationFrame(rafRef.current);
+    const el = cardRef.current;
+    if (!el) return;
+    el.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)';
+    el.style.transition = 'transform 0.5s ease-in-out';
   };
 
   return (
@@ -36,7 +41,7 @@ export default function ServiceCard({ title, tagline, body, background, accent, 
       ref={cardRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      style={{ ...style, transformStyle: 'preserve-3d' }}
+      style={{ transformStyle: 'preserve-3d' }}
       className="relative w-full rounded-xl overflow-hidden cursor-default"
     >
       <div style={{ height: '240px', position: 'relative' }}>
@@ -90,7 +95,7 @@ export default function ServiceCard({ title, tagline, body, background, accent, 
             }} />
           </div>
 
-          {/* Body text — right below the header, fills remaining space naturally */}
+          {/* Body text */}
           <p style={{
             fontSize: '0.88rem',
             color: 'rgba(255,255,255,0.85)',

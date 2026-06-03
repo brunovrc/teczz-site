@@ -1,4 +1,4 @@
-import { type RefObject, useRef, useEffect } from 'react';
+import { type RefObject, useRef, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, ChevronDown } from 'lucide-react';
 import DataGridHero from './DataGridHero';
@@ -21,10 +21,12 @@ interface HeroRobotProps {
 export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
   const heroRef = useRef<HTMLElement>(null);
   const splineRef = useRef<HTMLDivElement>(null);
+  // Calculado uma vez no mount — evita renderizar DUAS instâncias do Spline
+  const isDesktop = useMemo(() => window.innerWidth >= 768, []);
 
-  // Repassa mousemove de toda a hero para o canvas do Spline
-  // → robô responde ao mouse mesmo quando cursor está no lado esquerdo
+  // Repassa mousemove de toda a hero para o canvas do Spline (desktop only)
   useEffect(() => {
+    if (!isDesktop) return;
     const hero = heroRef.current;
     if (!hero) return;
     const forward = (e: MouseEvent) => {
@@ -39,7 +41,7 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
     };
     hero.addEventListener('mousemove', forward, { passive: true });
     return () => hero.removeEventListener('mousemove', forward);
-  }, []);
+  }, [isDesktop]);
 
   return (
     <section ref={heroRef} className="relative flex flex-col overflow-hidden bg-black" style={{ minHeight: '100svh' }}>
@@ -51,25 +53,26 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
         opacityMin={0.03} opacityMax={0.28}
       />
 
-      {/* 2. Robô desktop — metade direita */}
-      <div
-        ref={splineRef}
-        id="spline-robot"
-        className="hidden md:block absolute overflow-hidden"
-        style={{ top: 0, right: 0, bottom: 0, left: '50%', zIndex: 3 }}
-      >
-        <SplineScene scene={SPLINE_SCENE} className="w-full h-full" />
-        <style>{`#spline-robot canvas ~ div { display: none !important; }`}</style>
-      </div>
-
-      {/* 3. Robô mobile — altura total (cabeça no topo, pernas encerram no marquee) */}
-      <div
-        id="spline-mobile"
-        className="md:hidden absolute inset-0 pointer-events-none z-[4]"
-      >
-        <SplineScene scene={SPLINE_SCENE} className="w-full h-full" />
-        <style>{`#spline-mobile canvas ~ div { display: none !important; }`}</style>
-      </div>
+      {/* 2. Robô — UMA instância: desktop (direita) ou mobile (tela inteira) */}
+      {isDesktop ? (
+        <div
+          ref={splineRef}
+          id="spline-robot"
+          className="absolute overflow-hidden"
+          style={{ top: 0, right: 0, bottom: 0, left: '50%', zIndex: 3 }}
+        >
+          <SplineScene scene={SPLINE_SCENE} className="w-full h-full" />
+          <style>{`#spline-robot canvas ~ div { display: none !important; }`}</style>
+        </div>
+      ) : (
+        <div
+          id="spline-mobile"
+          className="absolute inset-0 pointer-events-none z-[4]"
+        >
+          <SplineScene scene={SPLINE_SCENE} className="w-full h-full" />
+          <style>{`#spline-mobile canvas ~ div { display: none !important; }`}</style>
+        </div>
+      )}
 
       {/* 4. Scrim desktop — esquerda → direita */}
       <div

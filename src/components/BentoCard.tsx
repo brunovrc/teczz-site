@@ -21,18 +21,25 @@ interface BentoCardProps {
 
 export function BentoCard({ area, icon, title, description, titleSize = 'text-xl' }: BentoCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef(0);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const el = cardRef.current;
-    if (!el) return;
-    const { left, top, width, height } = el.getBoundingClientRect();
-    const rx = ((e.clientY - top - height / 2) / (height / 2)) * -5;
-    const ry = ((e.clientX - left - width / 2) / (width / 2)) * 5;
-    el.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg) scale3d(1.02,1.02,1.02)`;
-    el.style.transition = 'transform 0.1s ease-out';
+    const clientX = e.clientX;
+    const clientY = e.clientY;
+    cancelAnimationFrame(rafRef.current);
+    rafRef.current = requestAnimationFrame(() => {
+      const el = cardRef.current;
+      if (!el) return;
+      const { left, top, width, height } = el.getBoundingClientRect();
+      const rx = ((clientY - top - height / 2) / (height / 2)) * -5;
+      const ry = ((clientX - left - width / 2) / (width / 2)) * 5;
+      el.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg) scale3d(1.02,1.02,1.02)`;
+      el.style.transition = 'transform 0.1s ease-out';
+    });
   };
 
   const handleMouseLeave = () => {
+    cancelAnimationFrame(rafRef.current);
     const el = cardRef.current;
     if (!el) return;
     el.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)';

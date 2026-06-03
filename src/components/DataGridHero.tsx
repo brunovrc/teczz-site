@@ -69,7 +69,10 @@ export default function DataGridHero({
 
     // Pause animation when hero is off-screen — frees main thread for smooth scroll
     const io = new IntersectionObserver(
-      ([entry]) => { isVisible = entry.isIntersecting; },
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+        if (isVisible && rafId === 0) rafId = requestAnimationFrame(draw);
+      },
       { threshold: 0 }
     );
     io.observe(canvas);
@@ -82,8 +85,10 @@ export default function DataGridHero({
     window.addEventListener('mousemove', onMouseMove, { passive: true });
 
     const draw = () => {
-      rafId = requestAnimationFrame(draw);
-      if (!isVisible || !width || !height) return;
+      if (!isVisible || !width || !height) {
+        rafId = 0; // RAF stops — IO reinicia quando voltar à tela
+        return;
+      }
 
       const t = performance.now() - startTime;
       const cellW = width / effectiveCols;
@@ -117,6 +122,7 @@ export default function DataGridHero({
       }
 
       ctx.globalAlpha = 1;
+      rafId = requestAnimationFrame(draw);
     };
 
     draw();
