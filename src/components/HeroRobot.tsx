@@ -23,18 +23,15 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
   const splineRef = useRef<HTMLDivElement>(null);
   const isDesktop = useMemo(() => window.innerWidth >= 768, []);
 
-  // Spline só monta depois do browser ficar idle — página abre fluida,
-  // robô carrega em background e faz fade-in quando pronto
+  // Monta Spline após 2 frames (~33ms) — primeiro frame pinta a página,
+  // segundo frame monta o Spline. Robô aparece junto com o restante da hero.
   const [splineReady, setSplineReady] = useState(false);
   useEffect(() => {
-    const mount = () => setSplineReady(true);
-    if ('requestIdleCallback' in window) {
-      const id = (window as Window & { requestIdleCallback: (cb: () => void, opts?: { timeout: number }) => number })
-        .requestIdleCallback(mount, { timeout: 3000 });
-      return () => (window as Window & { cancelIdleCallback: (id: number) => void }).cancelIdleCallback(id);
-    }
-    const id = setTimeout(mount, 1400);
-    return () => clearTimeout(id);
+    let raf1: number, raf2: number;
+    raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(() => setSplineReady(true));
+    });
+    return () => { cancelAnimationFrame(raf1); cancelAnimationFrame(raf2); };
   }, []);
 
   // Repassa mousemove para o canvas do Spline (desktop only)

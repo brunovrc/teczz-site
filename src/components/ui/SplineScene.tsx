@@ -17,13 +17,7 @@ export function SplineScene({ scene, className, transparentBackground }: SplineS
   }, [transparentBackground]);
 
   return (
-    <Suspense
-      fallback={
-        <div className="w-full h-full flex items-center justify-center">
-          <div className="w-8 h-8 border-2 border-blue-500/30 border-t-blue-500 rounded-full animate-spin" />
-        </div>
-      }
-    >
+    <Suspense fallback={null}>
       <Spline
         scene={scene}
         className={className}
