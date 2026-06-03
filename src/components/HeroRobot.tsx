@@ -25,7 +25,28 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
   return (
     <section className="relative flex flex-col overflow-hidden bg-black" style={{ minHeight: '100svh' }}>
 
-      {/* 1. Grid de fundo — canvas absoluto, pinta primeiro */}
+      {/*
+        SVG luma-key filter:
+        A' = 6*R + 6*G + 6*B - 0.8
+        Pixels com luminância < ~13% → transparentes (fundo Spline)
+        Pixels com luminância > ~14% → opacos (corpo do robô, chrome)
+        Isso remove o ambiente escuro da cena sem afetar o robô.
+      */}
+      <svg style={{ display: 'none' }} aria-hidden="true">
+        <defs>
+          <filter id="spline-luma-key" colorInterpolationFilters="sRGB">
+            <feColorMatrix
+              type="matrix"
+              values="1 0 0 0 0
+                      0 1 0 0 0
+                      0 0 1 0 0
+                      6 6 6 0 -0.8"
+            />
+          </filter>
+        </defs>
+      </svg>
+
+      {/* 1. Grid de fundo */}
       <DataGridHero
         rows={28} cols={50} spacing={3} duration={5}
         color="#3b82f6" animationType="pulse" pulseEffect mouseGlow
@@ -33,21 +54,19 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
       />
 
       {/*
-        2. Robô Spline — absolute, SEM z-index explícito, ANTES do z-10 no DOM
-           → mix-blend-mode: screen composta contra o DataGridHero corretamente.
-           O z-10 do flex container isola seu próprio stacking context, então
-           qualquer blend DENTRO dele não enxerga o DataGridHero como backdrop.
-           Fora do z-10, estamos no mesmo stacking context do DataGridHero. ✓
+        2. Robô — absolute, SEM z-index, fora do z-10
+           luma-key remove o fundo escuro do Spline na origem
       */}
       <div
         id="spline-robot"
         className="hidden md:block absolute overflow-hidden"
         style={{ top: 0, right: 0, bottom: 0, left: '44%' }}
       >
-        {/* Screen blend composta contra DataGridHero → preto do Spline vira transparente */}
-        <div className="absolute inset-0" style={{ mixBlendMode: 'screen' }}>
+        {/* Luma-key: converte preto/escuro em transparente */}
+        <div className="absolute inset-0" style={{ filter: 'url(#spline-luma-key)' }}>
+          {/* Tint + scale */}
           <div className="absolute inset-0" style={{
-            filter: 'contrast(2) brightness(0.75) sepia(0.2) hue-rotate(185deg) saturate(2.2) brightness(1.3)',
+            filter: 'brightness(1.15) sepia(0.1) hue-rotate(185deg) saturate(2)',
             transform: 'scale(1.18) translateY(6%)',
             transformOrigin: 'center top',
           }}>
@@ -55,30 +74,32 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
           </div>
         </div>
 
-        {/* Vignette esquerda */}
+        {/* Vignette esquerda — fusão suave com texto */}
         <div aria-hidden="true" className="absolute inset-0 pointer-events-none z-10"
-          style={{ background: 'linear-gradient(to right, #000 0%, rgba(0,0,0,0.45) 18%, transparent 42%)' }}
+          style={{ background: 'linear-gradient(to right, #000 0%, rgba(0,0,0,0.3) 12%, transparent 32%)' }}
         />
         {/* Vignette topo/base */}
         <div aria-hidden="true" className="absolute inset-0 pointer-events-none z-10"
-          style={{ background: 'linear-gradient(to bottom, #000 0%, transparent 10%, transparent 86%, #000 100%)' }}
+          style={{ background: 'linear-gradient(to bottom, #000 0%, transparent 8%, transparent 88%, #000 100%)' }}
         />
 
         <style>{`#spline-robot canvas ~ div { display: none !important; }`}</style>
       </div>
 
-      {/* 3. Scrim esquerda — legibilidade do texto */}
+      {/* 3. Scrim esquerda */}
       <div aria-hidden="true" className="absolute inset-0 pointer-events-none z-[5]"
         style={{
           background: 'linear-gradient(to right, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.75) 30%, rgba(0,0,0,0.15) 55%, transparent 70%)',
         }}
       />
 
-      {/* 4. Layout flex: texto (z-10 stacking context — pinta acima do robô)
-           pointer-events-none no container para eventos do mouse chegarem ao Spline abaixo */}
-      <div className="relative z-10 flex flex-1 pointer-events-none" style={{ minHeight: 'calc(100svh - 60px)' }}>
+      {/*
+        4. Flex: texto
+           pointer-events-none → mouse passa pro Spline abaixo
+           SEM minHeight → marquee sempre dentro do viewport
+      */}
+      <div className="relative z-10 flex flex-1 pointer-events-none">
 
-        {/* Texto — pointer-events-auto só aqui */}
         <div className="relative z-20 flex flex-col justify-center gap-7 px-6 md:px-10 lg:px-16
                         w-full md:w-[48%] lg:w-[42%] pointer-events-auto"
           style={{ paddingTop: 'calc(72px + 1rem)', paddingBottom: '2rem' }}
@@ -145,18 +166,17 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
           </motion.a>
         </div>
 
-        {/* Espaçador da coluna direita (robô é absolute fora do flex) */}
         <div className="hidden md:flex flex-1" />
 
-        {/* Mobile — robô fantasma atrás do texto */}
-        <div className="md:hidden absolute inset-0 pointer-events-none opacity-20 z-[4]"
-          style={{ filter: 'sepia(0.25) hue-rotate(185deg) saturate(2.6) brightness(1.08)' }}>
+        {/* Mobile — robô fantasma */}
+        <div className="md:hidden absolute inset-0 pointer-events-none opacity-25 z-[4]"
+          style={{ filter: 'url(#spline-luma-key) brightness(1.1) sepia(0.1) hue-rotate(185deg) saturate(2)' }}>
           <SplineScene scene={SPLINE_SCENE} className="w-full h-full" transparentBackground />
         </div>
 
       </div>
 
-      {/* 5. Marquee */}
+      {/* 5. Marquee — pointer-events-auto */}
       <div className="relative z-[15] pointer-events-auto">
         <div className="px-6 md:px-10 pt-5 pb-3 flex items-center justify-between">
           <p className="lets-build text-[9px] md:text-[10px] tracking-[0.5em] md:tracking-[0.8em] uppercase font-medium">
