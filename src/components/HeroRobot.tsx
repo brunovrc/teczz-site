@@ -23,32 +23,28 @@ interface HeroRobotProps {
 
 export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
   return (
-    <section
-      className="relative min-h-screen flex flex-col overflow-hidden bg-black"
-    >
-      {/* Grid animado de fundo */}
+    <section className="relative flex flex-col overflow-hidden bg-black" style={{ minHeight: '100svh' }}>
+
+      {/* Grid de fundo */}
       <DataGridHero
         rows={28} cols={50} spacing={3} duration={5}
         color="#3b82f6" animationType="pulse" pulseEffect mouseGlow
         opacityMin={0.03} opacityMax={0.28}
       />
 
-      {/* Scrim — escurece o lado do texto */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 pointer-events-none z-[5]"
+      {/* Scrim esquerda — legibilidade do texto */}
+      <div aria-hidden="true" className="absolute inset-0 pointer-events-none z-[5]"
         style={{
-          background:
-            'linear-gradient(to right, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.7) 35%, rgba(0,0,0,0.2) 58%, transparent 75%)',
+          background: 'linear-gradient(to right, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.75) 30%, rgba(0,0,0,0.15) 55%, transparent 70%)',
         }}
       />
 
-      {/* ── Layout principal: texto + robô ── */}
-      <div className="relative z-10 flex-1 flex items-center">
+      {/* ── Layout flex: texto + robô ── */}
+      <div className="relative z-10 flex flex-1" style={{ minHeight: 'calc(100svh - 60px)' }}>
 
         {/* Texto — esquerda */}
-        <div
-          className="w-full md:w-[50%] lg:w-[44%] flex flex-col items-start gap-6 px-6 md:px-10 lg:px-16"
+        <div className="relative z-20 flex flex-col justify-center gap-7 px-6 md:px-10 lg:px-16
+                        w-full md:w-[48%] lg:w-[42%]"
           style={{ paddingTop: 'calc(72px + 1rem)', paddingBottom: '2rem' }}
         >
           <motion.h1
@@ -57,7 +53,7 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
             transition={{ delay: 0.15, duration: 0.8, ease }}
             style={{
               fontFamily: '"Bebas Neue", sans-serif',
-              fontSize: 'clamp(2.2rem, 5.5vw, 5.4rem)',
+              fontSize: 'clamp(2.2rem, 5vw, 5.2rem)',
               fontWeight: 400,
               lineHeight: 1.1,
               letterSpacing: '0.04em',
@@ -103,9 +99,8 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
 
           <motion.a
             href="https://wa.me/5511940411688?text=Ol%C3%A1%2C%20quero%20implementar%20IA%20na%20minha%20empresa!"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="pill-btn-lg"
+            target="_blank" rel="noopener noreferrer"
+            className="pill-btn-lg w-fit"
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.62, duration: 0.7, ease }}
@@ -114,51 +109,46 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
           </motion.a>
         </div>
 
-        {/* Robô Spline — direita, responsivo, interativo */}
-        <div className="absolute right-0 top-0 w-full md:w-[62%] h-full">
+        {/* ── Robô 3D Spline — direita ── */}
+        <div className="hidden md:flex flex-1 relative overflow-hidden" style={{ minHeight: 'calc(100svh - 60px)' }}>
+
           {/*
-            mix-blend-mode: screen aplicado aqui:
-            fundo escuro do Spline vira transparente,
-            o robô 3D brilhante fica visível sobre o DataGridHero
+            transparentBackground → setBackgroundColor('rgba(0,0,0,0)') no onLoad → fundo some
+            filter: paleta branco-azul da Teczz
+            scale(1.18) + translateY(6%) → pernas chegam até o marquee
+            pointer-events ativo (filter CSS não bloqueia mouse)
           */}
-          <div className="w-full h-full" style={{ mixBlendMode: 'screen' }}>
-            <SplineScene
-              scene={SPLINE_SCENE}
-              className="w-full h-full"
-            />
+          <div className="absolute inset-0" style={{
+            filter: 'sepia(0.25) hue-rotate(185deg) saturate(2.6) brightness(1.08)',
+            transform: 'scale(1.18) translateY(6%)',
+            transformOrigin: 'center top',
+          }}>
+            <SplineScene scene={SPLINE_SCENE} className="w-full h-full" transparentBackground />
           </div>
 
-          {/* Vignette lateral esquerda — transição suave pro texto */}
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              background:
-                'linear-gradient(to right, #000 0%, rgba(0,0,0,0.6) 18%, transparent 42%)',
-            }}
+          {/* Vignette esquerda */}
+          <div aria-hidden="true" className="absolute inset-0 pointer-events-none z-10"
+            style={{ background: 'linear-gradient(to right, #000 0%, rgba(0,0,0,0.5) 20%, transparent 45%)' }}
           />
-
           {/* Vignette topo/base */}
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              background:
-                'linear-gradient(to bottom, #000 0%, transparent 12%, transparent 82%, #000 100%)',
-            }}
+          <div aria-hidden="true" className="absolute inset-0 pointer-events-none z-10"
+            style={{ background: 'linear-gradient(to bottom, #000 0%, transparent 14%, transparent 84%, #000 100%)' }}
           />
 
-          {/* Esconde watermark Spline */}
-          <style>{`
-            canvas ~ div[style*="position: absolute"],
-            #spline-watermark { display: none !important; }
-          `}</style>
+          <style>{`canvas ~ div { display: none !important; }`}</style>
         </div>
+
+        {/* Mobile — robô fantasma atrás do texto */}
+        <div className="md:hidden absolute inset-0 pointer-events-none opacity-20 z-[4]"
+          style={{ filter: 'sepia(0.25) hue-rotate(185deg) saturate(2.6) brightness(1.08)' }}>
+          <SplineScene scene={SPLINE_SCENE} className="w-full h-full" transparentBackground />
+        </div>
+
       </div>
 
       {/* ── Marquee ── */}
-      <div className="relative z-[15] mt-auto">
-        <div className="px-6 md:px-10 pt-6 pb-3 flex items-center justify-between">
+      <div className="relative z-[15]">
+        <div className="px-6 md:px-10 pt-5 pb-3 flex items-center justify-between">
           <p className="lets-build text-[9px] md:text-[10px] tracking-[0.5em] md:tracking-[0.8em] uppercase font-medium">
             L&nbsp;&nbsp;E&nbsp;&nbsp;T&nbsp;&nbsp;'&nbsp;&nbsp;S&nbsp;&nbsp;&nbsp;&nbsp;B&nbsp;&nbsp;U&nbsp;&nbsp;I&nbsp;&nbsp;L&nbsp;&nbsp;D
           </p>
@@ -176,6 +166,7 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
           </div>
         </div>
       </div>
+
     </section>
   );
 }
