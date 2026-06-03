@@ -47,7 +47,7 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
         {/* Screen blend composta contra DataGridHero → preto do Spline vira transparente */}
         <div className="absolute inset-0" style={{ mixBlendMode: 'screen' }}>
           <div className="absolute inset-0" style={{
-            filter: 'sepia(0.2) hue-rotate(185deg) saturate(2.4) brightness(1.1)',
+            filter: 'contrast(2) brightness(0.75) sepia(0.2) hue-rotate(185deg) saturate(2.2) brightness(1.3)',
             transform: 'scale(1.18) translateY(6%)',
             transformOrigin: 'center top',
           }}>
@@ -74,12 +74,13 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
         }}
       />
 
-      {/* 4. Layout flex: texto (z-10 stacking context — pinta acima do robô) */}
-      <div className="relative z-10 flex flex-1" style={{ minHeight: 'calc(100svh - 60px)' }}>
+      {/* 4. Layout flex: texto (z-10 stacking context — pinta acima do robô)
+           pointer-events-none no container para eventos do mouse chegarem ao Spline abaixo */}
+      <div className="relative z-10 flex flex-1 pointer-events-none" style={{ minHeight: 'calc(100svh - 60px)' }}>
 
-        {/* Texto — esquerda */}
+        {/* Texto — pointer-events-auto só aqui */}
         <div className="relative z-20 flex flex-col justify-center gap-7 px-6 md:px-10 lg:px-16
-                        w-full md:w-[48%] lg:w-[42%]"
+                        w-full md:w-[48%] lg:w-[42%] pointer-events-auto"
           style={{ paddingTop: 'calc(72px + 1rem)', paddingBottom: '2rem' }}
         >
           <motion.h1
@@ -156,7 +157,7 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
       </div>
 
       {/* 5. Marquee */}
-      <div className="relative z-[15]">
+      <div className="relative z-[15] pointer-events-auto">
         <div className="px-6 md:px-10 pt-5 pb-3 flex items-center justify-between">
           <p className="lets-build text-[9px] md:text-[10px] tracking-[0.5em] md:tracking-[0.8em] uppercase font-medium">
             L&nbsp;&nbsp;E&nbsp;&nbsp;T&nbsp;&nbsp;'&nbsp;&nbsp;S&nbsp;&nbsp;&nbsp;&nbsp;B&nbsp;&nbsp;U&nbsp;&nbsp;I&nbsp;&nbsp;L&nbsp;&nbsp;D
