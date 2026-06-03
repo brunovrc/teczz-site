@@ -1,13 +1,12 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { createTimeline, scrambleText } from 'animejs';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, ArrowUpRight, ChevronDown, Menu, X, Layers, TrendingUp, Users, Mail, Instagram, Linkedin, Facebook, Search, Zap, Rocket } from 'lucide-react';
-import DataGridHero from './components/DataGridHero';
+import { ArrowUpRight, ChevronDown, Menu, X, Layers, TrendingUp, Users, Mail, Instagram, Linkedin, Facebook, Search, Zap, Rocket } from 'lucide-react';
 import Preloader from './components/Preloader';
-import { GooeyText } from './components/GooeyText';
 import BentoGrid, { type BentoItem } from './components/BentoGrid';
 import { BentoCard } from './components/BentoCard';
 import { AnimatedHeading } from './components/AnimatedHeading';
+import { HeroRobot } from './components/HeroRobot';
 import { GlowMenu } from './components/GlowMenu';
 import type { MenuItem } from './components/GlowMenu';
 import { LampHeading } from './components/LampHeading';
@@ -255,100 +254,7 @@ export default function App() {
         </AnimatePresence>
 
         {/* ─── HERO ─── */}
-        <section className="relative min-h-screen flex flex-col overflow-hidden" style={{ background: '#000' }}>
-
-          <DataGridHero rows={28} cols={50} spacing={3} duration={5} color="#3b82f6" animationType="pulse" pulseEffect mouseGlow opacityMin={0.03} opacityMax={0.28} />
-
-          {/* Dark scrim behind text for contrast */}
-          <div className="absolute inset-0 pointer-events-none z-[5]"
-            style={{ background: 'radial-gradient(ellipse 65% 55% at 50% 50%, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.38) 55%, transparent 100%)' }} />
-
-          {/* Bottom fade */}
-          <div className="absolute bottom-0 left-0 right-0 h-48 pointer-events-none z-10"
-            style={{ background: 'linear-gradient(to bottom, transparent, #000)' }} />
-
-          {/* Hero content */}
-          <div
-            className="relative z-20 flex-1 flex items-center justify-center"
-            style={{ padding: 'calc(64px + 2rem) clamp(1.5rem, 6vw, 6rem) 2rem' }}
-          >
-            <div className="flex flex-col items-center text-center" style={{ maxWidth: '900px' }}>
-              <div style={{ width: '100%' }}>
-
-                <h1 className="animate-on-load animate-on-load-d2"
-                  style={{
-                    fontFamily: '"Bebas Neue", sans-serif',
-                    fontSize: 'clamp(1.6rem, 7vw, 5.2rem)',
-                    fontWeight: 400,
-                    lineHeight: 1.15,
-                    paddingTop: '0.1em',
-                    letterSpacing: '0.04em',
-                    textTransform: 'uppercase',
-                    marginBottom: '2rem',
-                  }}>
-                  <span ref={heroLine1Ref} style={{
-                    background: 'linear-gradient(180deg, #ffffff 0%, rgba(255,255,255,0.6) 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text',
-                    display: 'block',
-                  }}>IA não é mais tendência.</span>
-                  <span ref={heroLine2Ref} style={{
-                    background: 'linear-gradient(180deg, #60a5fa 0%, #3b82f6 60%, #2563eb 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text',
-                    display: 'block',
-                  }}>É vantagem competitiva.</span>
-                </h1>
-
-                <div className="animate-on-load animate-on-load-d3"
-                  style={{ marginBottom: '2.5rem', height: '2rem', position: 'relative', overflow: 'visible' }}>
-                  <GooeyText
-                    texts={gooeyTexts}
-                    morphTime={1.2}
-                    cooldownTime={2.2}
-                    textStyle={{
-                      fontSize: 'clamp(1rem, 2vw, 1.35rem)',
-                      fontWeight: 700,
-                      letterSpacing: '-0.025em',
-                      textTransform: 'uppercase' as const,
-                      color: 'rgba(255,255,255,0.7)',
-                      whiteSpace: 'nowrap',
-                    }}
-                  />
-                </div>
-
-                <div className="animate-on-load animate-on-load-d4 flex justify-center">
-                  <a href="https://wa.me/5511940411688?text=Ol%C3%A1%2C%20quero%20implementar%20IA%20na%20minha%20empresa!" target="_blank" rel="noopener noreferrer" className="pill-btn-lg">
-                    Quero implementar IA na minha empresa <ArrowRight size={14} />
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Bottom strip + marquee */}
-          <div className="relative z-[15] mt-auto">
-            <div className="px-6 md:px-10 pt-6 pb-3 flex items-center justify-between">
-              <p className="lets-build text-[9px] md:text-[10px] tracking-[0.5em] md:tracking-[0.8em] uppercase font-medium">
-                L&nbsp;&nbsp;E&nbsp;&nbsp;T&nbsp;&nbsp;'&nbsp;&nbsp;S&nbsp;&nbsp;&nbsp;&nbsp;B&nbsp;&nbsp;U&nbsp;&nbsp;I&nbsp;&nbsp;L&nbsp;&nbsp;D
-              </p>
-              <a href="#soluções" className="scroll-indicator text-white/75 hover:text-white/70 transition-colors">
-                <ChevronDown size={18} />
-              </a>
-            </div>
-            <div className="border-y section-divider py-3 overflow-hidden" style={{ background: '#000' }}>
-              <div className="marquee-track">
-                {Array(2).fill(['CHATBOTS', '·', 'AUTOMAÇÃO', '·', 'AGENTES IA', '·', 'INTEGRAÇÕES', '·', 'SITES PERSONALIZADOS', '·', 'CLAUDE', '·', 'RESULTS FIRST', '·']).flat().map((word, i) => (
-                  <span key={i} className={`text-[13px] tracking-[0.12em] uppercase font-semibold ${word === '·' ? 'text-blue-500' : 'marquee-word'}`}>
-                    {word}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
+        <HeroRobot line1Ref={heroLine1Ref} line2Ref={heroLine2Ref} />
 
         {/* ─── SERVICES ─── */}
         <section id="soluções" className="px-6 md:px-10 py-24 md:py-36">

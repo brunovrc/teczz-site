@@ -459,6 +459,26 @@
     transform: scaleX(0);
   }
 
+  /* ── Robot hero — heart glow pulse ── */
+  .heart-glow {
+    background: radial-gradient(
+      ellipse 18% 14% at 50% 44%,
+      rgba(59,130,246,0.55) 0%,
+      rgba(96,165,250,0.25) 40%,
+      transparent 70%
+    );
+    animation: heart-pulse 2.4s ease-in-out infinite;
+  }
+
+  @keyframes heart-pulse {
+    0%, 100% { opacity: 0.45; transform: scale(1); }
+    50%       { opacity: 0.85; transform: scale(1.08); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .heart-glow { animation: none; }
+  }
+
   /* ── Process cards — gradient border + glow ── */
   .process-card {
     padding: 2px;
