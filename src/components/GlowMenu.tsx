@@ -134,7 +134,23 @@ export const GlowMenu = forwardRef<HTMLDivElement, GlowMenuProps>(
                       <span className={cn('transition-colors duration-300', item.iconColor)}>
                         <Icon className="h-[14px] w-[14px]" />
                       </span>
-                      <span style={{ letterSpacing: '0.02em' }}>{item.label}</span>
+                      <motion.span
+                        style={{ letterSpacing: '0.02em', display: 'inline-flex' }}
+                        variants={{ hover: { transition: { staggerChildren: 0.03, delayChildren: 0.12 } } }}
+                      >
+                        {item.label.split('').map((char, i) => (
+                          <motion.span
+                            key={i}
+                            variants={{
+                              initial: { opacity: 0, y: 4 },
+                              hover:   { opacity: 1, y: 0 },
+                            }}
+                            transition={{ duration: 0.15, ease: 'easeOut' }}
+                          >
+                            {char === ' ' ? ' ' : char}
+                          </motion.span>
+                        ))}
+                      </motion.span>
                     </motion.div>
                   </motion.div>
                 </a>
