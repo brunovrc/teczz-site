@@ -2,7 +2,6 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { createTimeline, scrambleText } from 'animejs';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, ArrowUpRight, ChevronDown, Menu, X, Layers, TrendingUp, Users, Mail, Instagram, Linkedin, Facebook, Search, Zap, Rocket } from 'lucide-react';
-import Preloader from './components/Preloader';
 import BentoGrid, { type BentoItem } from './components/BentoGrid';
 import { BentoCard } from './components/BentoCard';
 import { AnimatedHeading } from './components/AnimatedHeading';
@@ -83,7 +82,6 @@ const faqs = [
 ];
 
 export default function App() {
-  const [showPreloader, setShowPreloader] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [showAllCases, setShowAllCases] = useState(false);
@@ -122,10 +120,6 @@ export default function App() {
     };
   }, []);
 
-  const handlePreloaderComplete = useCallback(() => {
-    setShowPreloader(false);
-  }, []);
-
   // Sempre inicia no topo — entrada e refresh
   useEffect(() => {
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
@@ -137,8 +131,6 @@ export default function App() {
     return () => { document.body.style.overflow = ''; };
   }, [mobileOpen]);
 
-  // Scramble da headline — começa 700ms ANTES do preloader sair (3300ms)
-  // Quando o preloader desaparece, o texto já está embaralhado e resolvendo
   useEffect(() => {
     const timer = setTimeout(() => {
       if (heroScrambled.current) return;
@@ -159,7 +151,7 @@ export default function App() {
         .add(heroLine1Ref.current, { innerHTML: (scrambleText as any)(params) }, 0)
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .add(heroLine2Ref.current, { innerHTML: (scrambleText as any)(params) }, 200);
-    }, 2600); // preloader dura 3300ms → scramble começa aos 2600ms
+    }, 500);
 
     return () => clearTimeout(timer);
   }, []);
@@ -176,7 +168,6 @@ export default function App() {
         }}
       />
 
-      {showPreloader && <Preloader onComplete={handlePreloaderComplete} duration={3300} />}
 
       <div className="grain-overlay bg-black text-white font-grotesk">
 
