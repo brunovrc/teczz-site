@@ -33,28 +33,23 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
       />
 
       {/*
-        2a. Overlay que escurece GRADUALMENTE a metade direita do hero
-            Isso faz o grid transicionar para preto ANTES do container do Spline começar
-            → o fundo do Spline (preto) combina com o grid já escuro → sem seam visível
-            Não vai dentro do container do robô — é um elemento separado abaixo dele
-      */}
-      <div aria-hidden="true" className="hidden md:block absolute inset-0 pointer-events-none" style={{ zIndex: 2 }}
-      >
-        <div className="absolute inset-0" style={{
-          background: 'linear-gradient(to right, transparent 30%, rgba(0,0,0,0.4) 48%, rgba(0,0,0,0.85) 62%, #000 72%)',
-        }} />
-      </div>
-
-      {/*
-        2b. Robô — SEM gradientes internos, SEM blend mode
-            Renderiza natural, 100% opaco, igual ao Spline original
+        2. Robô — inset-0 (full width) para receber mouse events de TODA a hero
+           O canvas do Spline cobre a hero inteira → o robô responde ao mouse
+           em qualquer posição, não só quando passa por cima dele.
+           Gradiente interno oculta o lado esquerdo do canvas visualmente.
       */}
       <div
         id="spline-robot"
-        className="hidden md:block absolute overflow-hidden"
-        style={{ top: 0, right: 0, bottom: 0, left: '50%', zIndex: 3 }}
+        className="hidden md:block absolute inset-0 overflow-hidden"
+        style={{ zIndex: 3 }}
       >
         <SplineScene scene={SPLINE_SCENE} className="w-full h-full" />
+
+        {/* Oculta metade esquerda do canvas — robô aparece só na direita */}
+        <div aria-hidden="true" className="absolute inset-0 pointer-events-none"
+          style={{ background: 'linear-gradient(to right, #000 0%, #000 42%, rgba(0,0,0,0.85) 55%, transparent 72%)' }}
+        />
+
         <style>{`#spline-robot canvas ~ div { display: none !important; }`}</style>
       </div>
 
