@@ -82,6 +82,18 @@ const faqs = [
 ];
 
 export default function App() {
+  // Remove o preloader HTML assim que o React montar
+  useEffect(() => {
+    sessionStorage.setItem('tz', '1');
+    const el = document.getElementById('tpre');
+    if (!el) return;
+    const id = setTimeout(() => {
+      el.classList.add('out');
+      setTimeout(() => el.remove(), 600);
+    }, 500);
+    return () => clearTimeout(id);
+  }, []);
+
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [showAllCases, setShowAllCases] = useState(false);

@@ -58,7 +58,7 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
 
       {/* 1. Grid de fundo */}
       <DataGridHero
-        rows={28} cols={50} spacing={3} duration={5}
+        rows={18} cols={30} spacing={3} duration={5}
         color="#3b82f6" animationType="pulse" pulseEffect mouseGlow
         opacityMin={0.03} opacityMax={0.28}
       />
