@@ -6,6 +6,7 @@ import Preloader from './components/Preloader';
 import { GooeyText } from './components/GooeyText';
 import BentoGrid, { type BentoItem } from './components/BentoGrid';
 import { BentoCard } from './components/BentoCard';
+import { ContainerScroll } from './components/ui/ContainerScroll';
 import { GlowMenu } from './components/GlowMenu';
 import type { MenuItem } from './components/GlowMenu';
 import { LampHeading } from './components/LampHeading';
@@ -408,21 +409,22 @@ export default function App() {
 
         {/* ─── CASES ─── */}
         <div aria-hidden="true" className="section-sep" />
-        <section id="cases" className="px-6 md:px-10 py-24 md:py-36">
-          <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={vp}>
-
-            <LampHeading label="Cases" className="mb-16">
-              <h2 className="text-5xl md:text-7xl font-black uppercase leading-none tracking-tight">
-                Projetos<br />reais
-              </h2>
-            </LampHeading>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <section id="cases" className="px-6 md:px-10">
+          <ContainerScroll
+            titleComponent={
+              <LampHeading label="Cases" className="mb-0">
+                <h2 className="text-5xl md:text-7xl font-black uppercase leading-none tracking-tight">
+                  Projetos<br />reais
+                </h2>
+              </LampHeading>
+            }
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {cases.map((c, i) => (
-                <motion.div key={i} variants={itemVariants}>
+                <div key={i}>
 
                   {/* Browser mockup */}
-                  <div className="browser-frame mb-5">
+                  <div className="browser-frame mb-4">
                     <div className="browser-bar">
                       <div className="flex gap-1.5 shrink-0">
                         <span className="w-3 h-3 rounded-full" style={{ background: '#ff5f57' }} />
@@ -447,20 +449,18 @@ export default function App() {
                   </div>
 
                   {/* Info */}
-                  <div className="flex items-center gap-3 mb-3">
-                    <span className="text-[13px] tracking-[0.2em] text-blue-500 uppercase font-semibold">{c.tag}</span>
-                  </div>
-                  <h3 className="text-xl font-bold tracking-tight mb-2">{c.title}</h3>
-                  <p className="text-white/75 text-sm leading-relaxed mb-4">{c.desc}</p>
+                  <span className="text-[13px] tracking-[0.2em] text-blue-500 uppercase font-semibold block mb-2">{c.tag}</span>
+                  <h3 className="text-lg font-bold tracking-tight mb-1">{c.title}</h3>
+                  <p className="text-white/60 text-sm leading-relaxed mb-3">{c.desc}</p>
                   <a href={c.url} target="_blank" rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 text-[13px] tracking-[0.08em] uppercase text-blue-400 hover:text-blue-300 transition-colors font-semibold">
                     Ver projeto <ArrowUpRight size={14} />
                   </a>
 
-                </motion.div>
+                </div>
               ))}
             </div>
-          </motion.div>
+          </ContainerScroll>
         </section>
 
         {/* ─── PROCESS ─── */}
