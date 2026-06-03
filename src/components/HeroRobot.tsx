@@ -1,9 +1,17 @@
-import { useEffect, useRef, useState, type RefObject } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { type RefObject } from 'react';
+import { motion } from 'framer-motion';
 import { ArrowRight, ChevronDown } from 'lucide-react';
+import DataGridHero from './DataGridHero';
 import { GooeyText } from './GooeyText';
 
 const gooeyTexts = ['Sites personalizados', 'Chatbots', 'Automações', 'Agentes de IA'];
+
+const marqueeWords = [
+  'CHATBOTS', '·', 'AUTOMAÇÃO', '·', 'AGENTES IA', '·', 'INTEGRAÇÕES', '·',
+  'SITES PERSONALIZADOS', '·', 'CLAUDE', '·', 'RESULTS FIRST', '·',
+];
+
+const ease = [0.22, 1, 0.36, 1] as const;
 
 interface HeroRobotProps {
   line1Ref: RefObject<HTMLSpanElement>;
@@ -11,163 +19,185 @@ interface HeroRobotProps {
 }
 
 export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
-  const zoneRef    = useRef<HTMLDivElement>(null);
-  const videoRef   = useRef<HTMLVideoElement>(null);
-  const [ready, setReady] = useState(false);
-
-  const { scrollYProgress } = useScroll({
-    target: zoneRef,
-    offset: ['start start', 'end start'],
-  });
-
-  // ── Controla o vídeo via scroll (scroll-scrubbing)
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    // Pausa imediatamente — não queremos autoplay
-    video.pause();
-
-    const onReady = () => {
-      setReady(true);
-      video.currentTime = 0;
-    };
-
-    video.addEventListener('canplay', onReady);
-
-    // rAF-batched: atualiza currentTime a cada mudança de scroll
-    const unsub = scrollYProgress.on('change', (v) => {
-      if (!video.duration) return;
-      // Mapeia 0→1 do scroll para 0→duration do vídeo
-      video.currentTime = Math.min(v * video.duration, video.duration - 0.05);
-    });
-
-    return () => {
-      video.removeEventListener('canplay', onReady);
-      unsub();
-    };
-  }, [scrollYProgress]);
-
-  // ── Texto: visível no início, some ao rolar (~8-30%)
-  const textOpacity = useTransform(scrollYProgress, [0.06, 0.28], [1, 0]);
-  const textY       = useTransform(scrollYProgress, [0.06, 0.28], [0, 24]);
-
-  // ── Overlay escuro atrás do texto (segue o texto)
-  const overlayOpacity = useTransform(scrollYProgress, [0, 0.06, 0.28], [0.7, 0.7, 0]);
-
-  // ── Scroll indicator
-  const arrowOpacity = useTransform(scrollYProgress, [0, 0.05, 0.18], [0, 1, 0]);
-
-  // ── Hero inteiro faz fade final
-  const heroOpacity = useTransform(scrollYProgress, [0.87, 1.0], [1, 0]);
-
   return (
-    // Zona de scroll: 250vh cria ~150vh de scroll room pra percorrer os 10s de vídeo
-    <div ref={zoneRef} style={{ height: '250vh' }}>
+    <section
+      className="relative min-h-screen flex flex-col overflow-hidden"
+      style={{ background: '#000' }}
+    >
+      {/* Grid animado de fundo */}
+      <DataGridHero
+        rows={28} cols={50} spacing={3} duration={5}
+        color="#3b82f6" animationType="pulse" pulseEffect mouseGlow
+        opacityMin={0.03} opacityMax={0.28}
+      />
 
-      <motion.div
-        style={{ opacity: heroOpacity }}
-        className="sticky top-0 h-screen overflow-hidden bg-black"
+      {/* Scrim — escurece mais à esquerda onde fica o texto */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 pointer-events-none z-[5]"
+        style={{
+          background:
+            'radial-gradient(ellipse 60% 70% at 35% 50%, rgba(0,0,0,0.80) 0%, rgba(0,0,0,0.40) 55%, transparent 100%)',
+        }}
+      />
+
+      {/* Robô — direita, mix-blend-mode:screen remove o fundo escuro */}
+      <div
+        aria-hidden="true"
+        className="absolute right-0 top-0 h-full pointer-events-none z-[6]
+                   hidden md:block"
+        style={{ width: '58%' }}
       >
-
-        {/* ── Vídeo full-screen scroll-scrubbed ── */}
-        <video
-          ref={videoRef}
-          src="/hero-video.mp4"
-          muted
-          playsInline
-          preload="auto"
-          className="absolute inset-0 w-full h-full object-cover"
-          style={{ opacity: ready ? 1 : 0, transition: 'opacity 0.6s ease' }}
+        {/* Imagem com blend mode pra sumir fundo escuro */}
+        <img
+          src="/robot.png"
+          alt=""
+          loading="eager"
+          draggable={false}
+          className="w-full h-full object-contain object-center select-none"
+          style={{
+            mixBlendMode: 'screen',
+            maskImage:
+              'radial-gradient(ellipse 80% 92% at 50% 52%, black 30%, transparent 100%)',
+            WebkitMaskImage:
+              'radial-gradient(ellipse 80% 92% at 50% 52%, black 30%, transparent 100%)',
+          }}
         />
 
-        {/* Fallback enquanto carrega */}
-        {!ready && (
-          <div className="absolute inset-0 bg-black flex items-center justify-center">
-            <div className="w-8 h-8 border-2 border-blue-500/40 border-t-blue-500 rounded-full animate-spin" />
-          </div>
-        )}
-
-        {/* ── Overlay gradiente para legibilidade do texto ── */}
-        <motion.div
+        {/* Glow pulsante no coração */}
+        <div
           aria-hidden="true"
-          style={{ opacity: overlayOpacity }}
-          className="absolute inset-0 z-10 pointer-events-none"
-          // Gradiente escurece mais à esquerda onde fica o texto
-          css-note="gradient-only-left"
-        >
-          <div className="w-full h-full" style={{
-            background: 'linear-gradient(105deg, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.55) 38%, rgba(0,0,0,0.15) 65%, transparent 100%)',
-          }} />
-        </motion.div>
+          className="absolute inset-0 heart-glow pointer-events-none"
+        />
+      </div>
 
-        {/* ── Texto overlay — canto inferior esquerdo ── */}
-        <motion.div
-          style={{ opacity: textOpacity, y: textY }}
-          className="absolute z-20 bottom-[12%] left-[5%] md:left-[6%] lg:left-[8%]
-                     flex flex-col items-start gap-5 max-w-[90%] md:max-w-[520px]"
-        >
-          <h1 style={{
-            fontFamily: '"Bebas Neue", sans-serif',
-            fontSize: 'clamp(2rem, 5.5vw, 5.4rem)',
-            fontWeight: 400,
-            lineHeight: 1.1,
-            letterSpacing: '0.04em',
-            textTransform: 'uppercase',
-          }}>
-            <span ref={line1Ref} style={{
-              background: 'linear-gradient(180deg, #fff 0%, rgba(255,255,255,0.65) 100%)',
-              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-              display: 'block',
-            }}>
+      {/* Robô mobile — fantasma atrás do texto */}
+      <div
+        aria-hidden="true"
+        className="md:hidden absolute right-[-10%] top-0 h-full w-[70%] pointer-events-none z-[6]"
+        style={{ opacity: 0.15 }}
+      >
+        <img
+          src="/robot.png"
+          alt=""
+          loading="eager"
+          draggable={false}
+          className="w-full h-full object-contain object-right select-none"
+          style={{
+            mixBlendMode: 'screen',
+            maskImage: 'linear-gradient(to left, black 5%, transparent 75%)',
+            WebkitMaskImage: 'linear-gradient(to left, black 5%, transparent 75%)',
+          }}
+        />
+      </div>
+
+      {/* ── Conteúdo principal ── */}
+      <div
+        className="relative z-20 flex-1 flex items-center"
+        style={{ padding: 'calc(72px + 1.5rem) clamp(1.5rem, 6vw, 5rem) 2rem' }}
+      >
+        <div className="flex flex-col items-start gap-7 max-w-[520px]">
+
+          <motion.h1
+            initial={{ opacity: 0, y: 28 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1, duration: 0.8, ease }}
+            style={{
+              fontFamily: '"Bebas Neue", sans-serif',
+              fontSize: 'clamp(2rem, 6vw, 5.4rem)',
+              fontWeight: 400,
+              lineHeight: 1.1,
+              letterSpacing: '0.04em',
+              textTransform: 'uppercase',
+            }}
+          >
+            <span
+              ref={line1Ref}
+              style={{
+                background: 'linear-gradient(180deg, #fff 0%, rgba(255,255,255,0.6) 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                display: 'block',
+              }}
+            >
               IA não é mais tendência.
             </span>
-            <span ref={line2Ref} style={{
-              background: 'linear-gradient(180deg, #60a5fa 0%, #3b82f6 60%, #2563eb 100%)',
-              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-              display: 'block',
-            }}>
+            <span
+              ref={line2Ref}
+              style={{
+                background: 'linear-gradient(180deg, #60a5fa 0%, #3b82f6 60%, #2563eb 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                display: 'block',
+              }}
+            >
               É vantagem competitiva.
             </span>
-          </h1>
+          </motion.h1>
 
-          <div style={{ height: '1.8rem', position: 'relative', overflow: 'visible', width: '100%' }}>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.45, duration: 0.7 }}
+            style={{ height: '2rem', position: 'relative', overflow: 'visible', width: '100%' }}
+          >
             <GooeyText
               texts={gooeyTexts}
               morphTime={1.2}
               cooldownTime={2.2}
               textStyle={{
-                fontSize: 'clamp(0.8rem, 1.5vw, 1.1rem)',
+                fontSize: 'clamp(0.9rem, 1.8vw, 1.25rem)',
                 fontWeight: 700,
-                letterSpacing: '-0.02em',
+                letterSpacing: '-0.025em',
                 textTransform: 'uppercase' as const,
-                color: 'rgba(255,255,255,0.65)',
+                color: 'rgba(255,255,255,0.7)',
                 whiteSpace: 'nowrap',
               }}
             />
-          </div>
+          </motion.div>
 
-          <a
+          <motion.a
             href="https://wa.me/5511940411688?text=Ol%C3%A1%2C%20quero%20implementar%20IA%20na%20minha%20empresa!"
             target="_blank"
             rel="noopener noreferrer"
             className="pill-btn-lg"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.65, duration: 0.7, ease }}
           >
             Quero implementar IA na minha empresa <ArrowRight size={14} />
+          </motion.a>
+
+        </div>
+      </div>
+
+      {/* ── Marquee ── */}
+      <div className="relative z-[15] mt-auto">
+        <div className="px-6 md:px-10 pt-6 pb-3 flex items-center justify-between">
+          <p className="lets-build text-[9px] md:text-[10px] tracking-[0.5em] md:tracking-[0.8em] uppercase font-medium">
+            L&nbsp;&nbsp;E&nbsp;&nbsp;T&nbsp;&nbsp;'&nbsp;&nbsp;S&nbsp;&nbsp;&nbsp;&nbsp;B&nbsp;&nbsp;U&nbsp;&nbsp;I&nbsp;&nbsp;L&nbsp;&nbsp;D
+          </p>
+          <a href="#soluções" className="scroll-indicator text-white/75 hover:text-white/70 transition-colors">
+            <ChevronDown size={18} />
           </a>
-        </motion.div>
-
-        {/* ── Scroll indicator ── */}
-        <motion.div
-          style={{ opacity: arrowOpacity }}
-          className="absolute z-20 bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1"
-          aria-label="Role para continuar"
-        >
-          <span className="text-[10px] tracking-[0.25em] uppercase text-white/40 font-medium">scroll</span>
-          <ChevronDown size={16} className="text-white/40 animate-bounce" />
-        </motion.div>
-
-      </motion.div>
-    </div>
+        </div>
+        <div className="border-y section-divider py-3 overflow-hidden" style={{ background: '#000' }}>
+          <div className="marquee-track">
+            {Array(2).fill(marqueeWords).flat().map((word, i) => (
+              <span
+                key={i}
+                className={`text-[13px] tracking-[0.12em] uppercase font-semibold ${
+                  word === '·' ? 'text-blue-500' : 'marquee-word'
+                }`}
+              >
+                {word}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
