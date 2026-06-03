@@ -1,4 +1,4 @@
-import { type RefObject } from 'react';
+import { type RefObject, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, ChevronDown } from 'lucide-react';
 import DataGridHero from './DataGridHero';
@@ -22,8 +22,30 @@ interface HeroRobotProps {
 }
 
 export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
+  const heroRef = useRef<HTMLElement>(null);
+  const splineRef = useRef<HTMLDivElement>(null);
+
+  // Repassa mousemove de toda a hero para o canvas do Spline
+  // → robô responde ao mouse mesmo quando cursor está no lado esquerdo
+  useEffect(() => {
+    const hero = heroRef.current;
+    if (!hero) return;
+    const forward = (e: MouseEvent) => {
+      const canvas = splineRef.current?.querySelector('canvas');
+      if (!canvas) return;
+      canvas.dispatchEvent(new MouseEvent('mousemove', {
+        bubbles: false, cancelable: true, view: window,
+        clientX: e.clientX, clientY: e.clientY,
+        screenX: e.screenX, screenY: e.screenY,
+        movementX: e.movementX, movementY: e.movementY,
+      }));
+    };
+    hero.addEventListener('mousemove', forward, { passive: true });
+    return () => hero.removeEventListener('mousemove', forward);
+  }, []);
+
   return (
-    <section className="relative flex flex-col overflow-hidden bg-black" style={{ minHeight: '100svh' }}>
+    <section ref={heroRef} className="relative flex flex-col overflow-hidden bg-black" style={{ minHeight: '100svh' }}>
 
       {/* 1. Grid de fundo */}
       <DataGridHero
@@ -33,23 +55,16 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
       />
 
       {/*
-        2. Robô — inset-0 (full width) para receber mouse events de TODA a hero
-           O canvas do Spline cobre a hero inteira → o robô responde ao mouse
-           em qualquer posição, não só quando passa por cima dele.
-           Gradiente interno oculta o lado esquerdo do canvas visualmente.
+        2. Robô — container na direita (visual limpo)
+           Mouse events da esquerda são repassados via useEffect acima
       */}
       <div
+        ref={splineRef}
         id="spline-robot"
-        className="hidden md:block absolute inset-0 overflow-hidden"
-        style={{ zIndex: 3 }}
+        className="hidden md:block absolute overflow-hidden"
+        style={{ top: 0, right: 0, bottom: 0, left: '50%', zIndex: 3 }}
       >
         <SplineScene scene={SPLINE_SCENE} className="w-full h-full" />
-
-        {/* Oculta metade esquerda do canvas — robô aparece só na direita */}
-        <div aria-hidden="true" className="absolute inset-0 pointer-events-none"
-          style={{ background: 'linear-gradient(to right, #000 0%, #000 42%, rgba(0,0,0,0.85) 55%, transparent 72%)' }}
-        />
-
         <style>{`#spline-robot canvas ~ div { display: none !important; }`}</style>
       </div>
 
