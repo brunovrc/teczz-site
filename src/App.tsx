@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { createTimeline, scrambleText } from 'animejs';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight, ChevronDown, Menu, X, Layers, TrendingUp, Users, Mail, Instagram, Linkedin, Facebook, Search, Zap, Rocket } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, ChevronDown, Menu, X, Layers, TrendingUp, Users, Mail, Instagram, Linkedin, Facebook, Search, Zap, Rocket } from 'lucide-react';
 import Preloader from './components/Preloader';
 import BentoGrid, { type BentoItem } from './components/BentoGrid';
 import { BentoCard } from './components/BentoCard';
