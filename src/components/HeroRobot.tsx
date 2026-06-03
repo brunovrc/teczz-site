@@ -33,35 +33,35 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
       />
 
       {/*
-        2. Robô — SEM blend mode, SEM filters
-           O fundo do Spline É preto, igual ao bg-black do hero.
-           Gradientes nas bordas fazem a transição invisível:
-           a borda esquerda funde preto→Spline, topo/base idem.
-           O robô fica 100% opaco como no Spline original.
+        2a. Overlay que escurece GRADUALMENTE a metade direita do hero
+            Isso faz o grid transicionar para preto ANTES do container do Spline começar
+            → o fundo do Spline (preto) combina com o grid já escuro → sem seam visível
+            Não vai dentro do container do robô — é um elemento separado abaixo dele
+      */}
+      <div aria-hidden="true" className="hidden md:block absolute inset-0 pointer-events-none" style={{ zIndex: 2 }}
+      >
+        <div className="absolute inset-0" style={{
+          background: 'linear-gradient(to right, transparent 30%, rgba(0,0,0,0.4) 48%, rgba(0,0,0,0.85) 62%, #000 72%)',
+        }} />
+      </div>
+
+      {/*
+        2b. Robô — SEM gradientes internos, SEM blend mode
+            Renderiza natural, 100% opaco, igual ao Spline original
       */}
       <div
         id="spline-robot"
         className="hidden md:block absolute overflow-hidden"
-        style={{ top: 0, right: 0, bottom: 0, left: '40%' }}
+        style={{ top: 0, right: 0, bottom: 0, left: '50%', zIndex: 3 }}
       >
         <SplineScene scene={SPLINE_SCENE} className="w-full h-full" />
-
-        {/* Borda esquerda: hero-black → Spline (transição invisível) */}
-        <div aria-hidden="true" className="absolute inset-0 pointer-events-none z-10"
-          style={{ background: 'linear-gradient(to right, #000 0%, rgba(0,0,0,0.85) 15%, rgba(0,0,0,0.4) 35%, transparent 55%)' }}
-        />
-        {/* Topo e base */}
-        <div aria-hidden="true" className="absolute inset-0 pointer-events-none z-10"
-          style={{ background: 'linear-gradient(to bottom, #000 0%, transparent 10%, transparent 85%, #000 100%)' }}
-        />
-
         <style>{`#spline-robot canvas ~ div { display: none !important; }`}</style>
       </div>
 
       {/* 3. Scrim esquerda — legibilidade do texto */}
       <div aria-hidden="true" className="absolute inset-0 pointer-events-none z-[5]"
         style={{
-          background: 'linear-gradient(to right, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.75) 30%, rgba(0,0,0,0.15) 55%, transparent 70%)',
+          background: 'linear-gradient(to right, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.75) 30%, rgba(0,0,0,0.1) 50%, transparent 65%)',
         }}
       />
 
