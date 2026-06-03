@@ -2,12 +2,9 @@ import { type RefObject, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, ChevronDown } from 'lucide-react';
 import DataGridHero from './DataGridHero';
-import { GooeyText } from './GooeyText';
 import { SplineScene } from './ui/SplineScene';
 
 const SPLINE_SCENE = 'https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode';
-
-const gooeyTexts = ['Sites personalizados', 'Chatbots', 'Automações', 'Agentes de IA'];
 
 const marqueeWords = [
   'CHATBOTS', '·', 'AUTOMAÇÃO', '·', 'AGENTES IA', '·', 'INTEGRAÇÕES', '·',
@@ -55,8 +52,8 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
       />
 
       {/*
-        2. Robô — container na direita (visual limpo)
-           Mouse events da esquerda são repassados via useEffect acima
+        2. Robô — container na direita
+           Mouse events de qualquer posição são repassados via useEffect acima
       */}
       <div
         ref={splineRef}
@@ -71,18 +68,18 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
       {/* 3. Scrim esquerda — legibilidade do texto */}
       <div aria-hidden="true" className="absolute inset-0 pointer-events-none z-[5]"
         style={{
-          background: 'linear-gradient(to right, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.75) 30%, rgba(0,0,0,0.1) 50%, transparent 65%)',
+          background: 'linear-gradient(to right, rgba(0,0,0,0.97) 0%, rgba(0,0,0,0.88) 35%, rgba(0,0,0,0.45) 55%, rgba(0,0,0,0.1) 68%, transparent 80%)',
         }}
       />
 
       {/*
-        4. Flex: texto — z-10
-           pointer-events-none → mouse chega ao Spline
+        4. Texto — pointer-events-none no container para não bloquear mouse do Spline
+           Apenas o CTA (motion.a) precisa de pointer-events-auto
       */}
       <div className="relative z-10 flex flex-1 pointer-events-none">
 
-        <div className="relative z-20 flex flex-col justify-center gap-6 px-6 md:px-10 lg:px-16
-                        w-full md:w-[65%] lg:w-[63%] pointer-events-auto"
+        <div className="relative z-20 flex flex-col justify-center gap-8 px-6 md:px-10 lg:px-16
+                        w-full md:w-[65%] lg:w-[63%] pointer-events-none"
           style={{ paddingTop: 'calc(72px + 1rem)', paddingBottom: '2rem' }}
         >
           <motion.h1
@@ -93,7 +90,7 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
               fontFamily: '"Bebas Neue", sans-serif',
               fontSize: 'clamp(2.8rem, 5vw, 5rem)',
               fontWeight: 400,
-              lineHeight: 1.0,
+              lineHeight: 1.15,
               letterSpacing: '0.04em',
               textTransform: 'uppercase',
             }}
@@ -117,41 +114,18 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
           <motion.a
             href="https://wa.me/5511940411688?text=Ol%C3%A1%2C%20quero%20implementar%20IA%20na%20minha%20empresa!"
             target="_blank" rel="noopener noreferrer"
-            className="pill-btn-lg w-fit"
+            className="pill-btn-lg w-fit pointer-events-auto"
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.45, duration: 0.7, ease }}
           >
             Quero implementar IA na minha empresa <ArrowRight size={14} />
           </motion.a>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.62, duration: 0.7 }}
-            style={{ height: '2.2rem', position: 'relative', overflow: 'visible' }}
-          >
-            <GooeyText
-              texts={gooeyTexts}
-              morphTime={1.2}
-              cooldownTime={2.2}
-              textStyle={{
-                fontSize: 'clamp(1rem, 1.6vw, 1.35rem)',
-                fontWeight: 700,
-                letterSpacing: '0.05em',
-                textTransform: 'uppercase' as const,
-                color: 'rgba(255,255,255,0.75)',
-                whiteSpace: 'nowrap',
-                left: 0,
-                transform: 'none',
-              }}
-            />
-          </motion.div>
         </div>
 
         <div className="hidden md:flex flex-1" />
 
-        {/* Mobile — robô do topo até onde começa o GooeyText (~50vh) */}
+        {/* Mobile — robô do topo (~50vh) */}
         <div
           id="spline-mobile"
           className="md:hidden absolute left-0 right-0 top-0 pointer-events-none opacity-30 z-[4]"
