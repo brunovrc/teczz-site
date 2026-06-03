@@ -11,6 +11,8 @@ export function AnimatedHeading({ html, className, style }: AnimatedHeadingProps
   const ref = useRef<HTMLHeadingElement>(null);
   const animated = useRef(false);
 
+  const isGradientText = style?.WebkitTextFillColor === 'transparent';
+
   useEffect(() => {
     const el = ref.current;
     if (!el || animated.current) return;
@@ -18,30 +20,18 @@ export function AnimatedHeading({ html, className, style }: AnimatedHeadingProps
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const split = (splitText as any)(el, { words: true });
 
-    // Se o h2 tem gradient text, propaga pra cada word span —
-    // background-clip: text só funciona no elemento com texto direto
-    const hasGradientText =
-      el.style.webkitTextFillColor === 'transparent' ||
-      el.style.backgroundClip === 'text';
-
     split.words.forEach((w: HTMLElement) => {
       w.style.opacity = '0';
       w.style.transform = 'translateY(10px)';
       w.style.display = 'inline-block';
 
-      if (hasGradientText) {
-        w.style.background = el.style.background;
+      if (isGradientText && style?.background) {
+        w.style.background = style.background as string;
         w.style.webkitBackgroundClip = 'text';
         w.style.backgroundClip = 'text';
         w.style.webkitTextFillColor = 'transparent';
       }
     });
-
-    // Remove o gradient do h2 pai pra não duplicar
-    if (hasGradientText) {
-      el.style.background = 'none';
-      el.style.webkitTextFillColor = 'inherit';
-    }
 
     const observer = new IntersectionObserver(([entry]) => {
       if (!entry.isIntersecting || animated.current) return;
@@ -61,11 +51,15 @@ export function AnimatedHeading({ html, className, style }: AnimatedHeadingProps
     return () => observer.disconnect();
   }, []);
 
+  // Gradient text: não passa o estilo pro h2 pois background-clip:text
+  // só funciona no elemento que tem texto direto — as word spans herdarão via JS
+  const h2Style = isGradientText ? {} : style;
+
   return (
     <h2
       ref={ref}
       className={className}
-      style={style}
+      style={h2Style}
       dangerouslySetInnerHTML={{ __html: html }}
     />
   );
