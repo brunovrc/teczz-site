@@ -139,36 +139,32 @@ export default function App() {
     return () => { document.body.style.overflow = ''; };
   }, [mobileOpen]);
 
-  // Scramble da headline — dispara quando o preloader sai
+  // Scramble da headline — começa 700ms ANTES do preloader sair (3300ms)
+  // Quando o preloader desaparece, o texto já está embaralhado e resolvendo
   useEffect(() => {
-    if (showPreloader || heroScrambled.current) return;
-    if (!heroLine1Ref.current || !heroLine2Ref.current) return;
-    heroScrambled.current = true;
+    const timer = setTimeout(() => {
+      if (heroScrambled.current) return;
+      if (!heroLine1Ref.current || !heroLine2Ref.current) return;
+      heroScrambled.current = true;
 
-    createTimeline({ delay: 150 })
-      .add(heroLine1Ref.current, {
+      const params = {
+        duration: 2200,
+        settleDuration: 800,
+        perturbation: 0.12,
+        chars: 'uppercase',
+        cursor: '░▒▓█',
+        from: 'left',
+      };
+
+      createTimeline()
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        innerHTML: (scrambleText as any)({
-          duration: 2200,
-          settleDuration: 800,
-          perturbation: 0.12,
-          chars: 'uppercase',
-          cursor: '░▒▓█',
-          from: 'left',
-        }),
-      })
-      .add(heroLine2Ref.current, {
+        .add(heroLine1Ref.current, { innerHTML: (scrambleText as any)(params) }, 0)
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        innerHTML: (scrambleText as any)({
-          duration: 2200,
-          settleDuration: 800,
-          perturbation: 0.12,
-          chars: 'uppercase',
-          cursor: '░▒▓█',
-          from: 'left',
-        }),
-      }, '-=1500');
-  }, [showPreloader]);
+        .add(heroLine2Ref.current, { innerHTML: (scrambleText as any)(params) }, 200);
+    }, 2600); // preloader dura 3300ms → scramble começa aos 2600ms
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <>
