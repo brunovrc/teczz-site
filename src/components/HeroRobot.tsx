@@ -23,16 +23,18 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
   const splineRef = useRef<HTMLDivElement>(null);
   const isDesktop = useMemo(() => window.innerWidth >= 768, []);
 
-  // Monta Spline após 2 frames (~33ms) — primeiro frame pinta a página,
-  // segundo frame monta o Spline. Robô aparece junto com o restante da hero.
+  // Desktop: monta Spline após 2 frames (~33ms)
+  // Mobile: +350ms extra para o primeiro render assentar antes do WebGL
   const [splineReady, setSplineReady] = useState(false);
   useEffect(() => {
     let raf1: number, raf2: number;
-    raf1 = requestAnimationFrame(() => {
-      raf2 = requestAnimationFrame(() => setSplineReady(true));
-    });
-    return () => { cancelAnimationFrame(raf1); cancelAnimationFrame(raf2); };
-  }, []);
+    const id = setTimeout(() => {
+      raf1 = requestAnimationFrame(() => {
+        raf2 = requestAnimationFrame(() => setSplineReady(true));
+      });
+    }, isDesktop ? 0 : 350);
+    return () => { clearTimeout(id); cancelAnimationFrame(raf1); cancelAnimationFrame(raf2); };
+  }, [isDesktop]);
 
   // Repassa mousemove para o canvas do Spline (desktop only)
   useEffect(() => {
@@ -56,12 +58,14 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
   return (
     <section ref={heroRef} className="relative flex flex-col overflow-hidden bg-black" style={{ minHeight: '100svh' }}>
 
-      {/* 1. Grid de fundo */}
-      <DataGridHero
-        rows={18} cols={30} spacing={3} duration={5}
-        color="#3b82f6" animationType="pulse" pulseEffect mouseGlow
-        opacityMin={0.03} opacityMax={0.28}
-      />
+      {/* 1. Grid de fundo — só no desktop (mobile: robô cobre 100%, gasto desnecessário) */}
+      {isDesktop && (
+        <DataGridHero
+          rows={18} cols={30} spacing={3} duration={5}
+          color="#3b82f6" animationType="pulse" pulseEffect mouseGlow
+          opacityMin={0.03} opacityMax={0.28}
+        />
+      )}
 
       {/* 2. Robô — monta só quando browser está idle (não bloqueia primeiro render) */}
       {isDesktop ? (

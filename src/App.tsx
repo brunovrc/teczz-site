@@ -264,7 +264,7 @@ export default function App() {
         <HeroRobot line1Ref={heroLine1Ref} line2Ref={heroLine2Ref} />
 
         {/* ─── SERVICES ─── */}
-        <section id="soluções" className="px-6 md:px-10 py-24 md:py-36">
+        <section id="soluções" className="px-6 md:px-10 py-24 md:py-36" style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 900px' }}>
           <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={vp}>
 
             <LampHeading label="Soluções" className="mb-16">
@@ -353,7 +353,7 @@ export default function App() {
 
         {/* ─── CASES ─── */}
         <div aria-hidden="true" className="section-sep" />
-        <section id="cases" className="px-6 md:px-10 py-24 md:py-36">
+        <section id="cases" className="px-6 md:px-10 py-24 md:py-36" style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 1000px' }}>
           <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={vp}>
 
             <LampHeading label="Cases" className="mb-16">
@@ -439,7 +439,7 @@ export default function App() {
 
         {/* ─── PROCESS ─── */}
         <div aria-hidden="true" className="section-sep" />
-        <section id="sobre" className="px-6 md:px-10 py-24 md:py-36 relative overflow-hidden">
+        <section id="sobre" className="px-6 md:px-10 py-24 md:py-36 relative overflow-hidden" style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 700px' }}>
           <div className="absolute inset-0 pointer-events-none"
             style={{ background: 'radial-gradient(ellipse 80% 50% at 50% 60%, rgba(59,130,246,0.04) 0%, transparent 70%)' }} />
 
@@ -496,7 +496,7 @@ export default function App() {
 
         {/* ─── FAQ ─── */}
         <div aria-hidden="true" className="section-sep" />
-        <section id="faq" className="px-6 md:px-10 py-24 md:py-36">
+        <section id="faq" className="px-6 md:px-10 py-24 md:py-36" style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 700px' }}>
           <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={vp}>
 
             <LampHeading label="FAQ" className="mb-14">
@@ -559,7 +559,7 @@ export default function App() {
 
         {/* ─── CTA FINAL ─── */}
         <div aria-hidden="true" className="section-sep" />
-        <section id="contato" className="relative min-h-[88vh] flex flex-col items-center justify-center overflow-hidden px-6 md:px-10 py-24">
+        <section id="contato" className="relative min-h-[88vh] flex flex-col items-center justify-center overflow-hidden px-6 md:px-10 py-24" style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 800px' }}>
 
           {/* Glow background */}
           <div className="absolute inset-0 pointer-events-none">
