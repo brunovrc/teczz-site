@@ -3,6 +3,9 @@ import { motion } from 'framer-motion';
 import { ArrowRight, ChevronDown } from 'lucide-react';
 import DataGridHero from './DataGridHero';
 import { GooeyText } from './GooeyText';
+import { SplineScene } from './ui/SplineScene';
+
+const SPLINE_SCENE = 'https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode';
 
 const gooeyTexts = ['Sites personalizados', 'Chatbots', 'Automações', 'Agentes de IA'];
 
@@ -31,80 +34,90 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
         opacityMin={0.03} opacityMax={0.28}
       />
 
-      {/* Scrim — escurece mais à esquerda onde fica o texto */}
+      {/* Scrim — concentra escuridão no lado do texto */}
       <div
         aria-hidden="true"
         className="absolute inset-0 pointer-events-none z-[5]"
         style={{
           background:
-            'radial-gradient(ellipse 60% 70% at 35% 50%, rgba(0,0,0,0.80) 0%, rgba(0,0,0,0.40) 55%, transparent 100%)',
+            'radial-gradient(ellipse 55% 80% at 28% 50%, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.45) 50%, transparent 100%)',
         }}
       />
 
-      {/* Robô — direita, mix-blend-mode:screen remove o fundo escuro */}
+      {/* ── Spline — lado direito ── */}
       <div
         aria-hidden="true"
-        className="absolute right-0 top-0 h-full pointer-events-none z-[6]
+        className="absolute right-0 top-0 h-full pointer-events-none z-[7]
                    hidden md:block"
-        style={{ width: '58%' }}
+        style={{ width: '62%' }}
       >
-        {/* Imagem com blend mode pra sumir fundo escuro */}
-        <img
-          src="/robot.png"
-          alt=""
-          loading="eager"
-          draggable={false}
-          className="w-full h-full object-contain object-center select-none"
-          style={{
-            mixBlendMode: 'screen',
-            maskImage:
-              'radial-gradient(ellipse 80% 92% at 50% 52%, black 30%, transparent 100%)',
-            WebkitMaskImage:
-              'radial-gradient(ellipse 80% 92% at 50% 52%, black 30%, transparent 100%)',
-          }}
-        />
-
-        {/* Glow pulsante no coração */}
+        {/* Container com customizações visuais */}
         <div
-          aria-hidden="true"
-          className="absolute inset-0 heart-glow pointer-events-none"
-        />
+          className="relative w-full h-full"
+          style={{
+            // Ajusta a cor para a paleta azul do site
+            filter: 'hue-rotate(10deg) saturate(1.25) brightness(0.92)',
+          }}
+        >
+          <SplineScene
+            scene={SPLINE_SCENE}
+            className="w-full h-full"
+          />
+
+          {/* Overlay azul sutil pra fundir na identidade do site */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                'radial-gradient(ellipse 60% 60% at 50% 45%, rgba(37,99,235,0.08) 0%, transparent 70%)',
+              mixBlendMode: 'screen',
+            }}
+          />
+
+          {/* Vignette nas bordas pra fundir com o fundo preto */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                'radial-gradient(ellipse 85% 90% at 52% 48%, transparent 45%, rgba(0,0,0,0.5) 72%, rgba(0,0,0,0.95) 100%)',
+            }}
+          />
+
+          {/* Esconde watermark do Spline */}
+          <style>{`
+            #spline-watermark,
+            [class*="spline-watermark"],
+            canvas + div { display: none !important; }
+          `}</style>
+        </div>
       </div>
 
-      {/* Robô mobile — fantasma atrás do texto */}
+      {/* Spline mobile — menor, atrás do texto */}
       <div
         aria-hidden="true"
-        className="md:hidden absolute right-[-10%] top-0 h-full w-[70%] pointer-events-none z-[6]"
-        style={{ opacity: 0.15 }}
+        className="md:hidden absolute right-[-15%] top-0 h-full w-[75%]
+                   pointer-events-none z-[6]"
+        style={{ opacity: 0.22 }}
       >
-        <img
-          src="/robot.png"
-          alt=""
-          loading="eager"
-          draggable={false}
-          className="w-full h-full object-contain object-right select-none"
-          style={{
-            mixBlendMode: 'screen',
-            maskImage: 'linear-gradient(to left, black 5%, transparent 75%)',
-            WebkitMaskImage: 'linear-gradient(to left, black 5%, transparent 75%)',
-          }}
-        />
+        <SplineScene scene={SPLINE_SCENE} className="w-full h-full" />
       </div>
 
-      {/* ── Conteúdo principal ── */}
+      {/* ── Conteúdo ── */}
       <div
         className="relative z-20 flex-1 flex items-center"
-        style={{ padding: 'calc(72px + 1.5rem) clamp(1.5rem, 6vw, 5rem) 2rem' }}
+        style={{ padding: 'calc(72px + 1rem) clamp(1.5rem, 5vw, 5rem) 2rem' }}
       >
-        <div className="flex flex-col items-start gap-7 max-w-[520px]">
+        <div className="flex flex-col items-start gap-7 max-w-[500px]">
 
           <motion.h1
             initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1, duration: 0.8, ease }}
+            transition={{ delay: 0.15, duration: 0.8, ease }}
             style={{
               fontFamily: '"Bebas Neue", sans-serif',
-              fontSize: 'clamp(2rem, 6vw, 5.4rem)',
+              fontSize: 'clamp(2rem, 5.8vw, 5.4rem)',
               fontWeight: 400,
               lineHeight: 1.1,
               letterSpacing: '0.04em',
@@ -114,10 +127,8 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
             <span
               ref={line1Ref}
               style={{
-                background: 'linear-gradient(180deg, #fff 0%, rgba(255,255,255,0.6) 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
+                background: 'linear-gradient(180deg, #fff 0%, rgba(255,255,255,0.62) 100%)',
+                WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
                 display: 'block',
               }}
             >
@@ -127,9 +138,7 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
               ref={line2Ref}
               style={{
                 background: 'linear-gradient(180deg, #60a5fa 0%, #3b82f6 60%, #2563eb 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
                 display: 'block',
               }}
             >
@@ -148,7 +157,7 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
               morphTime={1.2}
               cooldownTime={2.2}
               textStyle={{
-                fontSize: 'clamp(0.9rem, 1.8vw, 1.25rem)',
+                fontSize: 'clamp(0.85rem, 1.7vw, 1.2rem)',
                 fontWeight: 700,
                 letterSpacing: '-0.025em',
                 textTransform: 'uppercase' as const,
@@ -165,7 +174,7 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
             className="pill-btn-lg"
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.65, duration: 0.7, ease }}
+            transition={{ delay: 0.62, duration: 0.7, ease }}
           >
             Quero implementar IA na minha empresa <ArrowRight size={14} />
           </motion.a>
@@ -186,12 +195,7 @@ export function HeroRobot({ line1Ref, line2Ref }: HeroRobotProps) {
         <div className="border-y section-divider py-3 overflow-hidden" style={{ background: '#000' }}>
           <div className="marquee-track">
             {Array(2).fill(marqueeWords).flat().map((word, i) => (
-              <span
-                key={i}
-                className={`text-[13px] tracking-[0.12em] uppercase font-semibold ${
-                  word === '·' ? 'text-blue-500' : 'marquee-word'
-                }`}
-              >
+              <span key={i} className={`text-[13px] tracking-[0.12em] uppercase font-semibold ${word === '·' ? 'text-blue-500' : 'marquee-word'}`}>
                 {word}
               </span>
             ))}
