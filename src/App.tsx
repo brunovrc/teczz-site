@@ -70,6 +70,13 @@ const cases = [
     title: 'Hipismo Maringá',
     desc: 'Site institucional para clube de hipismo com design personalizado, SEO otimizado e experiência mobile-first.',
   },
+  {
+    url: 'https://brunovrc.github.io/assados-tradicao/',
+    urlLabel: 'brunovrc.github.io/assados-tradicao',
+    tag: 'Site Personalizado',
+    title: 'Assados & Tradição',
+    desc: 'Site para restaurante especializado em assados com cardápio digital, identidade visual forte e experiência otimizada para conversão.',
+  },
 ];
 
 const gooeyTexts = ['Sites personalizados', 'Chatbots', 'Automações', 'Agentes de IA'];
