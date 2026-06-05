@@ -416,7 +416,10 @@ export default function App() {
               {cases.slice(0, showAllCases ? cases.length : 2).map((c, i) => (
                 <motion.div
                   key={c.url}
-                  variants={itemVariants}
+                  variants={i < 2 ? itemVariants : undefined}
+                  initial={i >= 2 ? { opacity: 0, y: 26 } : undefined}
+                  animate={i >= 2 ? { opacity: 1, y: 0 } : undefined}
+                  transition={i >= 2 ? { duration: 0.72, ease: [0.22, 1, 0.36, 1] } : undefined}
                   className="relative rounded-2xl border border-white/[0.08] overflow-hidden"
                   style={{ background: 'rgba(6,13,31,0.9)' }}
                 >
