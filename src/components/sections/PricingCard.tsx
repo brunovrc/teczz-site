@@ -31,15 +31,16 @@ export interface PricingCardProps {
   benefits: Array<{ text: string; checked: boolean }>;
   highlighted?: boolean;
   badge?: string;
+  className?: string;
 }
 
 export function PricingCard({
   tier, price, originalPrice, bestFor, CTA, ctaHref,
-  benefits, highlighted = false, badge,
+  benefits, highlighted = false, badge, className = '',
 }: PricingCardProps) {
   return (
-    <motion.div variants={itemVariants} className="h-full">
-      <div className={`relative h-full rounded-2xl border p-6 flex flex-col shadow-[0px_0px_27px_0px_#2D2D2D] transition-colors ${
+    <motion.li variants={itemVariants} className={`list-none min-h-[20rem] ${className}`}>
+      <div className={`relative h-full rounded-2xl border p-6 flex flex-col shadow-[0px_0px_27px_0px_#2D2D2D] ${
         highlighted
           ? 'border-blue-500/40 bg-gradient-to-b from-blue-950/30 to-[#0a0a0f]'
           : 'border-white/[0.08] bg-[#0a0a0f]'
@@ -80,6 +81,6 @@ export function PricingCard({
           {CTA}
         </a>
       </div>
-    </motion.div>
+    </motion.li>
   );
 }
