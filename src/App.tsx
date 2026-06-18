@@ -699,7 +699,7 @@ export default function App() {
               <a href="https://linkedin.com/company/teczz" target="_blank" rel="noopener noreferrer" className="social-linkedin">
                 <Linkedin size={17} />
               </a>
-              <a href="https://facebook.com/teczz" target="_blank" rel="noopener noreferrer" className="social-facebook">
+              <a href="https://web.facebook.com/teczz.ia" target="_blank" rel="noopener noreferrer" className="social-facebook">
                 <Facebook size={17} />
               </a>
             </div>
