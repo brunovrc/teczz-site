@@ -2,13 +2,13 @@ import { useEffect, useRef, useState, useCallback, memo } from 'react';
 import { createTimeline, scrambleText } from 'animejs';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, ArrowUpRight, ChevronDown, Menu, X, Layers, TrendingUp, Users, Mail, Instagram, Linkedin, Facebook, Search, Zap, Rocket } from 'lucide-react';
-import BentoGrid, { type BentoItem } from './components/BentoGrid';
-import { BentoCard } from './components/BentoCard';
-import { AnimatedHeading } from './components/AnimatedHeading';
-import { HeroRobot } from './components/HeroRobot';
-import { GlowMenu } from './components/GlowMenu';
-import type { MenuItem } from './components/GlowMenu';
-import { LampHeading } from './components/LampHeading';
+import BentoGrid, { type BentoItem } from './components/sections/BentoGrid';
+import { BentoCard } from './components/sections/BentoCard';
+import { AnimatedHeading } from './components/effects/AnimatedHeading';
+import { HeroRobot } from './components/sections/HeroRobot';
+import { GlowMenu } from './components/layout/GlowMenu';
+import type { MenuItem } from './components/layout/GlowMenu';
+import { LampHeading } from './components/effects/LampHeading';
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -326,7 +326,7 @@ export default function App() {
               />
             </LampHeading>
 
-            <ul className="grid grid-cols-1 gap-4 md:grid-cols-12 md:grid-rows-3 xl:grid-rows-2 xl:max-h-[42rem]">
+            <ul className="grid grid-cols-1 gap-4 md:grid-cols-12">
 
               <BentoCard
                 area="md:[grid-area:1/1/2/7] xl:[grid-area:1/1/2/5]"
@@ -385,12 +385,24 @@ export default function App() {
               />
 
               <BentoCard
-                area="md:[grid-area:4/1/5/13] xl:[grid-area:2/11/3/13]"
+                area="md:[grid-area:4/1/5/7] xl:[grid-area:2/11/3/13]"
                 title="Voz com IA"
                 description="Agentes que ligam, qualificam leads e agendam. Sem script travado, com naturalidade real."
                 icon={
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>
+                  </svg>
+                }
+              />
+
+              <BentoCard
+                area="md:[grid-area:4/7/5/13] xl:[grid-area:3/1/4/13]"
+                title="Google Meu Negócio"
+                description="Cadastro otimizado e manutenção contínua da sua presença no Google: fotos, categorias, palavras-chave e respostas — para aparecer antes da concorrência."
+                icon={
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    <line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>
                   </svg>
                 }
               />
