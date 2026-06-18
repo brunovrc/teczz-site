@@ -1,6 +1,6 @@
 import { useRef, type ReactNode } from 'react';
 import { motion } from 'framer-motion';
-import { GlowingEffect } from './ui/GlowingEffect';
+import { GlowingEffect } from '../ui/GlowingEffect';
 
 const itemVariants = {
   hidden: { opacity: 0, y: 26 },

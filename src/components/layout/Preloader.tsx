@@ -1,4 +1,4 @@
-import { SilkPreloader } from './ui/silk-background-animation';
+import { SilkPreloader } from '../ui/silk-background-animation';
 
 interface PreloaderProps {
   onComplete: () => void;

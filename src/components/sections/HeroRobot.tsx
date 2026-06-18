@@ -2,7 +2,7 @@ import { type RefObject, useRef, useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, ChevronDown } from 'lucide-react';
 import DataGridHero from './DataGridHero';
-import { SplineScene } from './ui/SplineScene';
+import { SplineScene } from '../ui/SplineScene';
 
 const SPLINE_SCENE = 'https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode';
 

@@ -1,5 +1,5 @@
 import { useRef, type ReactNode } from 'react';
-import { GlowingEffect } from './ui/GlowingEffect';
+import { GlowingEffect } from '../ui/GlowingEffect';
 
 export interface BentoItem {
   title: string;
