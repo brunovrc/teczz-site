@@ -9,6 +9,7 @@ import { HeroRobot } from './components/sections/HeroRobot';
 import { GlowMenu } from './components/layout/GlowMenu';
 import type { MenuItem } from './components/layout/GlowMenu';
 import { LampHeading } from './components/effects/LampHeading';
+import { PricingCard } from './components/sections/PricingCard';
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -45,6 +46,13 @@ const navItems: MenuItem[] = [
     href: '#sobre',
     gradient: 'radial-gradient(circle, rgba(99,102,241,0.18) 0%, rgba(79,70,229,0.07) 50%, transparent 100%)',
     iconColor: 'text-indigo-400',
+  },
+  {
+    icon: Rocket,
+    label: 'Preços',
+    href: '#preços',
+    gradient: 'radial-gradient(circle, rgba(34,197,94,0.18) 0%, rgba(22,163,74,0.07) 50%, transparent 100%)',
+    iconColor: 'text-green-400',
   },
   {
     icon: Mail,
@@ -279,7 +287,7 @@ export default function App() {
               >
                 <X size={26} />
               </button>
-              {['Soluções', 'Cases', 'Sobre', 'Contato'].map((link, i) => (
+              {['Soluções', 'Cases', 'Sobre', 'Preços', 'Contato'].map((link, i) => (
                 <motion.a
                   key={link}
                   href={`#${link.toLowerCase()}`}
@@ -615,6 +623,119 @@ export default function App() {
                 );
               })}
             </div>
+          </motion.div>
+        </section>
+
+        {/* ─── PREÇOS ─── */}
+        <div aria-hidden="true" className="section-sep" />
+        <section id="preços" className="px-6 md:px-10 py-24 md:py-36">
+          <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={vp}>
+
+            <LampHeading label="Preços" className="mb-16">
+              <AnimatedHeading
+                as="h2"
+                className="text-white text-4xl md:text-5xl xl:text-6xl font-semibold tracking-tight leading-[1.08]"
+                splitBy="chars"
+                animation="blur-slide"
+                threshold={0.2}
+              >
+                Transparência total.<br />Sem letras miúdas.
+              </AnimatedHeading>
+            </LampHeading>
+
+            {/* Row 1 — 3 principais */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-5">
+              <PricingCard
+                tier="Site Personalizado"
+                price="R$ 659,99"
+                originalPrice="De R$ 1.499,99"
+                bestFor="Presença digital que converte — entregue em 2 a 6 dias úteis."
+                CTA="Quero meu site"
+                ctaHref={`https://wa.me/5511940411688?text=${encodeURIComponent('Olá! Tenho interesse no Site Personalizado da Teczz.')}`}
+                benefits={[
+                  { text: 'Design único, sem template', checked: true },
+                  { text: 'SEO otimizado desde o início', checked: true },
+                  { text: 'Responsivo (mobile + desktop)', checked: true },
+                  { text: 'Entrega em 2–6 dias úteis', checked: true },
+                  { text: 'Domínio e hospedagem inclusos', checked: false },
+                ]}
+              />
+
+              <PricingCard
+                tier="Combo — Mais Popular"
+                price="R$ 1.793,47"
+                originalPrice="De R$ 2.109,97"
+                bestFor="Site + Chatbot WhatsApp + Google Meu Negócio. 15% de desconto automático."
+                CTA="Quero o Combo"
+                ctaHref={`https://wa.me/5511940411688?text=${encodeURIComponent('Olá! Tenho interesse no Combo da Teczz (Site + Chatbot + Google Meu Negócio).')}`}
+                highlighted
+                badge="Mais Popular"
+                benefits={[
+                  { text: 'Site personalizado com SEO', checked: true },
+                  { text: 'Chatbot WhatsApp com IA', checked: true },
+                  { text: 'Google Meu Negócio otimizado', checked: true },
+                  { text: '15% de desconto no pacote', checked: true },
+                  { text: 'Manutenção mensal disponível', checked: true },
+                ]}
+              />
+
+              <PricingCard
+                tier="Chatbot WhatsApp"
+                price="R$ 999,99"
+                originalPrice="De R$ 1.799,99"
+                bestFor="IA treinada no DNA do seu negócio. Responde mensagens 24h, 7 dias."
+                CTA="Quero o Chatbot"
+                ctaHref={`https://wa.me/5511940411688?text=${encodeURIComponent('Olá! Tenho interesse no Chatbot para WhatsApp da Teczz.')}`}
+                benefits={[
+                  { text: 'IA treinada no seu negócio', checked: true },
+                  { text: 'Atendimento 24h no WhatsApp', checked: true },
+                  { text: 'Respostas em texto com IA', checked: true },
+                  { text: 'Manutenção mensal disponível', checked: true },
+                  { text: 'Áudio, imagem e vídeo', checked: false },
+                ]}
+              />
+            </div>
+
+            {/* Row 2 — complementares */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-10">
+              <PricingCard
+                tier="Chatbot Completo"
+                price="R$ 2.850,00"
+                originalPrice="De R$ 3.499,99"
+                bestFor="Para quem quer o máximo: IA que entende áudio, imagem, vídeo e integra sistemas."
+                CTA="Quero o Chatbot Completo"
+                ctaHref={`https://wa.me/5511940411688?text=${encodeURIComponent('Olá! Tenho interesse no Chatbot Completo da Teczz.')}`}
+                benefits={[
+                  { text: 'Tudo do Chatbot padrão', checked: true },
+                  { text: 'Entende áudio, imagem e vídeo', checked: true },
+                  { text: 'Integrações com CRM e sistemas', checked: true },
+                  { text: 'Manutenção mensal disponível', checked: true },
+                ]}
+              />
+
+              <PricingCard
+                tier="Google Meu Negócio"
+                price="R$ 449,99"
+                originalPrice="De R$ 699,99"
+                bestFor="Apareça antes da concorrência nas buscas do Google da sua cidade."
+                CTA="Quero otimizar meu GMN"
+                ctaHref={`https://wa.me/5511940411688?text=${encodeURIComponent('Olá! Tenho interesse na otimização do Google Meu Negócio pela Teczz.')}`}
+                benefits={[
+                  { text: 'Cadastro completo e otimizado', checked: true },
+                  { text: 'Fotos, categorias e palavras-chave', checked: true },
+                  { text: 'SEO local configurado', checked: true },
+                  { text: 'Manutenção mensal disponível', checked: true },
+                ]}
+              />
+            </div>
+
+            {/* Nota de custos adicionais */}
+            <motion.div variants={itemVariants} className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 max-w-2xl mx-auto text-center">
+              <p className="text-xs text-white/35 leading-relaxed">
+                <span className="text-white/50 font-medium">Custos de infraestrutura são por conta do cliente</span> — domínio (~R$ 50–100/ano), hospedagem (~R$ 30–80/mês) e APIs de IA (variável conforme o volume de uso). Na maioria dos casos, menos de R$ 100/mês no total. A Teczz orienta você nas opções mais acessíveis.
+              </p>
+            </motion.div>
+
           </motion.div>
         </section>
 
