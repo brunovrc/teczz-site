@@ -47,13 +47,6 @@ const navItems: MenuItem[] = [
     iconColor: 'text-indigo-400',
   },
   {
-    icon: Rocket,
-    label: 'Contato',
-    href: '#contato',
-    gradient: 'radial-gradient(circle, rgba(34,197,94,0.18) 0%, rgba(22,163,74,0.07) 50%, transparent 100%)',
-    iconColor: 'text-green-400',
-  },
-  {
     icon: Mail,
     label: 'Contato',
     href: '#contato',
