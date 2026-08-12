@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Teczz</title>
+  <script>
+    // SPA redirect for GitHub Pages — preserva path e query string (incluindo UTMs)
+    var l = window.location;
+    l.replace(
+      l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+      '/?p=' + encodeURIComponent(l.pathname + l.search) + l.hash
+    );
+  </script>
+</head>
+<body></body>
+</html>
