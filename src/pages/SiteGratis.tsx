@@ -48,6 +48,7 @@ function fireGA(eventName: string, params?: Record<string, string>) {
   }
 }
 
+
 export default function SiteGratis() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
