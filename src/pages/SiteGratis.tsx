@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 
 const WA_NUMBER = '5544998541023';
+const WA_MSG = 'Olá, vim pela Teczz e quero resgatar o meu site grátis, pagando apenas a hospedagem e domínio';
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -40,27 +41,6 @@ const faqs = [
   },
 ];
 
-const segments = [
-  'Alimentação / Restaurante',
-  'Salão de Beleza / Estética',
-  'Saúde / Clínica',
-  'Pet Shop / Veterinário',
-  'Loja / Comércio',
-  'Academia / Esporte',
-  'Educação / Cursos',
-  'Advocacia / Contabilidade',
-  'Imóveis / Construtora',
-  'Serviços Gerais',
-  'Outro',
-];
-
-function phoneMask(value: string) {
-  const d = value.replace(/\D/g, '').slice(0, 11);
-  if (d.length <= 2) return `(${d}`;
-  if (d.length <= 7) return `(${d.slice(0, 2)}) ${d.slice(2)}`;
-  return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
-}
-
 function fireGA(eventName: string, params?: Record<string, string>) {
   const w = window as unknown as Record<string, ((...args: unknown[]) => void) | undefined>;
   if (typeof w.gtag === 'function') {
@@ -71,19 +51,18 @@ function fireGA(eventName: string, params?: Record<string, string>) {
 export default function SiteGratis() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [form, setForm] = useState({ business: '', segment: '', phone: '' });
   const navRef = useRef<HTMLElement>(null);
   const lastScrollY = useRef(0);
   const rafRef = useRef(0);
 
-  // Remove preloader immediately — landing page, sem animação de entrada
+  // Remove preloader imediatamente
   useEffect(() => {
     sessionStorage.setItem('tz', '1');
     const el = document.getElementById('tpre');
     if (el) el.style.display = 'none';
   }, []);
 
-  // SEO — swap meta tags for this page and restore on unmount
+  // SEO — troca meta tags para essa página e restaura ao sair
   useEffect(() => {
     const prev = {
       title: document.title,
@@ -108,13 +87,13 @@ export default function SiteGratis() {
     };
   }, []);
 
-  // Always start at top
+  // Sempre começa no topo
   useEffect(() => {
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     window.scrollTo(0, 0);
   }, []);
 
-  // Nav hide/show on scroll
+  // Nav esconde/mostra no scroll
   useEffect(() => {
     const isMouse = () => window.matchMedia('(hover: hover) and (pointer: fine)').matches;
     const onScroll = () => {
@@ -144,29 +123,12 @@ export default function SiteGratis() {
     return () => { document.body.style.overflow = ''; };
   }, [mobileOpen]);
 
-  function scrollToForm() {
-    document.getElementById('formulario')?.scrollIntoView({ behavior: 'smooth' });
-  }
-
   function openWA(label: string) {
     fireGA('lead_whatsapp_click', { event_category: 'lead', event_label: label });
     window.open(
-      `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent('Olá! Quero meu site profissional grátis com a Teczz!')}`,
+      `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MSG)}`,
       '_blank', 'noopener,noreferrer'
     );
-  }
-
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    const text = encodeURIComponent(
-      `Olá! Vi o site e quero meu site profissional gratuito.\n\n📌 Negócio: ${form.business}\n🏷️ Segmento: ${form.segment}\n📱 WhatsApp: ${form.phone}`
-    );
-    // Append UTM params from current URL so they arrive in the WA message
-    const utms = new URLSearchParams(window.location.search);
-    const utmStr = utms.toString() ? `\n\n🔗 Origem: ${utms.get('utm_source') ?? 'direto'}` : '';
-    const finalText = encodeURIComponent(decodeURIComponent(text) + utmStr);
-    fireGA('lead_whatsapp_click', { event_category: 'lead', event_label: 'site-gratis-form', value: form.segment });
-    window.open(`https://wa.me/${WA_NUMBER}?text=${finalText}`, '_blank', 'noopener,noreferrer');
   }
 
   return (
@@ -191,8 +153,8 @@ export default function SiteGratis() {
             <a href="/" className="text-xs uppercase tracking-[0.1em] text-white/40 hover:text-white/70 transition-colors font-semibold">
               ← Voltar ao site
             </a>
-            <button onClick={scrollToForm} className="pill-btn">
-              Solicitar grátis
+            <button onClick={() => openWA('site-gratis-nav')} className="pill-btn">
+              Resgatar grátis
             </button>
           </div>
           <button
@@ -218,12 +180,12 @@ export default function SiteGratis() {
                 <X size={26} />
               </button>
               <motion.button
-                onClick={() => { scrollToForm(); setMobileOpen(false); }}
+                onClick={() => { openWA('site-gratis-mobile-menu'); setMobileOpen(false); }}
                 className="text-3xl font-bold uppercase tracking-widest text-white/80 hover:text-white transition-colors"
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0, duration: 0.3, ease }}
               >
-                Quero meu site
+                Resgatar meu site
               </motion.button>
               <motion.a
                 href="/"
@@ -238,11 +200,18 @@ export default function SiteGratis() {
         </AnimatePresence>
 
         {/* ── HERO ── */}
-        <section className="relative min-h-[100svh] flex flex-col items-center justify-center px-6 md:px-10 overflow-hidden">
-          <div className="absolute inset-0 pointer-events-none">
+        <section className="relative min-h-[100svh] flex flex-col items-center justify-center px-6 md:px-10" style={{ overflow: 'visible' }}>
+          <div className="absolute inset-0 pointer-events-none overflow-hidden">
             <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 60% at 50% 40%,rgba(37,99,235,0.10) 0%,rgba(59,130,246,0.04) 50%,transparent 75%)' }} />
             <div className="cta-ring cta-ring-1" style={{ opacity: 0.45 }} />
             <div className="cta-ring cta-ring-2" style={{ opacity: 0.28 }} />
+
+            {/* Caixas de presente decorativas */}
+            <div style={{ position: 'absolute', top: '18%', left: '6%', fontSize: 'clamp(2.5rem, 5vw, 4rem)', opacity: 0.18, transform: 'rotate(-14deg)', userSelect: 'none', pointerEvents: 'none', lineHeight: 1 }}>🎁</div>
+            <div style={{ position: 'absolute', top: '28%', right: '5%', fontSize: 'clamp(2rem, 4vw, 3.2rem)', opacity: 0.14, transform: 'rotate(10deg)', userSelect: 'none', pointerEvents: 'none', lineHeight: 1 }}>🎁</div>
+            <div style={{ position: 'absolute', bottom: '22%', left: '10%', fontSize: 'clamp(1.4rem, 2.5vw, 2.2rem)', opacity: 0.10, transform: 'rotate(-6deg)', userSelect: 'none', pointerEvents: 'none', lineHeight: 1 }}>🎁</div>
+            <div style={{ position: 'absolute', bottom: '28%', right: '9%', fontSize: 'clamp(1.6rem, 3vw, 2.6rem)', opacity: 0.13, transform: 'rotate(18deg)', userSelect: 'none', pointerEvents: 'none', lineHeight: 1 }}>🎁</div>
+            <div style={{ position: 'absolute', top: '55%', left: '2%', fontSize: 'clamp(1rem, 2vw, 1.8rem)', opacity: 0.08, transform: 'rotate(8deg)', userSelect: 'none', pointerEvents: 'none', lineHeight: 1 }}>🎁</div>
           </div>
 
           <motion.div
@@ -257,20 +226,20 @@ export default function SiteGratis() {
 
             <motion.h1
               variants={itemVariants}
-              className="font-black uppercase leading-[0.95] tracking-tight mb-6"
-              style={{ fontSize: 'clamp(2.8rem, 7.5vw, 6.5rem)' }}
+              className="font-black uppercase tracking-tight mb-6"
+              style={{ fontSize: 'clamp(2.8rem, 7.5vw, 6.5rem)', lineHeight: 1, paddingBottom: '0.12em' }}
             >
               <span style={{
                 background: 'linear-gradient(180deg,#ffffff 0%,rgba(255,255,255,0.82) 100%)',
                 WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-                display: 'block',
+                display: 'block', paddingBottom: '0.05em',
               }}>
                 Seu site profissional
               </span>
               <span style={{
                 background: 'linear-gradient(180deg,#60a5fa 0%,#3b82f6 55%,#1d4ed8 100%)',
                 WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-                display: 'block',
+                display: 'block', paddingBottom: '0.08em',
               }}>
                 pode sair de graça.
               </span>
@@ -283,8 +252,8 @@ export default function SiteGratis() {
             </motion.p>
 
             <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button onClick={scrollToForm} className="pill-btn-lg">
-                Quero meu site grátis <ArrowRight size={14} />
+              <button onClick={() => openWA('site-gratis-hero-cta')} className="pill-btn-lg">
+                Resgatar meu site grátis <ArrowRight size={14} />
               </button>
               <a href="/" className="text-sm text-white/35 hover:text-white/55 transition-colors uppercase tracking-wider">
                 Conhecer a Teczz →
@@ -360,7 +329,7 @@ export default function SiteGratis() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {[
-                { num: '01', title: 'Você preenche o formulário', desc: 'Informe o nome do negócio, segmento e WhatsApp. Nossa equipe entra em contato para entender o que você precisa.' },
+                { num: '01', title: 'Você chama no WhatsApp', desc: 'Mande uma mensagem agora. Nossa equipe entra em contato para entender o que você precisa e combinamos tudo por lá.' },
                 { num: '02', title: 'A gente cria o site', desc: 'Desenvolvemos seu site profissional sem nenhum custo. Você acompanha e aprova cada etapa antes de publicar.' },
                 { num: '03', title: 'Você ativa o plano', desc: 'Ativa o plano anual do Wix (R$198/ano com domínio incluso) — o valor vai direto para o Wix, não para nós.' },
                 { num: '04', title: 'Seu site vai ao ar', desc: 'Site publicado, domínio ativo, aparecendo no Google. Pronto para receber clientes.' },
@@ -410,107 +379,13 @@ export default function SiteGratis() {
                 </div>
               ))}
             </motion.div>
-          </motion.div>
-        </section>
 
-        {/* ── FORMULÁRIO ── */}
-        <div aria-hidden="true" className="section-sep" />
-        <section id="formulario" className="px-6 md:px-10 py-20 md:py-28 relative overflow-hidden">
-          <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 80% 60% at 50% 50%,rgba(37,99,235,0.08) 0%,transparent 70%)' }} />
-          <div className="cta-ring cta-ring-1" style={{ position: 'absolute', opacity: 0.2 }} />
-          <div className="cta-ring cta-ring-2" style={{ position: 'absolute', opacity: 0.12 }} />
-
-          <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={vp} className="max-w-lg mx-auto relative z-10">
-            <motion.div variants={itemVariants} className="text-center mb-10">
-              <span className="text-[11px] tracking-[0.25em] text-blue-400 uppercase font-semibold">Solicitar agora</span>
-              <h2 className="font-black uppercase leading-none tracking-tight mt-3" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
-                Quero meu site grátis
-              </h2>
-              <p className="text-white/45 text-sm mt-4 leading-relaxed">
-                Preencha abaixo. A Teczz entra em contato via WhatsApp em até 24h.
-              </p>
-            </motion.div>
-
-            <motion.form
-              variants={itemVariants}
-              onSubmit={handleSubmit}
-              className="rounded-2xl border border-white/[0.08] p-8 flex flex-col gap-5"
-              style={{ background: 'rgba(6,13,31,0.97)' }}
-            >
-              <div>
-                <label className="block text-[10px] uppercase tracking-[0.18em] text-white/35 font-semibold mb-2">
-                  Nome do negócio *
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="Ex: Salão Beleza & Cia"
-                  value={form.business}
-                  onChange={e => setForm(f => ({ ...f, business: e.target.value }))}
-                  className="w-full rounded-xl px-4 py-3.5 text-white text-sm focus:outline-none transition-all"
-                  style={{
-                    background: 'rgba(255,255,255,0.04)',
-                    border: '1px solid rgba(255,255,255,0.09)',
-                  }}
-                  onFocus={e => { e.currentTarget.style.borderColor = 'rgba(59,130,246,0.5)'; e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; }}
-                  onBlur={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.09)'; e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; }}
-                />
-              </div>
-
-              <div>
-                <label className="block text-[10px] uppercase tracking-[0.18em] text-white/35 font-semibold mb-2">
-                  Segmento / Ramo *
-                </label>
-                <select
-                  required
-                  value={form.segment}
-                  onChange={e => setForm(f => ({ ...f, segment: e.target.value }))}
-                  className="w-full rounded-xl px-4 py-3.5 text-sm focus:outline-none appearance-none transition-all"
-                  style={{
-                    background: 'rgba(6,13,31,0.97)',
-                    border: '1px solid rgba(255,255,255,0.09)',
-                    color: form.segment ? '#fff' : 'rgba(255,255,255,0.22)',
-                  }}
-                  onFocus={e => { e.currentTarget.style.borderColor = 'rgba(59,130,246,0.5)'; }}
-                  onBlur={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.09)'; }}
-                >
-                  <option value="" disabled>Selecione seu segmento</option>
-                  {segments.map(s => (
-                    <option key={s} value={s} style={{ background: '#050a1c', color: '#fff' }}>{s}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-[10px] uppercase tracking-[0.18em] text-white/35 font-semibold mb-2">
-                  WhatsApp *
-                </label>
-                <input
-                  type="tel"
-                  required
-                  placeholder="(44) 99999-9999"
-                  value={form.phone}
-                  onChange={e => setForm(f => ({ ...f, phone: phoneMask(e.target.value) }))}
-                  inputMode="numeric"
-                  className="w-full rounded-xl px-4 py-3.5 text-white text-sm focus:outline-none transition-all"
-                  style={{
-                    background: 'rgba(255,255,255,0.04)',
-                    border: '1px solid rgba(255,255,255,0.09)',
-                  }}
-                  onFocus={e => { e.currentTarget.style.borderColor = 'rgba(59,130,246,0.5)'; e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; }}
-                  onBlur={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.09)'; e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; }}
-                />
-              </div>
-
-              <button type="submit" className="pill-btn-lg justify-center mt-2">
-                Quero meu site grátis <ArrowRight size={14} />
+            {/* CTA central após benefícios */}
+            <motion.div variants={itemVariants} className="text-center mt-14">
+              <button onClick={() => openWA('site-gratis-benefits-cta')} className="pill-btn-lg inline-flex">
+                Resgatar meu site grátis <ArrowRight size={14} />
               </button>
-
-              <p className="text-center text-[11px] text-white/22 leading-relaxed">
-                Ao clicar, você será redirecionado para o WhatsApp.<br />
-                Seus dados não são compartilhados com terceiros.
-              </p>
-            </motion.form>
+            </motion.div>
           </motion.div>
         </section>
 
@@ -579,7 +454,7 @@ export default function SiteGratis() {
             <motion.div variants={itemVariants} className="text-center mt-14">
               <p className="text-white/38 text-sm mb-6">Ainda tem dúvidas? Chama a gente no WhatsApp.</p>
               <button onClick={() => openWA('site-gratis-faq-cta')} className="pill-btn-lg inline-flex">
-                Falar agora <ArrowRight size={14} />
+                Resgatar meu site grátis <ArrowRight size={14} />
               </button>
             </motion.div>
           </motion.div>
@@ -608,7 +483,7 @@ export default function SiteGratis() {
 
       {/* WhatsApp FAB */}
       <a
-        href={`https://wa.me/${WA_NUMBER}`}
+        href={`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MSG)}`}
         target="_blank"
         rel="noopener noreferrer"
         className="whatsapp-fab"
