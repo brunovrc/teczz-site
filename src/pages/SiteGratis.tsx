@@ -37,7 +37,7 @@ const faqs = [
   },
   {
     q: 'Posso pedir alterações no site depois?',
-    a: 'Sim. Ajustes básicos (trocar texto, foto, cor) estão incluídos no primeiro mês. Após isso, modificações maiores são tratadas como novo projeto — mas nada impede de você mesmo editar pelo painel do Wix.',
+    a: 'Sim. Você pode solicitar 1 alteração após a entrega — troca de texto, foto ou cor. Modificações além disso são tratadas como novo projeto, mas nada impede de você mesmo editar pelo painel do Wix.',
   },
 ];
 
