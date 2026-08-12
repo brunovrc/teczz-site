@@ -37,7 +37,7 @@ const faqs = [
   },
   {
     q: 'Posso pedir alterações no site depois?',
-    a: 'Sim. Você pode solicitar 1 alteração após a entrega — troca de texto, foto ou cor. Modificações além disso são tratadas como novo projeto, mas nada impede de você mesmo editar pelo painel do Wix.',
+    a: 'Sim. Após a entrega, você tem 30 dias para solicitar 1 alteração (troca de texto, foto ou cor). Se não solicitar dentro desse prazo, o direito à alteração expira. Modificações além disso são tratadas como novo projeto — mas nada impede de você mesmo editar pelo painel do Wix.',
   },
 ];
 
