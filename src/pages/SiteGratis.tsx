@@ -76,16 +76,11 @@ export default function SiteGratis() {
   const lastScrollY = useRef(0);
   const rafRef = useRef(0);
 
-  // Remove preloader (same logic as App.tsx)
+  // Remove preloader immediately — landing page, sem animação de entrada
   useEffect(() => {
     sessionStorage.setItem('tz', '1');
     const el = document.getElementById('tpre');
-    if (!el) return;
-    const id = setTimeout(() => {
-      el.classList.add('out');
-      setTimeout(() => el.remove(), 600);
-    }, 500);
-    return () => clearTimeout(id);
+    if (el) el.style.display = 'none';
   }, []);
 
   // SEO — swap meta tags for this page and restore on unmount
