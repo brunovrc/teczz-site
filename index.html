@@ -70,10 +70,15 @@
   <script>
     // Pula o preloader em visitas repetidas OU em landing pages (site-gratis, etc.)
     var _path = new URLSearchParams(window.location.search).get('p') || window.location.pathname;
-    if (sessionStorage.getItem('tz') || _path.indexOf('/site-gratis') !== -1) {
+    if (sessionStorage.getItem('tz') || _path.indexOf('site-gratis') !== -1) {
       var _pre = document.getElementById('tpre');
       if (_pre) _pre.style.display = 'none';
     }
+    // Fallback: mata o preloader em 2s caso o JS principal trave por qualquer motivo
+    setTimeout(function() {
+      var el = document.getElementById('tpre');
+      if (el) el.style.display = 'none';
+    }, 2000);
   </script>
   </head>
   <body>
