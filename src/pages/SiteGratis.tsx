@@ -1,12 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  ArrowRight, ChevronDown, Instagram, Linkedin, Facebook,
+  ChevronDown, Instagram, Linkedin, Facebook,
   CheckCircle2, X, Menu,
 } from 'lucide-react';
 
 const WA_NUMBER = '5544998541023';
 const WA_MSG = 'Olá, vim pela Teczz e quero resgatar o meu site grátis, pagando apenas a hospedagem e domínio';
+const TIMER_START = 10 * 60; // 10 minutos em segundos
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -41,6 +42,12 @@ const faqs = [
   },
 ];
 
+function formatTime(s: number) {
+  const m = Math.floor(s / 60);
+  const sec = s % 60;
+  return `${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+}
+
 function fireGA(eventName: string, params?: Record<string, string>) {
   const w = window as unknown as Record<string, ((...args: unknown[]) => void) | undefined>;
   if (typeof w.gtag === 'function') {
@@ -48,10 +55,10 @@ function fireGA(eventName: string, params?: Record<string, string>) {
   }
 }
 
-
 export default function SiteGratis() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(TIMER_START);
   const navRef = useRef<HTMLElement>(null);
   const lastScrollY = useRef(0);
   const rafRef = useRef(0);
@@ -63,7 +70,18 @@ export default function SiteGratis() {
     if (el) el.style.display = 'none';
   }, []);
 
-  // SEO — troca meta tags para essa página e restaura ao sair
+  // Countdown timer
+  useEffect(() => {
+    const id = setInterval(() => {
+      setTimeLeft(t => {
+        if (t <= 1) { clearInterval(id); return 0; }
+        return t - 1;
+      });
+    }, 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  // SEO
   useEffect(() => {
     const prev = {
       title: document.title,
@@ -72,13 +90,11 @@ export default function SiteGratis() {
       ogDesc: document.querySelector('meta[property="og:description"]')?.getAttribute('content') ?? '',
       ogUrl: document.querySelector('meta[property="og:url"]')?.getAttribute('content') ?? '',
     };
-
     document.title = 'Site Profissional Grátis — Teczz';
-    document.querySelector('meta[name="description"]')?.setAttribute('content', 'Receba seu site profissional de graça. Você paga só o domínio + hospedagem: R$198/ano via Wix. A Teczz cria sem cobrar para pequenos negócios e autônomos.');
+    document.querySelector('meta[name="description"]')?.setAttribute('content', 'Receba seu site profissional de graça. A Teczz cria sem cobrar para pequenos negócios e autônomos.');
     document.querySelector('meta[property="og:title"]')?.setAttribute('content', 'Site Profissional Grátis — Teczz');
-    document.querySelector('meta[property="og:description"]')?.setAttribute('content', 'Receba seu site profissional de graça. Você paga só o domínio + hospedagem: R$198/ano via Wix.');
+    document.querySelector('meta[property="og:description"]')?.setAttribute('content', 'Receba seu site profissional de graça. A Teczz cria sem cobrar.');
     document.querySelector('meta[property="og:url"]')?.setAttribute('content', 'https://teczz.com.br/site-gratis');
-
     return () => {
       document.title = prev.title;
       document.querySelector('meta[name="description"]')?.setAttribute('content', prev.desc);
@@ -88,13 +104,12 @@ export default function SiteGratis() {
     };
   }, []);
 
-  // Sempre começa no topo
   useEffect(() => {
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     window.scrollTo(0, 0);
   }, []);
 
-  // Nav esconde/mostra no scroll
+  // Nav hide/show on scroll
   useEffect(() => {
     const isMouse = () => window.matchMedia('(hover: hover) and (pointer: fine)').matches;
     const onScroll = () => {
@@ -132,15 +147,97 @@ export default function SiteGratis() {
     );
   }
 
+  const isUrgent = timeLeft <= 60;
+
   return (
     <>
+      <style>{`
+        @keyframes cta-pulse {
+          0%, 100% {
+            box-shadow: 0 0 30px rgba(0,220,100,0.55), 0 0 70px rgba(0,220,100,0.25), 0 8px 40px rgba(0,0,0,0.5);
+            transform: scale(1);
+          }
+          50% {
+            box-shadow: 0 0 60px rgba(0,230,110,0.85), 0 0 130px rgba(0,230,110,0.4), 0 8px 40px rgba(0,0,0,0.5);
+            transform: scale(1.045);
+          }
+        }
+        @keyframes timer-urgent {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.65; }
+        }
+        @keyframes shake {
+          0%,100% { transform: translateX(0); }
+          20% { transform: translateX(-3px); }
+          40% { transform: translateX(3px); }
+          60% { transform: translateX(-2px); }
+          80% { transform: translateX(2px); }
+        }
+        .cta-green {
+          background: linear-gradient(135deg, #00e664 0%, #00c853 50%, #00b248 100%);
+          color: #003d18;
+          font-size: clamp(1.2rem, 3.5vw, 1.75rem);
+          font-weight: 900;
+          text-transform: uppercase;
+          letter-spacing: 0.04em;
+          padding: clamp(1.1rem, 3vw, 1.6rem) clamp(2.5rem, 6vw, 5rem);
+          border-radius: 999px;
+          border: 3px solid rgba(0,255,110,0.4);
+          cursor: pointer;
+          animation: cta-pulse 2s ease-in-out infinite;
+          transition: transform 0.15s ease;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.6rem;
+          white-space: nowrap;
+        }
+        .cta-green:hover {
+          animation: none;
+          transform: scale(1.06);
+          box-shadow: 0 0 80px rgba(0,230,110,0.9), 0 0 150px rgba(0,230,110,0.4);
+        }
+        .cta-green:active { transform: scale(0.97); }
+      `}</style>
+
+      {/* ── TIMER BANNER ── */}
+      <div
+        style={{
+          position: 'fixed', top: 0, left: 0, right: 0, zIndex: 200,
+          background: isUrgent
+            ? 'linear-gradient(90deg, #dc2626, #b91c1c)'
+            : 'linear-gradient(90deg, #b45309, #d97706, #b45309)',
+          padding: '0.6rem 1rem',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem',
+          animation: isUrgent ? 'timer-urgent 0.6s ease-in-out infinite' : 'none',
+        }}
+      >
+        <span style={{ fontSize: '1.1rem' }}>🔥</span>
+        <span style={{
+          color: '#fff', fontWeight: 700, fontSize: 'clamp(0.78rem, 2.5vw, 0.95rem)',
+          textTransform: 'uppercase', letterSpacing: '0.06em',
+        }}>
+          PROMOÇÃO VÁLIDA POR MAIS
+        </span>
+        <span style={{
+          color: '#fff', fontWeight: 900, fontSize: 'clamp(1rem, 3vw, 1.25rem)',
+          fontVariantNumeric: 'tabular-nums', fontFamily: 'monospace',
+          background: 'rgba(0,0,0,0.25)', borderRadius: '6px',
+          padding: '2px 10px',
+          animation: isUrgent ? 'shake 0.5s ease-in-out infinite' : 'none',
+        }}>
+          {formatTime(timeLeft)}
+        </span>
+        <span style={{ fontSize: '1.1rem' }}>🔥</span>
+      </div>
+
       <div className="grain-overlay bg-black text-white font-grotesk">
 
         {/* ── NAV ── */}
         <nav
           ref={navRef}
-          className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-10 py-5"
+          className="fixed left-0 right-0 z-50 flex items-center justify-between px-6 md:px-10 py-5"
           style={{
+            top: '44px',
             transition: 'transform 0.35s cubic-bezier(0.22,1,0.36,1),background 0.4s ease,border-color 0.4s ease,backdrop-filter 0.4s ease',
             background: 'linear-gradient(to bottom,rgba(0,0,0,0.75) 0%,transparent 100%)',
             backdropFilter: 'none',
@@ -182,11 +279,11 @@ export default function SiteGratis() {
               </button>
               <motion.button
                 onClick={() => { openWA('site-gratis-mobile-menu'); setMobileOpen(false); }}
-                className="text-3xl font-bold uppercase tracking-widest text-white/80 hover:text-white transition-colors"
+                className="cta-green"
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0, duration: 0.3, ease }}
               >
-                Resgatar meu site
+                Resgatar meu site grátis
               </motion.button>
               <motion.a
                 href="/"
@@ -201,23 +298,25 @@ export default function SiteGratis() {
         </AnimatePresence>
 
         {/* ── HERO ── */}
-        <section className="relative min-h-[100svh] flex flex-col items-center justify-center px-6 md:px-10" style={{ overflow: 'visible' }}>
+        <section
+          className="relative min-h-[100svh] flex flex-col items-center justify-center px-6 md:px-10"
+          style={{ overflow: 'visible', paddingTop: '44px' }}
+        >
           <div className="absolute inset-0 pointer-events-none overflow-hidden">
             <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 60% at 50% 40%,rgba(37,99,235,0.10) 0%,rgba(59,130,246,0.04) 50%,transparent 75%)' }} />
             <div className="cta-ring cta-ring-1" style={{ opacity: 0.45 }} />
             <div className="cta-ring cta-ring-2" style={{ opacity: 0.28 }} />
 
             {/* Caixas de presente decorativas */}
-            <div style={{ position: 'absolute', top: '18%', left: '6%', fontSize: 'clamp(2.5rem, 5vw, 4rem)', opacity: 0.18, transform: 'rotate(-14deg)', userSelect: 'none', pointerEvents: 'none', lineHeight: 1 }}>🎁</div>
-            <div style={{ position: 'absolute', top: '28%', right: '5%', fontSize: 'clamp(2rem, 4vw, 3.2rem)', opacity: 0.14, transform: 'rotate(10deg)', userSelect: 'none', pointerEvents: 'none', lineHeight: 1 }}>🎁</div>
-            <div style={{ position: 'absolute', bottom: '22%', left: '10%', fontSize: 'clamp(1.4rem, 2.5vw, 2.2rem)', opacity: 0.10, transform: 'rotate(-6deg)', userSelect: 'none', pointerEvents: 'none', lineHeight: 1 }}>🎁</div>
-            <div style={{ position: 'absolute', bottom: '28%', right: '9%', fontSize: 'clamp(1.6rem, 3vw, 2.6rem)', opacity: 0.13, transform: 'rotate(18deg)', userSelect: 'none', pointerEvents: 'none', lineHeight: 1 }}>🎁</div>
-            <div style={{ position: 'absolute', top: '55%', left: '2%', fontSize: 'clamp(1rem, 2vw, 1.8rem)', opacity: 0.08, transform: 'rotate(8deg)', userSelect: 'none', pointerEvents: 'none', lineHeight: 1 }}>🎁</div>
+            <div style={{ position: 'absolute', top: '18%', left: '6%', fontSize: 'clamp(2.5rem, 5vw, 4rem)', opacity: 0.18, transform: 'rotate(-14deg)', userSelect: 'none', lineHeight: 1 }}>🎁</div>
+            <div style={{ position: 'absolute', top: '28%', right: '5%', fontSize: 'clamp(2rem, 4vw, 3.2rem)', opacity: 0.14, transform: 'rotate(10deg)', userSelect: 'none', lineHeight: 1 }}>🎁</div>
+            <div style={{ position: 'absolute', bottom: '22%', left: '10%', fontSize: 'clamp(1.4rem, 2.5vw, 2.2rem)', opacity: 0.10, transform: 'rotate(-6deg)', userSelect: 'none', lineHeight: 1 }}>🎁</div>
+            <div style={{ position: 'absolute', bottom: '28%', right: '9%', fontSize: 'clamp(1.6rem, 3vw, 2.6rem)', opacity: 0.13, transform: 'rotate(18deg)', userSelect: 'none', lineHeight: 1 }}>🎁</div>
           </div>
 
           <motion.div
             variants={containerVariants} initial="hidden" animate="visible"
-            className="relative z-10 text-center max-w-4xl mx-auto pt-28 pb-16"
+            className="relative z-10 text-center max-w-4xl mx-auto pt-16 pb-16"
           >
             <motion.span variants={itemVariants}
               className="inline-block text-[11px] tracking-[0.28em] text-blue-400 uppercase font-semibold mb-8 px-3 py-1 rounded-full border border-blue-500/25 bg-blue-500/5"
@@ -246,19 +345,19 @@ export default function SiteGratis() {
               </span>
             </motion.h1>
 
-            <motion.p variants={itemVariants} className="text-white/60 text-lg md:text-xl leading-relaxed mb-10 max-w-lg mx-auto">
-              Você paga só o domínio + hospedagem:{' '}
-              <strong className="text-white font-semibold">R$198/ano</strong>.{' '}
-              A criação do site, a Teczz faz sem cobrar.
+            <motion.p variants={itemVariants} className="text-white/60 text-lg md:text-xl leading-relaxed mb-12 max-w-lg mx-auto">
+              A criação do site, a Teczz faz sem cobrar nada.{' '}
+              <strong className="text-white font-semibold">Chame no WhatsApp e saiba mais.</strong>
             </motion.p>
 
-            <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button onClick={() => openWA('site-gratis-hero-cta')} className="pill-btn-lg">
-                Resgatar meu site grátis <ArrowRight size={14} />
+            {/* CTA VERDE GIGANTE */}
+            <motion.div variants={itemVariants} className="flex flex-col items-center justify-center gap-6">
+              <button onClick={() => openWA('site-gratis-hero-cta')} className="cta-green">
+                🎁 Resgatar meu site grátis
               </button>
-              <a href="/" className="text-sm text-white/35 hover:text-white/55 transition-colors uppercase tracking-wider">
-                Conhecer a Teczz →
-              </a>
+              <p style={{ color: 'rgba(255,255,255,0.28)', fontSize: '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+                Sem compromisso · Resposta em minutos
+              </p>
             </motion.div>
 
             <motion.div variants={itemVariants} className="flex flex-wrap items-center justify-center gap-6 mt-12">
@@ -282,35 +381,25 @@ export default function SiteGratis() {
                 A conta é simples.
               </h2>
             </motion.div>
-
             <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Crossed-out card */}
               <div className="rounded-2xl border border-white/[0.06] p-8 relative overflow-hidden" style={{ background: 'rgba(8,8,12,0.85)' }}>
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
                   <div style={{ width: '140%', height: '2px', background: 'rgba(255,80,80,0.18)', transform: 'rotate(-5deg)' }} />
                 </div>
-                <span className="text-[10px] tracking-[0.2em] uppercase text-white/22 font-semibold block mb-4">
-                  Agência tradicional
-                </span>
+                <span className="text-[10px] tracking-[0.2em] uppercase text-white/22 font-semibold block mb-4">Agência tradicional</span>
                 <p className="font-black uppercase leading-[1.05] text-white/22" style={{ fontSize: 'clamp(2.2rem, 5vw, 3.8rem)', textDecoration: 'line-through', textDecorationColor: 'rgba(255,80,80,0.3)' }}>
                   R$2.000<br />a R$5.000
                 </p>
                 <p className="text-white/18 text-sm mt-4">Só para criar o site, sem contar hospedagem ou manutenção.</p>
               </div>
-
-              {/* Highlight card */}
               <div className="rounded-2xl border border-blue-500/40 p-8 relative overflow-hidden" style={{ background: 'rgba(6,14,35,0.97)', boxShadow: '0 0 50px rgba(37,99,235,0.13)' }}>
                 <div className="absolute top-0 left-0 right-0 h-[1px]" style={{ background: 'linear-gradient(90deg,transparent,rgba(96,165,250,0.55),transparent)' }} />
-                <span className="text-[10px] tracking-[0.2em] uppercase text-blue-400 font-semibold block mb-4">
-                  Com a Teczz
-                </span>
+                <span className="text-[10px] tracking-[0.2em] uppercase text-blue-400 font-semibold block mb-4">Com a Teczz</span>
                 <p className="font-black uppercase leading-[1.05]" style={{ fontSize: 'clamp(2.2rem, 5vw, 3.8rem)', background: 'linear-gradient(180deg,#60a5fa 0%,#3b82f6 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
                   R$0
                 </p>
                 <p className="text-white/38 text-sm font-semibold uppercase tracking-wide mt-1">de criação</p>
-                <p className="text-blue-400/75 text-sm mt-4">
-                  + <strong className="text-white">R$198/ano</strong> de domínio + hospedagem (via Wix)
-                </p>
+                <p className="text-blue-400/75 text-sm mt-4">Saiba o custo total direto no WhatsApp — é bem menor do que você imagina.</p>
               </div>
             </motion.div>
           </motion.div>
@@ -327,19 +416,14 @@ export default function SiteGratis() {
                 Como funciona
               </h2>
             </motion.div>
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {[
                 { num: '01', title: 'Você chama no WhatsApp', desc: 'Mande uma mensagem agora. Nossa equipe entra em contato para entender o que você precisa e combinamos tudo por lá.' },
-                { num: '02', title: 'A gente cria o site', desc: 'Desenvolvemos seu site profissional sem nenhum custo. Você acompanha e aprova cada etapa antes de publicar.' },
-                { num: '03', title: 'Você ativa o plano', desc: 'Ativa o plano anual do Wix (R$198/ano com domínio incluso) — o valor vai direto para o Wix, não para nós.' },
+                { num: '02', title: 'A gente cria o site', desc: 'Desenvolvemos seu site profissional sem nenhum custo de criação. Você acompanha e aprova cada etapa antes de publicar.' },
+                { num: '03', title: 'Você ativa o plano', desc: 'Ativa a hospedagem e domínio — o valor vai direto para a plataforma, não para nós.' },
                 { num: '04', title: 'Seu site vai ao ar', desc: 'Site publicado, domínio ativo, aparecendo no Google. Pronto para receber clientes.' },
               ].map((step, i) => (
-                <motion.div
-                  key={i} variants={itemVariants}
-                  className="rounded-2xl border border-white/[0.07] p-7 flex gap-5"
-                  style={{ background: 'rgba(6,13,31,0.92)' }}
-                >
+                <motion.div key={i} variants={itemVariants} className="rounded-2xl border border-white/[0.07] p-7 flex gap-5" style={{ background: 'rgba(6,13,31,0.92)' }}>
                   <span className="font-mono font-black text-blue-500/45 text-xl shrink-0 leading-none mt-0.5">{step.num}</span>
                   <div>
                     <h3 className="font-bold text-white text-sm mb-2 uppercase tracking-[0.08em]">{step.title}</h3>
@@ -361,13 +445,12 @@ export default function SiteGratis() {
                 Seu site já vem com tudo.
               </h2>
             </motion.div>
-
             <motion.div variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {[
                 { title: 'Site profissional e responsivo', desc: 'Funciona perfeito no celular, tablet e computador.' },
                 { title: 'Aparece no Google', desc: 'SEO básico configurado para sua empresa ser encontrada.' },
                 { title: 'Pronto em poucos dias', desc: 'Nada de esperar meses. Entregamos rápido.' },
-                { title: 'Sem letras miúdas', desc: 'O único custo é o domínio + hospedagem. Nada escondido.' },
+                { title: 'Sem letras miúdas', desc: 'Transparência total no que custa. Nada escondido.' },
                 { title: 'Design personalizado', desc: 'Cada site reflete a identidade do seu negócio.' },
                 { title: 'WhatsApp integrado', desc: 'Botão de contato direto para seus clientes te chamarem.' },
               ].map((b, i) => (
@@ -380,11 +463,9 @@ export default function SiteGratis() {
                 </div>
               ))}
             </motion.div>
-
-            {/* CTA central após benefícios */}
             <motion.div variants={itemVariants} className="text-center mt-14">
-              <button onClick={() => openWA('site-gratis-benefits-cta')} className="pill-btn-lg inline-flex">
-                Resgatar meu site grátis <ArrowRight size={14} />
+              <button onClick={() => openWA('site-gratis-benefits-cta')} className="cta-green">
+                🎁 Resgatar meu site grátis
               </button>
             </motion.div>
           </motion.div>
@@ -400,7 +481,6 @@ export default function SiteGratis() {
                 Perguntas frequentes
               </h2>
             </motion.div>
-
             <div className="flex flex-col">
               {faqs.map((faq, i) => {
                 const isOpen = openFaq === i;
@@ -408,17 +488,10 @@ export default function SiteGratis() {
                   <motion.div key={i} variants={itemVariants}>
                     <button
                       className="w-full text-left py-7 flex items-start gap-6 group border-b section-divider"
-                      style={{
-                        borderLeft: isOpen ? '2px solid rgba(59,130,246,0.6)' : '2px solid transparent',
-                        paddingLeft: '1rem',
-                        transition: 'border-color 0.3s ease',
-                      }}
+                      style={{ borderLeft: isOpen ? '2px solid rgba(59,130,246,0.6)' : '2px solid transparent', paddingLeft: '1rem', transition: 'border-color 0.3s ease' }}
                       onClick={() => setOpenFaq(isOpen ? null : i)}
                     >
-                      <span
-                        className="text-sm font-mono font-semibold shrink-0 mt-0.5 transition-colors duration-300"
-                        style={{ color: isOpen ? '#60a5fa' : 'rgba(255,255,255,0.2)' }}
-                      >
+                      <span className="text-sm font-mono font-semibold shrink-0 mt-0.5 transition-colors duration-300" style={{ color: isOpen ? '#60a5fa' : 'rgba(255,255,255,0.2)' }}>
                         {String(i + 1).padStart(2, '0')}
                       </span>
                       <div className="flex-1 min-w-0">
@@ -427,23 +500,13 @@ export default function SiteGratis() {
                         </span>
                         <AnimatePresence initial={false}>
                           {isOpen && (
-                            <motion.div
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: 'auto', opacity: 1 }}
-                              exit={{ height: 0, opacity: 0 }}
-                              transition={{ duration: 0.4, ease }}
-                              style={{ overflow: 'hidden' }}
-                            >
+                            <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.4, ease }} style={{ overflow: 'hidden' }}>
                               <p className="text-white/70 text-sm leading-relaxed pt-4">{faq.a}</p>
                             </motion.div>
                           )}
                         </AnimatePresence>
                       </div>
-                      <motion.div
-                        animate={{ rotate: isOpen ? 180 : 0 }}
-                        transition={{ duration: 0.3, ease }}
-                        className="shrink-0 mt-1.5"
-                      >
+                      <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.3, ease }} className="shrink-0 mt-1.5">
                         <ChevronDown size={16} style={{ color: isOpen ? '#60a5fa' : 'rgba(255,255,255,0.25)' }} />
                       </motion.div>
                     </button>
@@ -451,11 +514,10 @@ export default function SiteGratis() {
                 );
               })}
             </div>
-
             <motion.div variants={itemVariants} className="text-center mt-14">
               <p className="text-white/38 text-sm mb-6">Ainda tem dúvidas? Chama a gente no WhatsApp.</p>
-              <button onClick={() => openWA('site-gratis-faq-cta')} className="pill-btn-lg inline-flex">
-                Resgatar meu site grátis <ArrowRight size={14} />
+              <button onClick={() => openWA('site-gratis-faq-cta')} className="cta-green">
+                🎁 Resgatar meu site grátis
               </button>
             </motion.div>
           </motion.div>
